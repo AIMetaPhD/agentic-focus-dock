@@ -77,8 +77,8 @@ including npm dependencies.
 | Architecture contract fixed | PASS | `docs/ADR-001-ARCHITECTURE.md`, `docs/API.md` |
 | Scope P0/P1/Later fixed | PASS | `docs/SCOPE.md` |
 | Real macOS overlay spike | **BLOCKED** | no Mac; Swift source + CI compile only |
-| GitHub private repo | PASS | `AIMetaPhD/agentic-focus-dock` created private; commit `01c21e0` |
-| CI compile on Apple Silicon runner | PASS (compile only) | Actions run `40955562215`, job `macOS bridge · compile and unit tests` |
+| GitHub private repo | PASS | `AIMetaPhD/agentic-focus-dock` created private; commit `28a8a7c` |
+| CI compile on Apple Silicon runner | PASS (compile only) | Actions run `40955753656`, job `macOS bridge · compile and unit tests` |
 
 **G0 = CONDITIONAL.** The Web track (G1/G2) is not blocked. Any claim that the macOS
 overlay is complete is prohibited until the unblock procedure above is executed on a

@@ -2,8 +2,8 @@
 
 Date: 2026-10-30
 Repository: <https://github.com/AIMetaPhD/agentic-focus-dock> (**private**)
-Release candidate commit: `01c21e0b72b2d717b913824906f8f66c3516d3dd`
-CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955562215> — **success**
+Release candidate commit: `28a8a7cef8dbc24286deed78799c45819e28f72c`
+CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656> — **success**
 
 This document is the implementation owner's closure record. It is not a Muse
 sign-off and it does not authorize a public release.
@@ -57,7 +57,7 @@ sign-off and it does not authorize a public release.
 | Web unit tests (4) | `web/src/i18n.test.ts` |
 | Playwright (13) | `tests/e2e/`, report `qa/evidence/playwright-report/` |
 | Screenshots | `qa/evidence/*.png` |
-| CI run | Actions run `40955562215`, all three jobs green |
+| CI run | Actions run `40955753656`, all three jobs green |
 | Muse attempt 1 | `qa/muse-result-G4-attempt1.json` (verbatim queue result) |
 | Architecture / threat model | `docs/ADR-001-ARCHITECTURE.md`, `docs/THREAT_MODEL.md` |
 | License audit | `docs/THIRD_PARTY_AUDIT.md`, `NOTICE.md` |
