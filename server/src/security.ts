@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { isAllowedHost, isAllowedOrigin } from "./config";
 
@@ -90,7 +91,20 @@ export function writeSecretFile(file: string, content: string): void {
   try {
     fs.chmodSync(file, 0o600);
   } catch {
-    /* Windows: best effort; documented in SECURITY.md */
+    /* filesystems without POSIX modes */
+  }
+  if (process.platform === "win32" && process.env.USERNAME) {
+    try {
+      // chmod is not an access-control boundary on Windows; restrict the
+      // per-run bridge value to the current user.
+      execFileSync(
+        "icacls",
+        [file, "/inheritance:r", "/grant:r", `${process.env.USERNAME}:F`],
+        { stdio: "ignore", windowsHide: true },
+      );
+    } catch {
+      /* best effort; documented in SECURITY.md */
+    }
   }
 }
 
