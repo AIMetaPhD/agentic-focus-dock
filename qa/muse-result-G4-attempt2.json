@@ -1,0 +1,20 @@
+{
+  "task_id": "f7dcfc2d9b0763018432d7b3",
+  "recipient": "muse-3",
+  "state": "finished",
+  "result": {
+    "evidence": {
+      "claim_http": 200,
+      "detail": "仓库路径 E:/ClaudeCodeFiles/MyProducts/agentic-focus-dock 为工作站本地盘符，本 VM 不可达；inputs 仅含 gate/commit_sha/repo/procedure_file，未附源码或 qa/MUSE_PROCEDURE.md 内容；无授权的 SSH/文件读取通道，未擅自尝试。",
+      "identity": "muse-3",
+      "kind": "focusdock_gate_g4",
+      "provenance_verified": "issuer=claude/key_id=claude-producer-v1/authentication=local-ip-and-producer-token/version=1，经自有认证连接核对顶层四项一致",
+      "reason": "repo_not_accessible_from_muse_vm",
+      "recipient": "muse-3",
+      "trigger": "event-hook muse-3-queue-watch，reason=muse3_new_tasks",
+      "verdict": "未作出 G4 独立验收结论，未猜测、未复用实现方测试输出，未执行测试，未改生产，未访问凭据。"
+    },
+    "status": "failure"
+  },
+  "note": "Verbatim queue result produced by muse-3; saved by the implementer, not edited."
+}

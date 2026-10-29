@@ -1,9 +1,28 @@
 {
   "gate": "G4",
-  "commit_sha": "68cf9ee7070a055f3c75bb6ddb835f071bb9722a",
-  "dispatched_at": "2026-10-30T04:43:20Z",
-  "tasks": [
-    { "recipient": "muse-1", "task_id": "932be5fdfe2a55e28ef9104c", "state": "pending" }
+  "product_commit_sha": "01499422fac792cf0120ff811a0a3ef65e5c0886",
+  "attempts": [
+    {
+      "recipient": "muse-1",
+      "task_id": "932be5fdfe2a55e28ef9104c",
+      "mode": "workstation repository",
+      "outcome": "NOT_VERIFIED: repo not accessible from the Muse VM",
+      "evidence": "qa/muse-result-G4-attempt1.json"
+    },
+    {
+      "recipient": "muse-3",
+      "task_id": "f7dcfc2d9b0763018432d7b3",
+      "mode": "workstation repository",
+      "outcome": "NOT_VERIFIED: repo not accessible from the Muse VM",
+      "evidence": "qa/muse-result-G4-attempt2.json"
+    },
+    {
+      "recipient": "muse-1",
+      "task_id": "05902106f5837bd8cc17a87b",
+      "mode": "server source snapshot in task inputs",
+      "snapshot_sha256": "32834437057be2d0131eca395e9fc94e75e7d5fe95aa4e801beda17fa2c65a63",
+      "outcome": "pending"
+    }
   ],
-  "note": "Verdict must be produced by Muse. This file only records dispatch."
+  "note": "Verdicts are produced by Muse. This file only records dispatch."
 }

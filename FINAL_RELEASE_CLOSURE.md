@@ -16,7 +16,7 @@ sign-off and it does not authorize a public release.
 | G1 Runnable browser MVP | **PASS** | 69 automated tests; screenshots `qa/evidence/`; Windows 11 real run |
 | G2 Rules, AI proposals, persistence, privacy | **PASS** (rules path) | `server/test/rules.test.ts`, `server/test/proposals.test.ts`, E2E |
 | G3 macOS bridge | **NOT VERIFIED** | Swift package + macOS CI compile; no real-device run |
-| G4 Independent Muse QA | **PENDING / PARTIAL** | muse-1 could not reach the workstation (`qa/muse-result-G4-attempt1.json`); muse-3 attempt in flight |
+| G4 Independent Muse QA | **NOT VERIFIED** | no Muse instance could reach the source (attempts 1–2); the source-snapshot channel was refused as opaque (attempt 3). See `docs/QA_REPORT.md` and `qa/muse-result-G4-attempt*.json` |
 | G5 Private release candidate | **PASS for private RC** | green CI, bilingual README, LICENSE/NOTICE/SECURITY/PRIVACY, private repo |
 | G6 Profile README | **BLOCKED** | requires a public repo and explicit user approval |
 
@@ -47,7 +47,7 @@ sign-off and it does not authorize a public release.
 | Live Ollama / cloud provider | **NOT EXERCISED** | no model/endpoint in this environment |
 | Global notification interception | **UNSUPPORTED** | public API limit; explicitly stated in UI/docs |
 | Public GitHub Release / profile PR | **NOT DONE** | awaiting user authorization |
-| Muse independent sign-off | **PENDING** | attempt 1 blocked by VM access; see `docs/QA_REPORT.md` |
+| Muse independent sign-off | **NOT VERIFIED** | all three dispatch attempts blocked by the Muse VM/harness, not by a product defect; see `docs/QA_REPORT.md` |
 
 ## Evidence index
 

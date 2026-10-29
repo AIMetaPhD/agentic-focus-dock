@@ -81,13 +81,16 @@ Muse produces its own verdict; the development owner does not sign it.
 
 | Attempt | Recipient | Task | Outcome |
 |---|---|---|---|
-| 1 | muse-1 | `932be5fdfe2a55e28ef9104c` | **NOT_VERIFIED** — the Muse VM could not reach the workstation path; no tests executed. Verbatim result: `qa/muse-result-G4-attempt1.json` |
-| 2 | muse-3 | `f7dcfc2d9b0763018432d7b3` | pending at the time of this report |
+| 1 | muse-1 | `932be5fdfe2a55e28ef9104c` | **NOT_VERIFIED** — the Muse VM could not reach the workstation path; no tests executed. Verbatim: `qa/muse-result-G4-attempt1.json` |
+| 2 | muse-3 | `f7dcfc2d9b0763018432d7b3` | **NOT_VERIFIED** — same access block. Verbatim: `qa/muse-result-G4-attempt2.json` |
+| 3 | muse-1 | `05902106f5837bd8cc17a87b` | **FAIL (harness)** — the Muse safety screen refused the Brotli source snapshot as an opaque blob; no tests executed. Verbatim: `qa/muse-result-G4-attempt3.json` |
 
-Attempt 1 is an honest environment block, not a product failure and not a PASS.
-If no Muse instance can reach the repository, the independent-QA gate remains
-**NOT VERIFIED**; the automated evidence above must not be relabelled as an
-independent sign-off.
+All three attempts are environment/harness blocks, not product failures and not
+a PASS. No Muse instance could reach the repository, and the snapshot channel
+was refused as opaque. The independent-QA gate therefore remains **NOT
+VERIFIED**; the automated evidence above must not be relabelled as an
+independent sign-off. This blocks a public release, not the private release
+candidate.
 
 No Sev0/Sev1 defect was found by the automated suite. That is not a substitute
 for independent QA, and it does not cover the macOS-only items above.

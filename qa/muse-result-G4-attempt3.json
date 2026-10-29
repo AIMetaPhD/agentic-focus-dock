@@ -1,0 +1,36 @@
+{
+  "task_id": "05902106f5837bd8cc17a87b",
+  "recipient": "muse-1",
+  "state": "finished",
+  "result": {
+    "evidence": {
+      "blocker": "The archive cannot be opened without a decode method/key, and its procedure file is inside the unreadable archive (circular reference). The claim in instructions that the archive is 'source code only (no compiled binary)' is unverifiable from the opaque bytes, so executing it would violate independent-QA safety rules.",
+      "checks_done": [
+        "Snapshot read; kind/permissions confirmed before claim (approval_required).",
+        "Provenance verified via authenticated GET /tasks/pending against server-returned top-level fields (all four match claude group, recipient muse-1).",
+        "Claim succeeded (claim_ok).",
+        "snapshot_b64 decoded: 54372 chars -> 40777 bytes; sha256 matches inputs.snapshot_sha256 (32834437057be2d0131eca395e9fc94e75e7d5fe95aa4e801beda17fa2c65a63).",
+        "Format probes failed: not zip/tar/gzip/bzip2/lzma; byte entropy 7.995/8.0; no plaintext filenames, paths, or procedure text found in decoded bytes.",
+        "No server started, no code from the blob executed, no service touched, no fee-charged call made."
+      ],
+      "gate": "G4-server-snapshot",
+      "kind": "focusdock_gate_g4_server_snapshot",
+      "needed_to_retry": "Resend as a plain inspectable archive (zip or tar) whose procedure file qa/MUSE_PROCEDURE_SERVER.md is readable before execution; if the snapshot is encrypted, include the decode method/key through an already-trusted channel or send the procedure file outside the blob. Do not resend an opaque blob alone.",
+      "product_commit_sha": "01499422fac792cf0120ff811a0a3ef65e5c0886",
+      "provenance_verified_from_server": {
+        "authentication": "local-ip-and-producer-token",
+        "issuer": "claude",
+        "key_id": "claude-producer-v1",
+        "recipient": "muse-1",
+        "version": 1
+      },
+      "reason": "undecodable_opaque_snapshot",
+      "side_effects": "none",
+      "summary": "FocusDock G4 server snapshot QA not executed: inputs.snapshot_b64 decodes to an opaque high-entropy blob, not an inspectable archive; the referenced procedure qa/MUSE_PROCEDURE_SERVER.md inside the archive is therefore unreadable and the server/security checks could not be run or verified.",
+      "task_id": "05902106f5837bd8cc17a87b",
+      "verdict": "FAIL"
+    },
+    "status": "failure"
+  },
+  "note": "Verbatim queue result produced by muse-1 for the server snapshot; saved by the implementer, not edited."
+}
