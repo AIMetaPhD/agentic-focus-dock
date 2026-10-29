@@ -10,7 +10,8 @@ This file is written by the implementation owner. It is **not** a Muse sign-off.
 | OS | Windows 11 Pro 10.0.26200 (x64) |
 | Node | v24.12.0 |
 | Browser (E2E) | Playwright Chromium, 1440×900 |
-| Commit under test | recorded in the final delivery message (repo commit SHA) |
+| Commit under test | `01499422fac792cf0120ff811a0a3ef65e5c0886` |
+| CI run | `https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40952360367` (success) |
 | Data | isolated `qa/e2e-data`, wiped per run; screenshots use synthetic data |
 | macOS | **not available** — G3 NOT VERIFIED |
 
@@ -76,9 +77,17 @@ Command: `npm test && npm run test:e2e` (also `npm run verify` in CI).
 
 ## Independent Muse QA
 
-**PENDING.** The implementation owner will send the repository, build commands,
-test environment and this report to Muse. Muse must produce its own verdict and
-`MUSE_QA_SIGNOFF.md`; the development owner must not write or approve it.
+Muse produces its own verdict; the development owner does not sign it.
+
+| Attempt | Recipient | Task | Outcome |
+|---|---|---|---|
+| 1 | muse-1 | `932be5fdfe2a55e28ef9104c` | **NOT_VERIFIED** — the Muse VM could not reach the workstation path; no tests executed. Verbatim result: `qa/muse-result-G4-attempt1.json` |
+| 2 | muse-3 | `f7dcfc2d9b0763018432d7b3` | pending at the time of this report |
+
+Attempt 1 is an honest environment block, not a product failure and not a PASS.
+If no Muse instance can reach the repository, the independent-QA gate remains
+**NOT VERIFIED**; the automated evidence above must not be relabelled as an
+independent sign-off.
 
 No Sev0/Sev1 defect was found by the automated suite. That is not a substitute
 for independent QA, and it does not cover the macOS-only items above.
