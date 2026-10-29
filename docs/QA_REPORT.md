@@ -10,8 +10,8 @@ This file is written by the implementation owner. It is **not** a Muse sign-off.
 | OS | Windows 11 Pro 10.0.26200 (x64) |
 | Node | v24.12.0 |
 | Browser (E2E) | Playwright Chromium, 1440×900 |
-| Commit under test | `28a8a7cef8dbc24286deed78799c45819e28f72c` |
-| CI run | `https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656` (success) |
+| Product code under test | `01c21e0b72b2d717b913824906f8f66c3516d3dd` (tag `v0.1.0-rc.2`) |
+| CI run | `https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656` (success on the product tree) |
 | Data | isolated `qa/e2e-data`, wiped per run; screenshots use synthetic data |
 | macOS | **not available** — G3 NOT VERIFIED |
 

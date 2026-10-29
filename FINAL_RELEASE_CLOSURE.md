@@ -2,7 +2,7 @@
 
 Date: 2026-10-30
 Repository: <https://github.com/AIMetaPhD/agentic-focus-dock> (**private**)
-Release candidate commit: `28a8a7cef8dbc24286deed78799c45819e28f72c`
+Release candidate: tag `v0.1.0-rc.2` · product code commit `01c21e0b72b2d717b913824906f8f66c3516d3dd`
 CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656> — **success**
 
 This document is the implementation owner's closure record. It is not a Muse
