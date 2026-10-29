@@ -43,8 +43,18 @@ export const modeInputSchema = z.object({
   pinned_items: z.array(pinnedItemSchema).max(12).default([]),
   activity_app_allowlist: z.array(z.string().min(1).max(120)).max(30).default([]),
   keywords: z.array(z.string().min(1).max(40)).max(30).default([]),
-  transition: transitionSchema.default({}),
-  notifications: notificationPolicySchema.default({}),
+  transition: transitionSchema.default({
+    manual_immediate: true,
+    auto_suggest_only: true,
+    dwell_seconds: 15,
+    cooldown_seconds: 60,
+  }),
+  notifications: notificationPolicySchema.default({
+    default: "defer",
+    time_sensitive: "show",
+    switch_wait_seconds: 30,
+    social_switch_enabled: true,
+  }),
   sort_order: z.number().int().min(0).max(999).default(0),
 });
 
@@ -196,14 +206,26 @@ export const settingsSchema = z.object({
       cloud_opt_in: z.boolean().default(false),
       include_recent_activity: z.boolean().default(false),
     })
-    .default({}),
+    .default({
+      provider: "rules",
+      ollama_url: "http://127.0.0.1:11434",
+      ollama_model: "qwen2.5:7b",
+      base_url: "https://api.openai.com/v1",
+      model: "gpt-4o-mini",
+      cloud_opt_in: false,
+      include_recent_activity: false,
+    }),
   privacy: z
     .object({
       retention_days: z.number().int().min(1).max(365).default(7),
       store_window_titles: z.boolean().default(false),
       excluded_apps: z.array(z.string().max(120)).max(50).default([]),
     })
-    .default({}),
+    .default({
+      retention_days: 7,
+      store_window_titles: false,
+      excluded_apps: [],
+    }),
 });
 
 export type Settings = z.infer<typeof settingsSchema>;

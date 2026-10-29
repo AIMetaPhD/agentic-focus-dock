@@ -869,7 +869,7 @@ export async function startServer(opts: StartOptions): Promise<{
     const body = z
       .object({
         bridge_version: z.string().max(40).default("unknown"),
-        capabilities: z.record(z.string().max(60)).default({}),
+        capabilities: z.record(z.string(), z.string().max(60)).default({}),
       })
       .parse(request.body ?? {});
     ctx.bridge.connected = true;

@@ -85,13 +85,14 @@ public final class AppObserver {
         bundleId: String?,
         stable: Double
     ) {
-        var title: String?
-        if includeTitles {
-            title = AccessibilityReader.focusedWindowTitle(pid: app.processIdentifier)
-        }
+        let title: String? = includeTitles
+            ? AccessibilityReader.focusedWindowTitle(pid: app.processIdentifier)
+            : nil
+        // Capture immutable values before crossing into the concurrency domain.
+        let capturedBundleId = bundleId
         Task {
             await client.activity(
-                appId: bundleId,
+                appId: capturedBundleId,
                 appName: name,
                 windowTitle: title,
                 stableSeconds: stable

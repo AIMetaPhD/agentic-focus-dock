@@ -1,0 +1,9 @@
+{
+  "gate": "G4",
+  "commit_sha": "68cf9ee7070a055f3c75bb6ddb835f071bb9722a",
+  "dispatched_at": "2026-10-30T04:43:20Z",
+  "tasks": [
+    { "recipient": "muse-1", "task_id": "932be5fdfe2a55e28ef9104c", "state": "pending" }
+  ],
+  "note": "Verdict must be produced by Muse. This file only records dispatch."
+}
