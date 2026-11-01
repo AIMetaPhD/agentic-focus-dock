@@ -4,9 +4,9 @@ Date: 2026-11-01
 Repository: <https://github.com/AIMetaPhD/agentic-focus-dock> (**private**)
 Public release: **NOT PUBLISHED — awaiting explicit owner authorization**
 Product code commit: `01c21e0b72b2d717b913824906f8f66c3516d3dd`
-Documentation commit: `b98702e4d5de3e141be05d3684c5cf5e308a3b3b`
+Documentation commits: `b98702e4d5de3e141be05d3684c5cf5e308a3b3b` (subagent report, draft notes); `8a2e98126d5c3d763f76e250872ae059ac103023` (publication-gate correction)
 Product-tree CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40957464211> — **success**
-Documentation CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/41309872628> — **success**
+Documentation CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/41311439516> — **success**
 Previous private RC: tag `v0.1.0-rc.2`
 
 This document is the implementation owner's closure record. It is **not** a Muse
@@ -76,7 +76,7 @@ notes are in `docs/RELEASE_NOTES_v0.1.0.md`; they are not published.
 | Playwright (13) | `tests/e2e/`, screenshots `qa/evidence/*.png` |
 | Independent sub-agent verification (not Muse) | `qa/SUBAGENT_VERIFICATION_2026-10-30.md` |
 | Product-tree CI | Actions run `40957464211` on `ea3ef86`, all three jobs green |
-| Documentation CI | Actions run `41309872628` on `b98702e`, all three jobs green |
+| Documentation CI | Actions run `41311439516` on `8a2e981`, all three jobs green |
 | Muse attempts 1–3 | `qa/muse-result-G4-attempt*.json`, `docs/QA_REPORT.md` |
 | Architecture / threat model | `docs/ADR-001-ARCHITECTURE.md`, `docs/THREAT_MODEL.md` |
 | License audit | `docs/THIRD_PARTY_AUDIT.md`, `NOTICE.md` |
