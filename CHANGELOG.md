@@ -2,8 +2,7 @@
 
 ## 0.1.0 — 2026-11-01
 
-First private release candidate; public release is prepared but awaits explicit
-owner authorization.
+First public release (private RC on 2026-10-30).
 
 ### Added
 
@@ -42,7 +41,6 @@ owner authorization.
   endpoint in this environment.
 - No signed/notarized `.app`, no auto-update.
 - Muse independent QA is **NOT VERIFIED**; the sub-agent report is supplementary
-  evidence, not a Muse PASS. Public release remains gated on explicit owner
-  authorization.
-- The profile README PR has not been opened; it also awaits explicit owner
-  authorization.
+  evidence, not a Muse PASS. The owner explicitly authorized the public release
+  on 2026-11-01.
+- The profile README PR is open; merging it still requires the owner's approval.

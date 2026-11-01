@@ -1,12 +1,8 @@
 # FocusDock AI v0.1.0
 
-> **DRAFT — not published.** The repository remains private. Changing visibility,
-> publishing this Release, and opening the profile PR all await the owner's
-> explicit authorization.
-
 **A local-first, AI-native focus dock with customizable modes and an optional macOS companion.**
 
-This is the prepared first release. It is a real, runnable local web app — not a
+This is the first public release. It is a real, runnable local web app — not a
 mockup. Everything runs on `127.0.0.1`; there is no account, no telemetry, and
 no cloud key requirement.
 
@@ -46,8 +42,8 @@ no cloud key requirement.
 - **Muse independent QA is NOT VERIFIED.** Three Muse dispatches were blocked by
   the Muse VM/harness (repository access, then an opaque-snapshot rejection); no
   Muse test executed. The product owner accepted the sub-agent verification as
-  supplementary evidence and waived the Muse gate for this release. **This is not
-  a Muse sign-off.**
+  supplementary evidence and explicitly authorized this public release on
+  2026-11-01. **This is not a Muse sign-off.**
 - Global system-notification interception is unsupported by public Apple APIs
   and is not claimed.
 - No signed/notarized `.app` and no auto-update.
