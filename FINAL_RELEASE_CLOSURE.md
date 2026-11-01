@@ -1,12 +1,23 @@
 # Final Release Closure — FocusDock AI v0.1.0
 
-Date: 2026-10-30
-Repository: <https://github.com/AIMetaPhD/agentic-focus-dock> (**private**)
-Release candidate: tag `v0.1.0-rc.2` · product code commit `01c21e0b72b2d717b913824906f8f66c3516d3dd`
-CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656> — **success**
+Date: 2026-11-01
+Repository: <https://github.com/AIMetaPhD/agentic-focus-dock> (**public**)
+Release: <https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0>
+Product code commit: `01c21e0b72b2d717b913824906f8f66c3516d3dd`
+Verified tree: `ea3ef8605932163f913d4db1d9d79860eed911bf`
+CI: <https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40957464211> — **success**
+Previous private RC: tag `v0.1.0-rc.2`
 
-This document is the implementation owner's closure record. It is not a Muse
-sign-off and it does not authorize a public release.
+This document is the implementation owner's closure record. It is **not** a Muse
+sign-off and it does not claim that the Muse gate passed.
+
+## Product owner decision
+
+On 2026-11-01 the product owner selected the option to accept the independent
+Claude sub-agent verification as supplementary release evidence and proceed with
+the public release. The Muse gate remains **NOT VERIFIED**. This is a documented
+waiver, not a Muse PASS; the original acceptance criterion "Muse independent QA
+sign-off" is therefore **not fully met**.
 
 ## Gate status
 
@@ -16,13 +27,14 @@ sign-off and it does not authorize a public release.
 | G1 Runnable browser MVP | **PASS** | 69 automated tests; screenshots `qa/evidence/`; Windows 11 real run |
 | G2 Rules, AI proposals, persistence, privacy | **PASS** (rules path) | `server/test/rules.test.ts`, `server/test/proposals.test.ts`, E2E |
 | G3 macOS bridge | **NOT VERIFIED** | Swift package + macOS CI compile; no real-device run |
-| G4 Independent Muse QA | **NOT VERIFIED** | no Muse instance could reach the source (attempts 1–2); the source-snapshot channel was refused as opaque (attempt 3). See `docs/QA_REPORT.md` and `qa/muse-result-G4-attempt*.json` |
-| G5 Private release candidate | **PASS for private RC** | green CI, bilingual README, LICENSE/NOTICE/SECURITY/PRIVACY, private repo |
-| G6 Profile README | **BLOCKED** | requires a public repo and explicit user approval |
+| G4 Independent Muse QA | **WAIVED — Muse NOT VERIFIED** | three Muse attempts blocked by the VM/harness; independent Claude sub-agent PASS (not Muse) on `ea3ef86`; owner waiver 2026-11-01. See `docs/QA_REPORT.md` and `qa/SUBAGENT_VERIFICATION_2026-10-30.md` |
+| G5 Public release candidate | **PASS under documented waiver** | public repo, v0.1.0 Release, green CI, bilingual README, LICENSE/NOTICE/SECURITY/PRIVACY |
+| G6 Profile README | **PR OPEN — merge awaits owner** | `AIMetaPhD/AIMetaPhD` pull request; merge is not part of this release |
 
 ## What is real
 
-- A local web app at `http://127.0.0.1:4317`, started with `npm start`.
+- A public, MIT-licensed local web app at `http://127.0.0.1:4317`, started with
+  `npm start`.
 - Six modes with editable config, pinned apps, colors, allowlists, keywords,
   dwell/cooldown, notification policy.
 - Versioned persistence in SQLite; export/import; restore defaults; rollback.
@@ -46,8 +58,8 @@ sign-off and it does not authorize a public release.
 | Multi-display/full-screen/sleep-wake | **NOT VERIFIED** | same |
 | Live Ollama / cloud provider | **NOT EXERCISED** | no model/endpoint in this environment |
 | Global notification interception | **UNSUPPORTED** | public API limit; explicitly stated in UI/docs |
-| Public GitHub Release / profile PR | **NOT DONE** | awaiting user authorization |
-| Muse independent sign-off | **NOT VERIFIED** | all three dispatch attempts blocked by the Muse VM/harness, not by a product defect; see `docs/QA_REPORT.md` |
+| Muse independent sign-off | **NOT VERIFIED / WAIVED** | all three dispatch attempts blocked by the Muse VM/harness, not by a product defect; owner accepted supplementary sub-agent verification on 2026-11-01 |
+| Profile PR merge | **OPEN** | the PR is open; merging still requires the owner's approval |
 
 ## Evidence index
 
@@ -55,39 +67,41 @@ sign-off and it does not authorize a public release.
 |---|---|
 | Server/security/rules tests (52) | `server/test/`, result in `docs/QA_REPORT.md` |
 | Web unit tests (4) | `web/src/i18n.test.ts` |
-| Playwright (13) | `tests/e2e/`, report `qa/evidence/playwright-report/` |
-| Screenshots | `qa/evidence/*.png` |
-| CI run | Actions run `40955753656`, all three jobs green |
-| Muse attempt 1 | `qa/muse-result-G4-attempt1.json` (verbatim queue result) |
+| Playwright (13) | `tests/e2e/`, screenshots `qa/evidence/*.png` |
+| Independent sub-agent verification (not Muse) | `qa/SUBAGENT_VERIFICATION_2026-10-30.md` |
+| CI run | Actions run `40957464211`, all three jobs green on `ea3ef86` |
+| Muse attempts 1–3 | `qa/muse-result-G4-attempt*.json`, `docs/QA_REPORT.md` |
 | Architecture / threat model | `docs/ADR-001-ARCHITECTURE.md`, `docs/THREAT_MODEL.md` |
 | License audit | `docs/THIRD_PARTY_AUDIT.md`, `NOTICE.md` |
+| Release notes | `docs/RELEASE_NOTES_v0.1.0.md` |
 
 ## Security and privacy statement
 
 - No GPL-3.0 or all-rights-reserved code is copied. Research references are
   documented and were not vendored.
-- No keys, tokens, private paths, or personal screenshots are committed. CI runs
-  a tracked-file secret scan and a runtime dependency audit.
+- The tracked working tree was scanned (101 files); the pre-release git history
+  patch output (709,535 bytes) was scanned for secret patterns and the
+  workstation username. Both scans were clean.
+- The public permissions screenshot redacts the local bridge-token path and hides
+  the floating dock overlay.
 - The app stores only local mode config, synthetic/demo events and settings.
   The optional cloud key lives outside SQLite in a `0600` file.
 - No third-party notification database is read; no SIP/Dock modification; no
   shell/AppleScript execution by the model.
 
-## Required before a public release
+## Release conditions
 
-1. Resolve or formally waive the Muse QA gate. A Muse PASS on this commit is
-   required; if no Muse instance can reach the source, record G4 as NOT VERIFIED
-   and obtain the product owner's decision.
-2. Run the macOS bridge checklist on Apple Silicon and attach evidence
-   (`mac-bridge/README.md`).
-3. Obtain explicit user authorization to change repository visibility and create
-   a public Release/tag.
-4. Only after the repository is public and reachable, open the minimal
-   `AIMetaPhD/AIMetaPhD` profile PR and request the user's approval to merge.
+1. The Muse QA gate is **waived, not passed**. The owner accepted the sub-agent
+   verification as supplementary evidence on 2026-11-01.
+2. The macOS bridge remains **NOT VERIFIED**; the Release notes say so and the
+   binary is not presented as production-ready.
+3. Public visibility and the v0.1.0 Release were explicitly authorized by the
+   product owner on 2026-11-01.
+4. The profile README PR is open; merging it still requires the owner's approval.
 
 ## Commit / build
 
 - Node 24.12.0 on Windows 11; `npm ci && npm run verify` passes.
 - CI repeats the full suite on Ubuntu and compiles/tests the Swift package on
   macOS 14.
-- The private RC tag, if created, is `v0.1.0-rc.1` (no public Release).
+- Public tag: `v0.1.0`.

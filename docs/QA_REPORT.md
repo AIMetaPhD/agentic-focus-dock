@@ -1,6 +1,8 @@
 # QA Report — v0.1.0
 
-Status: **development verification complete; independent Muse QA PENDING.**
+Status: **development verification complete; independent Muse QA NOT VERIFIED;
+the product owner waived the Muse gate for v0.1.0 on 2026-11-01 based on
+supplementary sub-agent verification.**
 This file is written by the implementation owner. It is **not** a Muse sign-off.
 
 ## Environment
@@ -11,7 +13,8 @@ This file is written by the implementation owner. It is **not** a Muse sign-off.
 | Node | v24.12.0 |
 | Browser (E2E) | Playwright Chromium, 1440×900 |
 | Product code under test | `01c21e0b72b2d717b913824906f8f66c3516d3dd` (tag `v0.1.0-rc.2`) |
-| CI run | `https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40955753656` (success on the product tree) |
+| Verified tree | `ea3ef8605932163f913d4db1d9d79860eed911bf` |
+| CI run | `https://github.com/AIMetaPhD/agentic-focus-dock/actions/runs/40957464211` (success on `ea3ef86`) |
 | Data | isolated `qa/e2e-data`, wiped per run; screenshots use synthetic data |
 | macOS | **not available** — G3 NOT VERIFIED |
 
@@ -26,7 +29,7 @@ Command: `npm test && npm run test:e2e` (also `npm run verify` in CI).
 | Playwright end-to-end | **13 passed, 0 failed** |
 | TypeScript | clean |
 | ESLint | clean |
-| Secret scan | clean (tracked files only) |
+| Secret scan | clean (99 tracked files) |
 
 ### What the automated tests prove
 
@@ -48,6 +51,25 @@ Command: `npm test && npm run test:e2e` (also `npm run verify` in CI).
   suggestion and switch, reload persistence, manual lock, AI diff/apply,
   rollback, new-mode creation, English/Chinese switch, capability truth.
 
+## Independent sub-agent verification (not Muse)
+
+A fresh-context Claude sub-agent re-ran the suite in an isolated git worktree on
+the same Windows workstation. It did not modify, commit, or push the product.
+
+| Item | Result |
+|---|---|
+| Commit | `ea3ef8605932163f913d4db1d9d79860eed911bf` |
+| `npm ci` | clean |
+| Typecheck / lint | pass |
+| Unit + integration | **56 passed** (52 server + 4 web) |
+| Build | pass |
+| Playwright | **13 passed** |
+| Black-box probes B1–B15 | pass; no Sev0/Sev1 |
+| Scope not covered | macOS runtime, live providers, public release, Muse QA |
+
+Full report: `qa/SUBAGENT_VERIFICATION_2026-10-30.md`. This is supplementary
+evidence, not a Muse gate pass.
+
 ## Evidence index
 
 | Evidence | Path |
@@ -57,10 +79,10 @@ Command: `npm test && npm run test:e2e` (also `npm run verify` in CI).
 | Building after suggested switch | `qa/evidence/02-focus-building.png` |
 | AI proposal diff | `qa/evidence/03-ai-diff.png` |
 | Mode editor + version history | `qa/evidence/04-mode-editor.png` |
-| Permissions & capabilities | `qa/evidence/05-permissions.png` |
+| Permissions & capabilities (local path redacted) | `qa/evidence/05-permissions.png` |
 | Chinese settings | `qa/evidence/06-settings-zh.png` |
 | Timeline after 50-event burst | `qa/evidence/07-timeline.png` |
-| Playwright HTML report | `qa/evidence/playwright-report/` |
+| Sub-agent report | `qa/SUBAGENT_VERIFICATION_2026-10-30.md` |
 | Test sources | `server/test/`, `web/src/*.test.ts`, `tests/e2e/` |
 
 ## Not verified
@@ -72,8 +94,7 @@ Command: `npm test && npm run test:e2e` (also `npm run verify` in CI).
 | Multi-display / full-screen / sleep-wake | no Mac | recording per scenario |
 | Live Ollama provider | no local model installed | request/response log + latency |
 | Live OpenAI-compatible provider | no endpoint/key used | opt-in screenshot + provider response |
-| Public GitHub release | awaiting user authorization | repo visibility + Release URL |
-| `AIMetaPhD` profile PR | depends on public release | PR URL |
+| Muse independent QA (G4) | three Muse VM/harness blocks | Muse re-dispatch on a reachable workstation; currently waived by owner |
 
 ## Independent Muse QA
 
@@ -88,9 +109,10 @@ Muse produces its own verdict; the development owner does not sign it.
 All three attempts are environment/harness blocks, not product failures and not
 a PASS. No Muse instance could reach the repository, and the snapshot channel
 was refused as opaque. The independent-QA gate therefore remains **NOT
-VERIFIED**; the automated evidence above must not be relabelled as an
-independent sign-off. This blocks a public release, not the private release
-candidate.
+VERIFIED**. The product owner accepted the sub-agent report as supplementary
+evidence and waived the Muse gate for v0.1.0 on 2026-11-01; this is not a Muse
+sign-off.
 
-No Sev0/Sev1 defect was found by the automated suite. That is not a substitute
-for independent QA, and it does not cover the macOS-only items above.
+No Sev0/Sev1 defect was found by the automated suite or the independent
+sub-agent. That does not cover the macOS-only items above and does not turn the
+Muse gate into a PASS.

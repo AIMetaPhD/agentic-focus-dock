@@ -23,6 +23,10 @@ test("the capability panel states the notification limit honestly", async ({ pag
   await expect(page.getByText(/never reads Notification Center databases/)).toBeVisible();
   await expect(page.getByText("macOS only").first()).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
+  await page.addStyleTag({ content: ".dock-wrap { display: none !important; }" });
+  await page.locator(".panel-note code").evaluateAll((nodes) => {
+    for (const node of nodes) node.textContent = "<data-dir>/bridge-token";
+  });
   await page.screenshot({ path: "qa/evidence/05-permissions.png" });
 });
 

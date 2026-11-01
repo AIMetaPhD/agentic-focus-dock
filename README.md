@@ -28,7 +28,16 @@ no cloud key required.
 | Optional Ollama / OpenAI-compatible adapters | **IMPLEMENTED, NOT EXERCISED** | needs a local model / endpoint to verify |
 | macOS floating Dock | **NOT VERIFIED** | Swift source + macOS CI compile only; no Mac was available |
 | Global system notification interception | **UNSUPPORTED BY DESIGN** | public-API limitation, documented in the app |
-| Public release / profile README | **AWAITING USER AUTHORIZATION** | private development only |
+| Public release | **PUBLIC v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
+| Profile README PR | **OPEN — merge awaits owner** | [AIMetaPhD/AIMetaPhD](https://github.com/AIMetaPhD/AIMetaPhD/pulls) |
+| Muse independent QA | **NOT VERIFIED** | three Muse VM/harness blocks; see [`docs/QA_REPORT.md`](docs/QA_REPORT.md) |
+| Independent sub-agent verification | **PASS (not Muse)** | 56 unit/integration + 13 Playwright; [`qa/SUBAGENT_VERIFICATION_2026-10-30.md`](qa/SUBAGENT_VERIFICATION_2026-10-30.md) |
+
+> **QA note:** The original plan required a Muse independent sign-off. Muse could
+> not reach the source in three attempts. A fresh-context Claude sub-agent on the
+> same machine independently re-ran the suite and black-box probes; it passed.
+> The product owner accepted that as supplementary evidence and waived the Muse
+> gate for v0.1.0. This is **not** a Muse sign-off.
 
 The honest capability matrix is in [`docs/CAPABILITIES.md`](docs/CAPABILITIES.md).
 

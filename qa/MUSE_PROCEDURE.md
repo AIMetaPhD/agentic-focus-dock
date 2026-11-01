@@ -10,7 +10,7 @@ on synthetic data.
 ## Fixed facts
 
 - Repository on this Windows workstation:
-  `E:\ClaudeCodeFiles\MyProducts\agentic-focus-dock`
+  `<repo-root>` (redacted in the public copy)
 - Product commit under test: the exact `commit_sha` in the queue task inputs.
 - Platform: Windows 11, Node 24. The macOS bridge cannot be tested here.
 - Product data: synthetic demo events only. Do not open any personal data
@@ -31,7 +31,7 @@ on synthetic data.
 1. Create a temporary clone and check out the exact commit:
 
 ```powershell
-$repo = "E:\ClaudeCodeFiles\MyProducts\agentic-focus-dock"
+$repo = "<repo-root>"
 $sha  = "<commit_sha from inputs>"
 $temp = Join-Path $env:TEMP ("focusdock-qa-" + (Get-Random))
 git clone --no-hardlinks $repo $temp
