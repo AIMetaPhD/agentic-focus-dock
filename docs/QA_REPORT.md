@@ -1,8 +1,8 @@
 # QA Report — v0.1.0
 
-Status: **development verification complete; independent Muse QA NOT VERIFIED;
-the product owner waived the Muse gate for v0.1.0 on 2026-11-01 based on
-supplementary sub-agent verification.**
+Status: **development verification complete; independent Muse QA NOT VERIFIED.**
+The product owner accepted the sub-agent report as supplementary evidence, but
+public release remains subject to explicit owner authorization.
 This file is written by the implementation owner. It is **not** a Muse sign-off.
 
 ## Environment
@@ -94,7 +94,7 @@ evidence, not a Muse gate pass.
 | Multi-display / full-screen / sleep-wake | no Mac | recording per scenario |
 | Live Ollama provider | no local model installed | request/response log + latency |
 | Live OpenAI-compatible provider | no endpoint/key used | opt-in screenshot + provider response |
-| Muse independent QA (G4) | three Muse VM/harness blocks | Muse re-dispatch on a reachable workstation; currently waived by owner |
+| Muse independent QA (G4) | three Muse VM/harness blocks | Muse re-dispatch on a reachable workstation; public release awaits explicit owner authorization |
 
 ## Independent Muse QA
 
@@ -110,8 +110,8 @@ All three attempts are environment/harness blocks, not product failures and not
 a PASS. No Muse instance could reach the repository, and the snapshot channel
 was refused as opaque. The independent-QA gate therefore remains **NOT
 VERIFIED**. The product owner accepted the sub-agent report as supplementary
-evidence and waived the Muse gate for v0.1.0 on 2026-11-01; this is not a Muse
-sign-off.
+evidence; this is not a Muse sign-off, and public release still requires
+explicit owner authorization.
 
 No Sev0/Sev1 defect was found by the automated suite or the independent
 sub-agent. That does not cover the macOS-only items above and does not turn the

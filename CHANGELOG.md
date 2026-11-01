@@ -2,7 +2,8 @@
 
 ## 0.1.0 — 2026-11-01
 
-First public release (private RC on 2026-10-30).
+First private release candidate; public release is prepared but awaits explicit
+owner authorization.
 
 ### Added
 
@@ -40,6 +41,8 @@ First public release (private RC on 2026-10-30).
 - Ollama and cloud providers are implemented but not exercised against a live
   endpoint in this environment.
 - No signed/notarized `.app`, no auto-update.
-- Muse independent QA is **NOT VERIFIED**; the product owner waived the gate for
-  v0.1.0 based on supplementary sub-agent verification. This is not a Muse PASS.
-- The profile README PR is open; merging it still requires the owner's approval.
+- Muse independent QA is **NOT VERIFIED**; the sub-agent report is supplementary
+  evidence, not a Muse PASS. Public release remains gated on explicit owner
+  authorization.
+- The profile README PR has not been opened; it also awaits explicit owner
+  authorization.

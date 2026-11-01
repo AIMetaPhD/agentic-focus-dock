@@ -1,8 +1,12 @@
 # FocusDock AI v0.1.0
 
+> **DRAFT — not published.** The repository remains private. Changing visibility,
+> publishing this Release, and opening the profile PR all await the owner's
+> explicit authorization.
+
 **A local-first, AI-native focus dock with customizable modes and an optional macOS companion.**
 
-This is the first public release. It is a real, runnable local web app — not a
+This is the prepared first release. It is a real, runnable local web app — not a
 mockup. Everything runs on `127.0.0.1`; there is no account, no telemetry, and
 no cloud key requirement.
 

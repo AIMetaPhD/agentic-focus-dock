@@ -27,14 +27,15 @@ API Key 也能完整使用。
 | 可选 Ollama / OpenAI 兼容适配器 | **已实现，未实测** | 需要本地模型或真实端点 |
 | macOS 浮动 Dock | **未验证** | 仅有 Swift 源码与 macOS CI 编译；开发机没有 Mac |
 | 全局系统通知拦截 | **设计上不支持** | 公开 API 限制，界面中已说明 |
-| 公开发布 | **已公开 v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
-| Profile README PR | **已提交，等待所有者合并** | [AIMetaPhD/AIMetaPhD](https://github.com/AIMetaPhD/AIMetaPhD/pulls) |
+| 公开发布 | **已准备，等待所有者明确授权** | 仓库保持私有；发布说明草稿见 `docs/RELEASE_NOTES_v0.1.0.md` |
+| Profile README PR | **未提交，等待所有者明确授权** | 尚未创建 PR |
 | Muse 独立 QA | **未验证** | Muse VM/执行环境三次阻断；见 [`docs/QA_REPORT.md`](docs/QA_REPORT.md) |
 | 独立子代理验证 | **通过（非 Muse）** | 56 个单元/集成 + 13 个 Playwright；[`qa/SUBAGENT_VERIFICATION_2026-10-30.md`](qa/SUBAGENT_VERIFICATION_2026-10-30.md) |
 
 > **QA 说明：** 原计划要求 Muse 独立签核。Muse 三次都无法访问源码。随后由同机、
 > 全新上下文的 Claude 子代理独立重跑测试与黑盒探针并通过。项目所有者接受其作为
-> 补充证据，并对 v0.1.0 豁免 Muse 门禁。这**不是** Muse 签核。
+> 补充证据；Muse 门禁仍为**未验证**，公开发布仍需所有者明确授权。这**不是**
+> Muse 签核。
 
 完整能力边界见 [`docs/CAPABILITIES.md`](docs/CAPABILITIES.md)。
 
