@@ -15,8 +15,8 @@ sign-off and it does not claim that the Muse gate passed.
 
 On 2026-11-01 the product owner explicitly authorized changing the repository to
 Public, publishing the v0.1.0 Release, and opening the profile PR. The repository
-is public, the Release is published, and the profile PR is open. Merging the
-profile PR still requires the owner's separate approval.
+is public, the Release is published, and the profile PR was merged on 2026-11-01
+(merge commit `5be0466fb81a36cad8f0e9b0e1093aa3f21b01d2`).
 
 ## Gate status
 
@@ -28,7 +28,7 @@ profile PR still requires the owner's separate approval.
 | G3 macOS bridge | **NOT VERIFIED** | Swift package + macOS CI compile; no real-device run |
 | G4 Independent Muse QA | **NOT VERIFIED** | three Muse attempts blocked by the VM/harness; independent Claude sub-agent PASS (not Muse) on `ea3ef86`. See `docs/QA_REPORT.md` and `qa/SUBAGENT_VERIFICATION_2026-10-30.md` |
 | G5 Public release | **PASS** | public repo, v0.1.0 Release, green CI, bilingual README, LICENSE/NOTICE/SECURITY/PRIVACY |
-| G6 Profile README | **PR OPEN — merge awaits owner** | `AIMetaPhD/AIMetaPhD` pull request; merge is not part of this release |
+| G6 Profile README | **PASS — merged** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
 
 ## What is real
 
@@ -52,7 +52,6 @@ profile PR still requires the owner's separate approval.
 
 | Item | Status | Why it matters |
 |---|---|---|
-| Profile PR merge | **OPEN** | the PR is open; merging still requires the owner's approval |
 | macOS floating panel at runtime | **NOT VERIFIED** | no Apple Silicon host; CI compile is not a device test |
 | Accessibility title capture | **NOT VERIFIED** | requires macOS permission flow |
 | Multi-display/full-screen/sleep-wake | **NOT VERIFIED** | same |
@@ -96,7 +95,8 @@ profile PR still requires the owner's separate approval.
    2026-11-01; this is not a Muse PASS.
 2. The macOS bridge remains **NOT VERIFIED**; the Release notes say so and the
    binary is not presented as production-ready.
-3. The profile README PR is open; merging it still requires the owner's approval.
+3. The profile README PR was merged on 2026-11-01; the public profile now lists
+   FocusDock.
 
 ## Commit / build
 

@@ -29,7 +29,7 @@ no cloud key required.
 | macOS floating Dock | **NOT VERIFIED** | Swift source + macOS CI compile only; no Mac was available |
 | Global system notification interception | **UNSUPPORTED BY DESIGN** | public-API limitation, documented in the app |
 | Public release | **PUBLIC v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
-| Profile README PR | **OPEN — merge awaits owner** | [AIMetaPhD/AIMetaPhD pull requests](https://github.com/AIMetaPhD/AIMetaPhD/pulls) |
+| Profile README PR | **MERGED** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
 | Muse independent QA | **NOT VERIFIED** | three Muse VM/harness blocks; see [`docs/QA_REPORT.md`](docs/QA_REPORT.md) |
 | Independent sub-agent verification | **PASS (not Muse)** | 56 unit/integration + 13 Playwright; [`qa/SUBAGENT_VERIFICATION_2026-10-30.md`](qa/SUBAGENT_VERIFICATION_2026-10-30.md) |
 

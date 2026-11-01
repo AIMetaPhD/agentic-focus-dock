@@ -43,4 +43,4 @@ First public release (private RC on 2026-10-30).
 - Muse independent QA is **NOT VERIFIED**; the sub-agent report is supplementary
   evidence, not a Muse PASS. The owner explicitly authorized the public release
   on 2026-11-01.
-- The profile README PR is open; merging it still requires the owner's approval.
+- The profile README PR is merged.

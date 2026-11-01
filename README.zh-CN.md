@@ -28,7 +28,7 @@ API Key 也能完整使用。
 | macOS 浮动 Dock | **未验证** | 仅有 Swift 源码与 macOS CI 编译；开发机没有 Mac |
 | 全局系统通知拦截 | **设计上不支持** | 公开 API 限制，界面中已说明 |
 | 公开发布 | **已公开 v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
-| Profile README PR | **已提交，等待所有者合并** | [AIMetaPhD/AIMetaPhD PR](https://github.com/AIMetaPhD/AIMetaPhD/pulls) |
+| Profile README PR | **已合并** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
 | Muse 独立 QA | **未验证** | Muse VM/执行环境三次阻断；见 [`docs/QA_REPORT.md`](docs/QA_REPORT.md) |
 | 独立子代理验证 | **通过（非 Muse）** | 56 个单元/集成 + 13 个 Playwright；[`qa/SUBAGENT_VERIFICATION_2026-10-30.md`](qa/SUBAGENT_VERIFICATION_2026-10-30.md) |
 

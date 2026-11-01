@@ -62,3 +62,11 @@ not evidence of a working overlay.
 **Decision:** private repository and PRs are allowed; public visibility, a public
 Release, and the `AIMetaPhD/AIMetaPhD` profile PR require explicit user approval.
 **Why:** the handoff's release boundary and the user's instruction.
+
+## 2026-11-01 — Public release authorized; profile PR merged
+
+**Decision:** after explicit owner authorization, the repository is public, the
+v0.1.0 Release is published, and the profile PR was merged (merge commit
+`5be0466fb81a36cad8f0e9b0e1093aa3f21b01d2`).
+**Why:** the owner authorized all three actions; the profile PR was a one-line
+addition to the `for builders` table.
