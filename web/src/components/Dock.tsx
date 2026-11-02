@@ -1,5 +1,6 @@
 import type { AppState, PendingNotification, PinnedItem } from "../types";
 import { useT } from "../i18n";
+import { NativeAppIcon } from "./NativeAppIcon";
 
 type Decision = "stay" | "later" | "dismiss" | "go_social";
 
@@ -196,7 +197,11 @@ export function Dock({
               onClick={() => onPinned(item)}
               title={item.kind === "bookmark" ? item.url : `${item.label} — native launch`}
             >
-              <span aria-hidden="true">{item.icon}</span>
+              <NativeAppIcon
+                id={item.kind === "app" ? item.bundle_id : undefined}
+                label={item.label}
+                fallback={item.icon}
+              />
               <span className="app-label">{item.label}</span>
             </button>
           ))}

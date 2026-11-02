@@ -13,6 +13,11 @@ namespace FocusDock.Companion
             Check("reject .txt target", !AppCatalog.IsSafeTarget(Path.Combine(Path.GetTempPath(), "focusdock-not-an-app.txt")), ref failures);
             Check("reject missing .exe", !AppCatalog.IsSafeTarget(Path.Combine(Path.GetTempPath(), "focusdock-missing-app.exe")), ref failures);
 
+            AppEntry iconEntry = new AppEntry();
+            iconEntry.TargetPath = Path.Combine(Environment.SystemDirectory, "notepad.exe");
+            byte[] icon = AppCatalog.IconPng(iconEntry);
+            Check("extract executable icon", icon != null && icon.Length > 8 && icon[0] == 0x89 && icon[1] == 0x50, ref failures);
+
             bool missingTokenRejected = false;
             try
             {

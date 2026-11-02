@@ -160,6 +160,25 @@ async function nativeControlRequest(
   }
 }
 
+async function nativeControlBinary(
+  ctx: Ctx,
+  path: string,
+): Promise<{ status: number; body: Buffer }> {
+  const base = process.env.FOCUSDOCK_NATIVE_COMPANION_URL || "http://127.0.0.1:4318";
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(`${base}${path}`, {
+      headers: { authorization: `Bearer ${ctx.bridgeToken}` },
+      signal: controller.signal,
+    });
+    const body = Buffer.from(await response.arrayBuffer());
+    return { status: response.status, body };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function publicSettings(settings: Settings, dataDir: string): unknown {
   return {
     ...settings,
@@ -835,6 +854,23 @@ export async function startServer(opts: StartOptions): Promise<{
         return fail(reply, 503, "native_unavailable", "The Windows companion is not listening.");
       }
       return result.body;
+    } catch {
+      return fail(reply, 503, "native_unavailable", "The Windows companion is not running.");
+    }
+  });
+
+  app.get("/api/native/icon/:id", async (request, reply) => {
+    const params = z.object({ id: z.string().min(1).max(128) }).parse(request.params);
+    if (process.platform !== "win32") {
+      return fail(reply, 503, "native_unavailable", "Native icons are only available on Windows in this spike.");
+    }
+    try {
+      const result = await nativeControlBinary(ctx, `/icon?id=${encodeURIComponent(params.id)}`);
+      if (result.status !== 200 || result.body.length === 0) {
+        return fail(reply, 404, "icon_not_found", "No icon for this app.");
+      }
+      reply.header("cache-control", "private, max-age=300");
+      return reply.type("image/png").send(result.body);
     } catch {
       return fail(reply, 503, "native_unavailable", "The Windows companion is not running.");
     }

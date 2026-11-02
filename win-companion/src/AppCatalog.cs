@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -136,6 +138,28 @@ namespace FocusDock.Companion
             if (string.IsNullOrWhiteSpace(path)) return false;
             if (!string.Equals(Path.GetExtension(path), ".exe", StringComparison.OrdinalIgnoreCase)) return false;
             return File.Exists(path);
+        }
+
+        public static byte[] IconPng(AppEntry entry)
+        {
+            if (entry == null || !IsSafeTarget(entry.TargetPath)) return null;
+            try
+            {
+                using (Icon icon = Icon.ExtractAssociatedIcon(entry.TargetPath))
+                {
+                    if (icon == null) return null;
+                    using (Bitmap bitmap = icon.ToBitmap())
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        bitmap.Save(stream, ImageFormat.Png);
+                        return stream.ToArray();
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static string HashFile(string path)

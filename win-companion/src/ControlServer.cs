@@ -20,6 +20,7 @@ namespace FocusDock.Companion
         private readonly string auditFile;
         private readonly Action<string> log;
         private readonly object cacheLock = new object();
+        private readonly Dictionary<string, byte[]> icons = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
         private List<AppEntry> apps;
         private TcpListener listener;
         private Thread thread;
@@ -121,6 +122,20 @@ namespace FocusDock.Companion
                         {
                             WriteJson(stream, 200, "OK", AppsJson());
                         }
+                        else if (method == "GET" && (path == "/icon" || path.StartsWith("/icon?")))
+                        {
+                            string iconId = QueryValue(path, "id");
+                            AppEntry iconEntry = AppCatalog.FindById(GetApps(), iconId);
+                            byte[] icon = iconEntry == null ? null : GetIcon(iconEntry);
+                            if (icon == null)
+                            {
+                                WriteJson(stream, 404, "Not Found", "{\"error\":\"icon_not_found\"}");
+                            }
+                            else
+                            {
+                                WriteBinary(stream, 200, "OK", "image/png", icon);
+                            }
+                        }
                         else if (method == "POST" && path == "/launch")
                         {
                             Match match = Regex.Match(body, "\"id\"\\s*:\\s*\"([^\"]{1,128})\"");
@@ -162,6 +177,34 @@ namespace FocusDock.Companion
             }
         }
 
+        private byte[] GetIcon(AppEntry entry)
+        {
+            lock (cacheLock)
+            {
+                byte[] icon;
+                if (icons.TryGetValue(entry.Id, out icon)) return icon;
+                icon = AppCatalog.IconPng(entry);
+                if (icon != null) icons[entry.Id] = icon;
+                return icon;
+            }
+        }
+
+        private static string QueryValue(string path, string key)
+        {
+            int question = path.IndexOf('?');
+            if (question < 0) return null;
+            string query = path.Substring(question + 1);
+            string[] parts = query.Split('&');
+            foreach (string part in parts)
+            {
+                int equals = part.IndexOf('=');
+                if (equals <= 0) continue;
+                if (!string.Equals(part.Substring(0, equals), key, StringComparison.OrdinalIgnoreCase)) continue;
+                return Uri.UnescapeDataString(part.Substring(equals + 1));
+            }
+            return null;
+        }
+
         private string AppsJson()
         {
             List<AppEntry> list = GetApps();
@@ -180,10 +223,20 @@ namespace FocusDock.Companion
 
         private static void WriteJson(NetworkStream stream, int status, string reason, string json)
         {
-            byte[] payload = Encoding.UTF8.GetBytes(json);
+            WriteBody(stream, status, reason, "application/json; charset=utf-8", Encoding.UTF8.GetBytes(json));
+        }
+
+        private static void WriteBinary(NetworkStream stream, int status, string reason, string contentType, byte[] payload)
+        {
+            WriteBody(stream, status, reason, contentType, payload);
+        }
+
+        private static void WriteBody(NetworkStream stream, int status, string reason, string contentType, byte[] payload)
+        {
             string head = "HTTP/1.1 " + status + " " + reason + "\r\n" +
-                "Content-Type: application/json; charset=utf-8\r\n" +
+                "Content-Type: " + contentType + "\r\n" +
                 "Content-Length: " + payload.Length + "\r\n" +
+                "Cache-Control: private, max-age=300\r\n" +
                 "Connection: close\r\n\r\n";
             byte[] headBytes = Encoding.ASCII.GetBytes(head);
             stream.Write(headBytes, 0, headBytes.Length);

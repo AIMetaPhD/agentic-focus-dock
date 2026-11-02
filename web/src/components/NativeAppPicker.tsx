@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import { useT } from "../i18n";
+import { NativeAppIcon } from "./NativeAppIcon";
 
 export type NativeApp = { id: string; name: string };
 
@@ -71,9 +72,7 @@ export function NativeAppPicker({
             ) : (
               filtered.map((app) => (
                 <div className="native-app-row" key={app.id}>
-                  <span className="native-app-glyph" aria-hidden="true">
-                    ▣
-                  </span>
+                  <NativeAppIcon id={app.id} label={app.name} />
                   <span className="native-app-name">{app.name}</span>
                   <button className="btn btn-ghost" type="button" onClick={() => onLaunch(app)}>
                     {t("native.testLaunch")}

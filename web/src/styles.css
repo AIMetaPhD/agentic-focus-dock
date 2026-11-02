@@ -2249,6 +2249,18 @@ button:disabled {
   font-size: 12px;
 }
 
+.native-app-icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.app-tile .native-app-icon {
+  width: 22px;
+  height: 22px;
+}
+
 .native-app-name {
   min-width: 0;
   overflow: hidden;
