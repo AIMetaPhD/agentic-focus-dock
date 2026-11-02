@@ -6,7 +6,7 @@
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
 - Repository: <https://github.com/AIMetaPhD/agentic-focus-dock>
 - Recovery commit: `c7a766e013da6f6e14d52c633818febdf43c83f9`
-- R3 follow-up commit: `1ad22db` (dock-first Add app UI, web pinned launch, social pause, real app icons)
+- R3 follow-up commits: `1ad22db` (dock-first Add app UI, web pinned launch, social pause, real app icons), `87ba975` (clean shutdown, R3 restart persistence)
 - Base commit before recovery: `56b30f3517ace01f2c31319b90fc5843112f73e8`
 - Public release: **v0.1.0 remains the public Release; no v0.2 Release was created.**
 
@@ -20,7 +20,7 @@ remains **NOT VERIFIED**.
 | R0 Truthful inventory / Mac reachability | **PASS for reachability matrix** | Repo, host, tools and tests inventoried; one online macOS Tailscale peer exists; SSH host key is presented but **not trusted**; GUI session not proven |
 | R1 Existing macOS bridge smoke test | **BLOCKED** | Host-key trust and Mac GUI/screen evidence are missing; no `NSPanel`/`NSWorkspace` runtime claim |
 | R2 Windows native companion | **PASS (minimal)** | Real foreground events, Building suggestion after 15 s, three distinct apps, allowlisted Character Map launch, unknown launch rejected, bilingual native status, graceful disconnect |
-| R3 Usefulness / full workflow | **PARTIAL — functional web flow passes** | Dock-first Add app, web pinned launch and a cancelable social pause pass; reboot persistence and the user-value assessment are still pending |
+| R3 Usefulness / full workflow | **PARTIAL — technical flow and app restart pass** | Dock-first Add app, real icons, web pinned launch, cancelable social pause, app-restart persistence and clean stop pass; real editor/social workflow, OS reboot and user-value assessment pending |
 
 **Recommendation: CONDITIONAL GO** to continue the specific Windows native P0
 blockers. **Not GO** for a daily-use claim or another public Release.
@@ -152,7 +152,7 @@ server reported `connected: false`, `last_seen: null`
 
 ## 5. R3 — usefulness test
 
-**PARTIAL — 2 of 4 subitems pass.**
+**PARTIAL — technical flow and app-restart persistence pass; the real editor/social workflow and the user-value assessment remain.**
 
 Proven:
 
@@ -173,19 +173,43 @@ Proven:
   showed a `FOCUS PAUSE` dialog, allowed Cancel, then allowed `Open now` after
   the configured 4 s test wait; UI toast: `Launched X`
   (`r3-social-pause.png`, `r3-social-open.png`, `r3-web-test.json`).
+- **App restart and clean stop:** the companion and server were stopped, then
+  restarted from the same data directory. No companion process, window or
+  listener remained after stop; with a WebSocket client still attached, the
+  server exited and the client observed `WS_CLOSED`. The stable state JSON
+  before and after restart is identical (`diff` exit 0), including the active
+  mode, manual lock, all six modes, `Character Map` and `Obsidian` pins, and
+  language/privacy settings. Icons returned the same SHA-256 values
+  (`r3-restart-before.json`, `r3-restart-after.json`,
+  `r3-restart-cleanup.txt`, `r3-restart-dock.png`).
+- **Local-only dependency check:** listeners and established peers sampled from
+  the server and companion were loopback-only; AI provider was `rules`,
+  `cloud_opt_in` was false and no API key was configured
+  (`r3-restart-local-only.txt`).
 - The native picker is now labeled **Diagnostic launch** and has a search box.
   It no longer preselects the first Start Menu entry; Launch is disabled until
   an explicit selection. This fixes the accidental `Access` launch reported by
   the user. The normal flow is the web dock `+ Add` modal.
+
+A real defect was found during this test: the first shutdown left the Node
+process alive because an established WebSocket kept the event loop open after
+the HTTP listener closed. Commit `87ba975` terminates hub clients in the
+`preClose` hook, adds a 3 s forced-exit deadline, and adds a regression test.
+The stop sequence above was rerun after the fix.
 
 Not proven:
 
 - The full 30 s default wait was not sat through; the test used a 4 s
   mode-configured wait.
 - No real Slack/WeChat/Teams app was launched; the social item was a test
-  fixture.
-- Reboot/restart persistence and no-residual-window behavior after a real
-  reboot are still pending.
+  fixture. A real code editor was not pinned and launched through the dock in
+  this pass.
+- A full OS reboot was not performed. This pass covers the directive's
+  "reboot/restart the app" path; FocusDock has no auto-start entry, so the
+  server and companion must be started manually after signing in.
+- The app was not run with the network adapter disabled; offline capability is
+  supported by the local rule engine and loopback-only socket sample, not by an
+  adapter-disabled test.
 - User assessment that the tool actually reduces context-switching friction is
   still pending.
 
@@ -221,14 +245,14 @@ the app directly. Automated tests are not a substitute for the user-value test.
 |---|---|
 | `npm run typecheck` | pass |
 | `npm run lint` | pass |
-| `npm test` | **56 passed** (52 server + 4 web) |
+| `npm test` | **57 passed** (53 server + 4 web), including the WebSocket shutdown regression test |
 | `npm run build` | pass |
 | `npm run test:e2e` | **13 passed** (before the R3 web-launch UI change; CI re-runs it) |
 | R3 UI scripts | `win-companion/r3-add-app-test.mjs` and `r3-web-test.mjs` pass |
 | `npm run secret-scan` | clean, 132 tracked files |
 | C# `--self-test` | **6 checks pass**, including executable icon extraction |
 | C# build | pass |
-| CI | R2 run `41409028974` on `c7a766e` — **success**; icon commit `1ad22db` run `41470500051` — **success** (macOS bridge, secret scan, web typecheck/lint/unit/e2e) |
+| CI | R2 run `41409028974` on `c7a766e` — **success**; icon commit `1ad22db` run `41470500051` — **success**; shutdown/restart commit `87ba975` run `41475843568` — **success** (macOS bridge, secret scan, web typecheck/lint/unit/e2e) |
 | Muse QA | **NOT VERIFIED**; no Muse PASS was fabricated |
 
 ## 8. Evidence index
@@ -258,6 +282,11 @@ the app directly. Automated tests are not a substitute for the user-value test.
 | Add-app icon — Obsidian | `qa/evidence/native/r3-add-app-obsidian.png` |
 | Dock with real pinned icons | `qa/evidence/native/r3-dock-icons.png` |
 | Extracted icon PNGs | `qa/evidence/native/r3-icon-character-map.png`, `r3-icon-obsidian.png` |
+| Restart state before | `qa/evidence/native/r3-restart-before.json` |
+| Restart state after | `qa/evidence/native/r3-restart-after.json` |
+| Stop/restart result | `qa/evidence/native/r3-restart-cleanup.txt` |
+| Loopback-only socket sample | `qa/evidence/native/r3-restart-local-only.txt` |
+| Dock after restart | `qa/evidence/native/r3-restart-dock.png` |
 | R3 launch audit (includes the accidental Access launch) | `qa/evidence/native/r3-launch-audit.log` |
 | Companion source | `win-companion/src/` |
 | Companion README | `win-companion/README.md` |
