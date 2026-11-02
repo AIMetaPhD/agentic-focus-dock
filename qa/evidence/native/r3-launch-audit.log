@@ -6,3 +6,7 @@
 2026-11-02T13:01:42.7064425Z	launch	Character Map	C:\WINDOWS\system32\charmap.exe	launched Character Map sha256=af7866199687521bf0179212a9fd788669c158516c00012ea98e04697b38ed35
 2026-11-02T13:02:00.7371192Z	launch	Access	C:\Program Files\Microsoft Office\root\Office16\MSACCESS.EXE	launched Access sha256=1056d48c75f00b5aa7588813c337a1c31970c428e79cbfd07f15ed9985d74f96
 2026-11-02T13:14:18.3024475Z	launch	Access	C:\Program Files\Microsoft Office\root\Office16\MSACCESS.EXE	launched Access sha256=1056d48c75f00b5aa7588813c337a1c31970c428e79cbfd07f15ed9985d74f96
+2026-11-02T16:11:24.8228762Z	launch	Visual Studio Code	F:\Applications\Microsoft VS Code\Code.exe	launched Visual Studio Code sha256=325fb30ba28d17fa6ba4df58043727b2469aca9d641793a65e413721b2110ec6
+2026-11-02T16:13:28.1511013Z	launch	Visual Studio Code	F:\Applications\Microsoft VS Code\Code.exe	launched Visual Studio Code sha256=325fb30ba28d17fa6ba4df58043727b2469aca9d641793a65e413721b2110ec6
+2026-11-02T16:14:44.2357682Z	launch	Visual Studio Code	F:\Applications\Microsoft VS Code\Code.exe	launched Visual Studio Code sha256=325fb30ba28d17fa6ba4df58043727b2469aca9d641793a65e413721b2110ec6
+2026-11-02T16:17:38.4540845Z	launch	Character Map	C:\WINDOWS\system32\charmap.exe	launched Character Map sha256=af7866199687521bf0179212a9fd788669c158516c00012ea98e04697b38ed35

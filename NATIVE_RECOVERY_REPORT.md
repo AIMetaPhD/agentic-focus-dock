@@ -1,6 +1,6 @@
 # NATIVE_RECOVERY_REPORT.md
 
-- Date: 2026-11-02
+- Date: 2026-11-03
 - Project lead: ChatGPT
 - Development lead: Claude Code
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
@@ -20,7 +20,7 @@ remains **NOT VERIFIED**.
 | R0 Truthful inventory / Mac reachability | **PASS for reachability matrix** | Repo, host, tools and tests inventoried; one online macOS Tailscale peer exists; SSH host key is presented but **not trusted**; GUI session not proven |
 | R1 Existing macOS bridge smoke test | **BLOCKED** | Host-key trust and Mac GUI/screen evidence are missing; no `NSPanel`/`NSWorkspace` runtime claim |
 | R2 Windows native companion | **PASS (minimal)** | Real foreground events, Building suggestion after 15 s, three distinct apps, allowlisted Character Map launch, unknown launch rejected, bilingual native status, graceful disconnect |
-| R3 Usefulness / full workflow | **PARTIAL — technical flow and app restart pass** | Dock-first Add app, real icons, web pinned launch, cancelable social pause, app-restart persistence and clean stop pass; real editor/social workflow, OS reboot and user-value assessment pending |
+| R3 Usefulness / full workflow | **PARTIAL — technical workflow passes on app restart** | Dock-first Add app, real icons, real VS Code foreground/suggestion/launch, cancelable 30 s social pause, app-restart persistence, clean stop and bilingual status pass; real social app, OS reboot and user-value assessment pending |
 
 **Recommendation: CONDITIONAL GO** to continue the specific Windows native P0
 blockers. **Not GO** for a daily-use claim or another public Release.
@@ -152,7 +152,7 @@ server reported `connected: false`, `last_seen: null`
 
 ## 5. R3 — usefulness test
 
-**PARTIAL — technical flow and app-restart persistence pass; the real editor/social workflow and the user-value assessment remain.**
+**PARTIAL — technical workflow passes on the app-restart path; a full OS reboot and the user-value assessment remain.**
 
 Proven:
 
@@ -168,11 +168,30 @@ Proven:
 - **Web pinned launch:** the newly pinned dock tile `Character Map` launched a
   real app through `/api/native/launch`; UI toast: `Launched Character Map`
   (`qa/evidence/native/r3-web-launch.png`).
-- **Cancelable social pause:** a pinned test item labeled `X` (pointing to the
-  Character Map target, a test fixture) received `409 social_pause_required`,
-  showed a `FOCUS PAUSE` dialog, allowed Cancel, then allowed `Open now` after
-  the configured 4 s test wait; UI toast: `Launched X`
-  (`r3-social-pause.png`, `r3-social-open.png`, `r3-web-test.json`).
+- **Real editor foreground and suggestion:** with Writing active and the
+  manual lock released, `Visual Studio Code` was launched through the native
+  picker. The companion recorded a real foreground activity event, the rules
+  engine suggested `Building` after 15 s stable dwell, and the operator
+  confirmed the suggestion in the UI. `active_mode` changed from `writing` to
+  `building`; the dock and mode hero changed with it
+  (`r3-editor-suggestion.png`, `r3-editor-flow.json`).
+- **Pinned real editor launch:** `Visual Studio Code` was pinned as a native
+  app in Building; clicking that dock tile produced `已启动 Visual Studio Code`
+  and an audit entry with SHA-256
+  `325fb30ba28d17fa6ba4df58043727b2469aca9d641793a65e413721b2110ec6`
+  (`r3-editor-pinned-dock.png`, `r3-editor-launch-toast.png`).
+- **Cancelable 30 s social pause:** a pinned test item labeled `X` (pointing to
+  the Character Map target, a test fixture) received
+  `409 social_pause_required`. The dialog showed a 31 s initial countdown
+  (30 s configured, rounded up), Cancel left the app unlaunched, reopening the
+  tile showed the same wait, and `Open now` became enabled at 0 s; UI toast:
+  `已启动 X`. The dialog explicitly says FocusDock cannot block the app outside
+  itself (`r3-social-30s-first.png`, `r3-social-30s-ready.png`,
+  `r3-social-30s-launch.png`, `r3-social-30s.json`).
+- **Bilingual and native status:** the topbar, dock labels and native status
+  were checked in both languages. Chinese: `Windows — 已连接`, dock `添加`;
+  English: `Windows — connected`, dock `Add`
+  (`r3-bilingual-zh.png`, `r3-bilingual-en.png`, `r3-bilingual.json`).
 - **App restart and clean stop:** the companion and server were stopped, then
   restarted from the same data directory. No companion process, window or
   listener remained after stop; with a WebSocket client still attached, the
@@ -199,11 +218,10 @@ The stop sequence above was rerun after the fix.
 
 Not proven:
 
-- The full 30 s default wait was not sat through; the test used a 4 s
-  mode-configured wait.
-- No real Slack/WeChat/Teams app was launched; the social item was a test
-  fixture. A real code editor was not pinned and launched through the dock in
-  this pass.
+- No real Slack/WeChat/Telegram app was launched; the social item was a test
+  fixture pointing at Character Map. This deliberately avoided exposing private
+  messages. The gate mechanics and 30 s default were exercised, but a real
+  social app remains a separate privacy-sensitive check.
 - A full OS reboot was not performed. This pass covers the directive's
   "reboot/restart the app" path; FocusDock has no auto-start entry, so the
   server and companion must be started manually after signing in.
@@ -287,6 +305,12 @@ the app directly. Automated tests are not a substitute for the user-value test.
 | Stop/restart result | `qa/evidence/native/r3-restart-cleanup.txt` |
 | Loopback-only socket sample | `qa/evidence/native/r3-restart-local-only.txt` |
 | Dock after restart | `qa/evidence/native/r3-restart-dock.png` |
+| Real editor suggestion | `qa/evidence/native/r3-editor-suggestion.png` |
+| Real editor flow result | `qa/evidence/native/r3-editor-flow.json` |
+| Pinned editor dock | `qa/evidence/native/r3-editor-pinned-dock.png` |
+| Editor launch toast | `qa/evidence/native/r3-editor-launch-toast.png` |
+| 30 s social pause | `qa/evidence/native/r3-social-30s-first.png`, `r3-social-30s-ready.png`, `r3-social-30s-launch.png`, `r3-social-30s.json` |
+| Bilingual status | `qa/evidence/native/r3-bilingual-zh.png`, `r3-bilingual-en.png`, `r3-bilingual.json` |
 | R3 launch audit (includes the accidental Access launch) | `qa/evidence/native/r3-launch-audit.log` |
 | Companion source | `win-companion/src/` |
 | Companion README | `win-companion/README.md` |

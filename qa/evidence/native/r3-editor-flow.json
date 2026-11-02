@@ -1,0 +1,153 @@
+{
+  "before": {
+    "active_mode": "writing",
+    "manual_lock": false,
+    "last_suggested_mode": "building",
+    "bridge_connected": true,
+    "building_pins": [
+      {
+        "id": "vscode",
+        "label": "VS Code",
+        "kind": "app",
+        "bundle_id": "com.microsoft.VSCode"
+      },
+      {
+        "id": "terminal",
+        "label": "Terminal",
+        "kind": "app",
+        "bundle_id": "com.apple.Terminal"
+      },
+      {
+        "id": "browser",
+        "label": "Browser",
+        "kind": "app",
+        "bundle_id": "com.google.Chrome"
+      },
+      {
+        "id": "github",
+        "label": "GitHub",
+        "kind": "bookmark",
+        "bundle_id": null
+      }
+    ]
+  },
+  "suggestion": {
+    "at": "2026-11-02T16:13:24.405Z",
+    "text": "⚒ 适合 Building 稳定专注 15 秒后给出建议 忽略 切换到 Building"
+  },
+  "after_confirm": {
+    "active_mode": "building",
+    "manual_lock": true,
+    "last_suggested_mode": null,
+    "bridge_connected": true,
+    "building_pins": [
+      {
+        "id": "vscode",
+        "label": "VS Code",
+        "kind": "app",
+        "bundle_id": "com.microsoft.VSCode"
+      },
+      {
+        "id": "terminal",
+        "label": "Terminal",
+        "kind": "app",
+        "bundle_id": "com.apple.Terminal"
+      },
+      {
+        "id": "browser",
+        "label": "Browser",
+        "kind": "app",
+        "bundle_id": "com.google.Chrome"
+      },
+      {
+        "id": "github",
+        "label": "GitHub",
+        "kind": "bookmark",
+        "bundle_id": null
+      }
+    ]
+  },
+  "after_pin": {
+    "active_mode": "building",
+    "manual_lock": true,
+    "last_suggested_mode": null,
+    "bridge_connected": true,
+    "building_pins": [
+      {
+        "id": "vscode",
+        "label": "VS Code",
+        "kind": "app",
+        "bundle_id": "com.microsoft.VSCode"
+      },
+      {
+        "id": "terminal",
+        "label": "Terminal",
+        "kind": "app",
+        "bundle_id": "com.apple.Terminal"
+      },
+      {
+        "id": "browser",
+        "label": "Browser",
+        "kind": "app",
+        "bundle_id": "com.google.Chrome"
+      },
+      {
+        "id": "github",
+        "label": "GitHub",
+        "kind": "bookmark",
+        "bundle_id": null
+      },
+      {
+        "id": "native-visual-studio-code-4f24c3ac",
+        "label": "Visual Studio Code",
+        "kind": "app",
+        "bundle_id": "visual-studio-code-4f24c3ac"
+      }
+    ]
+  },
+  "native_tile_count": 1,
+  "toast": "已启动 Visual Studio Code",
+  "dock_launch_at": "2026-11-02T16:14:44.695Z",
+  "after": {
+    "active_mode": "building",
+    "manual_lock": true,
+    "bridge_connected": true
+  },
+  "events": [
+    {
+      "source": "bridge",
+      "source_app": "Visual Studio Code",
+      "kind": "activity",
+      "app_name": "Visual Studio Code",
+      "stable_seconds": 0
+    },
+    {
+      "source": "bridge",
+      "source_app": "Visual Studio Code",
+      "kind": "activity",
+      "app_name": "Visual Studio Code",
+      "stable_seconds": 15
+    },
+    {
+      "source": "bridge",
+      "source_app": "Visual Studio Code",
+      "kind": "activity",
+      "app_name": "Visual Studio Code",
+      "stable_seconds": 0
+    },
+    {
+      "source": "bridge",
+      "source_app": "Visual Studio Code",
+      "kind": "activity",
+      "app_name": "Visual Studio Code",
+      "stable_seconds": 15
+    },
+    {
+      "source": "bridge",
+      "source_app": "Visual Studio Code",
+      "kind": "activity",
+      "app_name": "Visual Studio Code",
+      "stable_seconds": 0
+    }
+  ]
+}

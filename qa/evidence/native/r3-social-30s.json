@@ -1,0 +1,23 @@
+{
+  "fixture": {
+    "switch_wait_seconds": 30,
+    "social_switch_enabled": true,
+    "already_present": false
+  },
+  "tile_count": 1,
+  "first_gate": {
+    "at": "2026-11-02T16:17:06.898Z",
+    "text": "专注暂停 社交应用已暂停 打开 X 将在 31 秒后解锁。取消可继续专注。 FocusDock 无法在自身之外阻止该应用；你仍可直接打开它。 取消 31 秒后打开"
+  },
+  "cancelled": true,
+  "second_gate_start": "2026-11-02T16:17:07.731Z",
+  "ready": {
+    "at": "2026-11-02T16:17:38.129Z",
+    "text": "专注暂停 可以打开 打开 X 将在 0 秒后解锁。取消可继续专注。 FocusDock 无法在自身之外阻止该应用；你仍可直接打开它。 取消 现在打开"
+  },
+  "toast": "已启动 X",
+  "after": {
+    "active_mode": "meeting",
+    "manual_lock": true
+  }
+}

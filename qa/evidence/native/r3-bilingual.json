@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "lang": "zh-CN",
+    "native_status": "Windows — 已连接",
+    "dock_add": "添加",
+    "topbar_text": "FocusDock AI 专注 时间线 模式 AI 工作室 设置 权限 在线 Windows — 已连接 EN v0.1.0"
+  },
+  "en": {
+    "lang": "en",
+    "native_status": "Windows — connected",
+    "dock_add": "Add",
+    "topbar_text": "FocusDock AI Focus Timeline Modes AI Studio Settings Permissions Live Windows — connected 中文 v0.1.0"
+  }
+}
