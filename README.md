@@ -27,6 +27,7 @@ no cloud key required.
 | AI proposal → diff → confirm → apply → rollback | **PASS** (rules provider) | API and E2E tests |
 | Optional Ollama / OpenAI-compatible adapters | **IMPLEMENTED, NOT EXERCISED** | needs a local model / endpoint to verify |
 | macOS floating Dock | **NOT VERIFIED** | Swift source + macOS CI compile only; no Mac was available |
+| Native app control / launch | **NOT IMPLEMENTED** | browser sandbox; macOS bridge observes only; pinned app tiles are labels/bookmarks |
 | Global system notification interception | **UNSUPPORTED BY DESIGN** | public-API limitation, documented in the app |
 | Public release | **PUBLIC v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **MERGED** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -94,7 +95,7 @@ and starts in Writing. The **Demo console** creates events labelled
 
 ## What you get
 
-- **Dock** — a glass capsule with mode pills, pinned apps, manual lock and a
+- **Dock** — a glass capsule with mode pills, pinned app tiles (labels/bookmarks), manual lock and a
   pending-notification badge.
 - **Modes** — versioned, declarative JSON. Create, edit, delete, reorder,
   export/import, restore defaults, and roll back to any stored version.

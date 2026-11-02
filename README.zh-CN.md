@@ -26,6 +26,7 @@ API Key 也能完整使用。
 | AI 提案 → Diff → 确认 → 应用 → 回滚 | **通过**（规则引擎） | API 与 E2E 测试 |
 | 可选 Ollama / OpenAI 兼容适配器 | **已实现，未实测** | 需要本地模型或真实端点 |
 | macOS 浮动 Dock | **未验证** | 仅有 Swift 源码与 macOS CI 编译；开发机没有 Mac |
+| 本机应用控制 / 启动 | **未实现** | 浏览器沙箱；macOS bridge 只观察前台应用；pinned 图标只是标签/书签 |
 | 全局系统通知拦截 | **设计上不支持** | 公开 API 限制，界面中已说明 |
 | 公开发布 | **已公开 v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **已合并** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -70,7 +71,7 @@ macOS 使用相同命令。
 
 ## 功能
 
-- **Dock**：半透明胶囊、模式胶囊、固定应用、手动锁定、待处理通知计数。
+- **Dock**：半透明胶囊、模式胶囊、固定应用图标（标签/书签）、手动锁定、待处理通知计数。
 - **模式**：带版本的声明式 JSON；新增、编辑、删除、排序、导入导出、恢复默认、
   回滚到任意历史版本。
 - **规则引擎**：应用白名单、关键词、稳定停留（默认 15 秒）、冷却、手动锁；

@@ -24,7 +24,8 @@ Status: **CONDITIONAL** — Web track PASS, macOS native spike **BLOCKED (no Mac
 ## 2. macOS native spike
 
 Requirement: real `NSPanel` + `WKWebView` overlay, `NSWorkspace` activation events,
-bridge authentication and an action allowlist, with no residual window on quit.
+bridge authentication, and no residual window on quit. v0.1.0 exposes no
+app-launch API; an allowlisted launch action remains a future requirement.
 
 **Status: BLOCKED.** This workstation is Windows 11 x64. There is no Swift toolchain,
 no Xcode, and no reachable Mac (local or SSH). Per `05_FINAL_DECISIONS_AND_GATE_RULES.md`
@@ -34,7 +35,7 @@ What was delivered instead (and how it is labelled):
 
 1. `mac-bridge/` contains the real Swift Package source for the spike and the
    production-shaped bridge (NSPanel, WKWebView loading the local `/dock` route,
-   NSWorkspace observer, scoped Bearer token, action allowlist, cleanup on quit).
+   NSWorkspace observer, scoped Bearer token, no app-launch API, cleanup on quit).
 2. `.github/workflows/ci.yml` compiles it on a `macos-14` (Apple Silicon) runner and
    runs the non-UI unit tests. A green compile is **compile evidence only** — it is not
    evidence that the floating overlay works on a user's desktop.

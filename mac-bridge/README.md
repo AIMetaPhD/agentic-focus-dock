@@ -61,7 +61,8 @@ bundle ids and app names and the web app keeps working.
   touched.
 - ❌ It does not replace, hide, or modify the system Dock.
 - ❌ It does not read or suppress other apps' notifications.
-- ❌ It does not execute shell commands, AppleScript, or arbitrary app launches.
+- ❌ It does not execute shell commands, AppleScript, or launch apps; v0.1.0 has
+  no app-launch endpoint.
 
 ## Verification checklist (needs a real Apple Silicon Mac)
 

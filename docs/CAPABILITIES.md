@@ -5,21 +5,25 @@ panel. Do not describe anything below as more capable than this table.
 
 | Capability | Web (Windows/macOS/Linux) | With macOS bridge | Notes |
 |---|---|---|---|
-| Custom modes, colors, pinned apps | ✅ real | ✅ real | stored locally in SQLite |
+| Custom modes, colors, pinned tiles | ✅ real | ✅ real | stored locally in SQLite; tiles are labels/bookmarks |
 | Mode switch by click / keyboard | ✅ real | ✅ real (same UI in WKWebView) | manual switch is immediate |
 | Automatic mode **suggestions** | ✅ real (rules) | ✅ real | 15 s dwell, cooldown, manual lock |
 | Automatic mode **switching** | opt-in per mode | opt-in per mode | default is suggest-only |
 | Product-owned notification cards | ✅ real | ✅ real | e.g. focus timer, demo events |
 | Simulated notification/activity events | ✅ real, labelled `simulated` | ✅ real, labelled | for demos and tests |
-| Frontmost app detection | ❌ not available to a browser | ✅ public `NSWorkspace` API | bundle id + app name only |
+| Frontmost app detection | ❌ not available to a browser | ⚠️ source only; NOT runtime-verified | bundle id + app name only |
 | Window title | ❌ | ⚠️ only after Accessibility permission | degrades to bundle id when denied |
-| Launching an allowlisted app | ❌ | ✅ `NSWorkspace.openApplication` | only bundle ids pinned in a mode |
+| Launching an allowlisted app | ❌ | ❌ not implemented in v0.1.0 | the bridge has no launch endpoint; pinned app tiles do not launch native apps |
 | Global macOS notification interception | ❌ **impossible with public APIs** | ❌ **impossible** | `UNUserNotificationCenter` only exposes the app's own notifications |
 | Suppressing/silencing another app's notification | ❌ | ❌ | no public API; we do not read private DBs or inject code |
 | Replacing the system Dock | ❌ | ❌ | the bridge is a floating `NSPanel`, not a Dock replacement |
 | Reading other apps' content / keystrokes / clipboard | ❌ | ❌ | out of scope by design |
 | AI mode proposals | ✅ rules-only offline; optional Ollama/OpenAI-compatible | same | cloud is opt-in |
 | AI executing shell/AppleScript | ❌ | ❌ | proposals can only patch mode fields |
+
+> **macOS bridge status:** the "With macOS bridge" column is source-level and
+> **NOT runtime-verified**. The bridge observes frontmost apps and renders
+> `/dock`; v0.1.0 has no app-launch or notification-reading endpoint.
 
 ## Labels used in the UI
 

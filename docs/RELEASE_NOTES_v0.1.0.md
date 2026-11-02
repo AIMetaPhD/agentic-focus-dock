@@ -8,7 +8,8 @@ no cloud key requirement.
 
 ## What works
 
-- Bottom capsule dock with six editable modes, pinned apps, colors and manual lock.
+- Bottom capsule dock with six editable modes, pinned app tiles (labels/bookmarks),
+  colors and manual lock.
 - Deterministic offline rules: allowlists, keywords, 15 s dwell, cooldown, hysteresis.
 - Notification queue with a 30 s switch cool-down and `Stay` / `Later` /
   `Go to Social`; `Later` never launches an app.

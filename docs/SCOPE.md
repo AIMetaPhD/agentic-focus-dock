@@ -25,7 +25,12 @@ interception, loopback hardening, GPL isolation, Jev removed from the critical p
 - Security: loopback bind, Host/Origin allowlists, HttpOnly session, CSRF
   double-submit, scoped rotating bridge token, body limits, rate limits.
 - macOS Swift bridge source: NSPanel + WKWebView `/dock`, NSWorkspace observer,
-  optional AX, action allowlist, graceful teardown.
+  optional AX, future action allowlist (no launch API in v0.1.0), graceful teardown.
+
+**v0.1.0 delivery note (2026-11-02):** the bridge observes the frontmost app and
+renders `/dock`; it does **not** implement app launch. Pinned tiles are
+labels/bookmarks. App launch is a future native-companion requirement, not a
+shipped capability.
 
 ## P1 — implemented in this release where cheap, otherwise documented
 
@@ -46,4 +51,5 @@ interception, loopback hardening, GPL isolation, Jev removed from the critical p
 - No `killall Dock`, no `com.apple.dock` writes, no SIP changes, no private APIs.
 - No copying GPL-3.0 or all-rights-reserved code/assets.
 - No cloud AI by default; no activity contents leave the machine unless opted in.
-- Public release and the profile README PR require the user's explicit approval.
+- Public release and the profile README PR required the user's explicit approval;
+  both were approved on 2026-11-01.

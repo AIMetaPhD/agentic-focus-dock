@@ -34,8 +34,8 @@ is public, the Release is published, and the profile PR was merged on 2026-11-01
 
 - A public, MIT-licensed local web app at `http://127.0.0.1:4317`, started with
   `npm start`.
-- Six modes with editable config, pinned apps, colors, allowlists, keywords,
-  dwell/cooldown, notification policy.
+- Six modes with editable config, pinned app tiles (labels/bookmarks), colors,
+  allowlists, keywords, dwell/cooldown, notification policy.
 - Versioned persistence in SQLite; export/import; restore defaults; rollback.
 - Deterministic rules with manual lock and anti-flap behavior.
 - A notification queue with 30 s in-product cool-down, `Stay` / `Later` /
@@ -52,6 +52,7 @@ is public, the Release is published, and the profile PR was merged on 2026-11-01
 
 | Item | Status | Why it matters |
 |---|---|---|
+| Native app control / launch | **NOT IMPLEMENTED** | browser sandbox; macOS bridge observes only; pinned app tiles are labels/bookmarks |
 | macOS floating panel at runtime | **NOT VERIFIED** | no Apple Silicon host; CI compile is not a device test |
 | Accessibility title capture | **NOT VERIFIED** | requires macOS permission flow |
 | Multi-display/full-screen/sleep-wake | **NOT VERIFIED** | same |
