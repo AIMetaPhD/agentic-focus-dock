@@ -27,7 +27,7 @@ no cloud key required.
 | AI proposal → diff → confirm → apply → rollback | **PASS** (rules provider) | API and E2E tests |
 | Optional Ollama / OpenAI-compatible adapters | **IMPLEMENTED, NOT EXERCISED** | needs a local model / endpoint to verify |
 | macOS floating Dock | **NOT VERIFIED** | Swift source + macOS CI compile only; no Mac was available |
-| Native app control / launch | **NOT IMPLEMENTED** | browser sandbox; macOS bridge observes only; pinned app tiles are labels/bookmarks |
+| Native app control / launch | **WEB: NOT IMPLEMENTED; WINDOWS SPIKE: ALLOWLISTED LAUNCH** | unreleased Windows companion; the web dock still does not launch apps |
 | Global system notification interception | **UNSUPPORTED BY DESIGN** | public-API limitation, documented in the app |
 | Public release | **PUBLIC v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **MERGED** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -158,6 +158,15 @@ Details and residual risks: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) and
 [`SECURITY.md`](SECURITY.md). Security tests cover evil Host/Origin, missing
 CSRF, cross-origin WebSocket, bridge-token scope, oversized bodies and model
 output injection.
+
+## Windows native companion (unreleased)
+
+`win-companion/` is a post-v0.1.0 recovery spike on `main`, not part of the
+v0.1.0 Release. It runs as a Windows user-session tray app, observes real
+foreground apps with `SetWinEventHook`, and launches only Start Menu-resolved
+`.exe` targets from its own picker. The web dock still does not launch apps. It
+does not read or suppress notifications. See
+[`win-companion/README.md`](win-companion/README.md).
 
 ## Optional macOS floating Dock
 

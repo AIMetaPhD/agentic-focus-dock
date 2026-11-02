@@ -18,10 +18,10 @@
         "platform": "Windows 11 x64; macOS bridge NOT VERIFIED",
         "procedure_file": "qa/MUSE_PROCEDURE.md",
         "product": "FocusDock AI local web app",
-        "repo": "E:/ClaudeCodeFiles/MyProducts/agentic-focus-dock"
+        "repo": "<repo-root>"
       },
       "kind": "focusdock_gate_g4",
-      "next_step": "Re-dispatch with qa/MUSE_PROCEDURE.md and the gate-relevant repo snapshot contents included in the task inputs, or run this gate QA on the workstation where E:/ClaudeCodeFiles/MyProducts/agentic-focus-dock at commit 68cf9ee7070a055f3c75bb6ddb835f071bb9722a actually resides. Do not treat this failure writeback as a gate PASS.",
+      "next_step": "Re-dispatch with qa/MUSE_PROCEDURE.md and the gate-relevant repo snapshot contents included in the task inputs, or run this gate QA on the workstation where <repo-root> at commit 68cf9ee7070a055f3c75bb6ddb835f071bb9722a actually resides. Do not treat this failure writeback as a gate PASS.",
       "permissions": "approval_required",
       "provenance": "issuer=claude, key_id=claude-producer-v1, authentication=local-ip-and-producer-token, version=1",
       "provenance_verified_from_server": true,

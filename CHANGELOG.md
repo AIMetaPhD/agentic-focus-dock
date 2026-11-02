@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — native recovery spike
+
+- Windows tray companion in `win-companion/`: real foreground detection with
+  `SetWinEventHook`, authenticated loopback activity events, Start Menu app
+  picker, allowlisted `.exe` launch with SHA-256 audit, and graceful disconnect.
+- Bilingual topbar language switch and explicit `Windows — connected` /
+  `macOS — connected` / `Web-only — no native access` status.
+- Windows process identifiers added to default mode allowlists.
+
+This is not a public Release; it is the R2/R3 recovery work on `main`.
+
 ## 0.1.0 — 2026-11-01
 
 First public release (private RC on 2026-10-30).

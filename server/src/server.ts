@@ -130,23 +130,28 @@ function capabilities(ctx: Ctx): unknown {
       activity_detection: "browser-local only",
     },
     bridge: {
-      available: process.platform === "darwin",
+      available: process.platform === "darwin" || process.platform === "win32",
       status: bridgeIsFresh(ctx) ? "connected" : "not_connected",
       last_seen: ctx.bridge.last_seen,
       capabilities: ctx.bridge.capabilities,
       note:
         process.platform === "darwin"
           ? "Optional Swift companion. Not required for the web app."
-          : "The macOS companion only runs on macOS; this platform has no native bridge.",
+          : process.platform === "win32"
+            ? "Optional Windows companion: foreground events and allowlisted launch; no notification interception."
+            : "No native companion for this platform.",
     },
     system_notifications: {
       supported: false,
       reason:
-        "Public macOS APIs expose only the app's own notifications. FocusDock never reads private databases or injects into other apps.",
+        "Public APIs expose only the app's own notifications; Windows notification reading is not implemented. FocusDock never reads private databases or injects into other apps.",
     },
     accessibility: {
       status: ctx.bridge.capabilities?.accessibility ?? "not_connected",
-      note: "Optional. Without it the bridge reports bundle ids only.",
+      note:
+        process.platform === "darwin"
+          ? "Optional. Without it the bridge reports bundle ids only."
+          : "macOS-only capability; not used on Windows.",
     },
     cloud_ai: {
       provider: settings.ai.provider,

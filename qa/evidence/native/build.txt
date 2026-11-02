@@ -1,0 +1,3 @@
+Built: FocusDockCompanion.exe
+Built: FocusDockCompanionCli.exe
+Result: build exit 0

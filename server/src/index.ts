@@ -89,7 +89,13 @@ async function main(): Promise<void> {
   console.log(`  ➜  ${url}`);
   console.log(`  data:     ${config.dataDir}`);
   console.log(`  protocol: ${PROTOCOL_VERSION}   pid: ${process.pid}`);
-  console.log(`  bridge:   macOS only · token file ${tokenPath}`);
+  const bridgeLabel =
+    process.platform === "darwin"
+      ? "macOS companion"
+      : process.platform === "win32"
+        ? "Windows companion"
+        : "no native companion";
+  console.log(`  bridge:   ${bridgeLabel} · token file ${tokenPath}`);
   console.log("  system notifications: not intercepted (public-API limit)");
   console.log("  press Ctrl+C to stop");
   console.log("");

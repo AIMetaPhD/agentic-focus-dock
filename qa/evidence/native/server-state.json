@@ -1,0 +1,23 @@
+{
+  "active": "writing",
+  "runtime": {
+    "active_mode": "writing",
+    "manual_lock": false,
+    "last_suggestion_at": "2026-11-02T07:16:15.112Z",
+    "last_suggested_mode": "building"
+  },
+  "bridge": {
+    "connected": true,
+    "capabilities": {
+      "platform": "windows",
+      "activity": "win32-foreground",
+      "launch": "allowlist",
+      "notifications": "unsupported",
+      "overlay": "tray"
+    }
+  },
+  "counts": {
+    "events": 8,
+    "modes": 6
+  }
+}

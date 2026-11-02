@@ -260,6 +260,37 @@ button:disabled {
   color: var(--faint);
 }
 
+.native-status {
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 10px;
+  white-space: nowrap;
+  color: var(--faint);
+}
+
+.native-status.is-connected {
+  color: var(--ok);
+  border-color: rgba(94, 226, 160, 0.35);
+}
+
+.lang-switch {
+  appearance: none;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.lang-switch:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
 .stage {
   width: min(1240px, 100%);
   margin: 0 auto;

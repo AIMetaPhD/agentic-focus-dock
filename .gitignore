@@ -17,6 +17,8 @@ secrets.json
 !.env.example
 mac-bridge/.build/
 mac-bridge/.swiftpm/
+win-companion/bin/
+win-companion/obj/
 .DS_Store
 Thumbs.db
 *.log

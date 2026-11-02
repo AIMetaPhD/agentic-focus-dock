@@ -26,7 +26,7 @@ API Key 也能完整使用。
 | AI 提案 → Diff → 确认 → 应用 → 回滚 | **通过**（规则引擎） | API 与 E2E 测试 |
 | 可选 Ollama / OpenAI 兼容适配器 | **已实现，未实测** | 需要本地模型或真实端点 |
 | macOS 浮动 Dock | **未验证** | 仅有 Swift 源码与 macOS CI 编译；开发机没有 Mac |
-| 本机应用控制 / 启动 | **未实现** | 浏览器沙箱；macOS bridge 只观察前台应用；pinned 图标只是标签/书签 |
+| 本机应用控制 / 启动 | **Web 未实现；Windows spike：允许列表启动** | 未发布的 Windows 伴生程序；Web dock 仍不启动应用 |
 | 全局系统通知拦截 | **设计上不支持** | 公开 API 限制，界面中已说明 |
 | 公开发布 | **已公开 v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **已合并** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -127,6 +127,13 @@ API Key 保存在数据目录的 `secrets.json`（尽力设为 `0600`），**不
 完整威胁模型与残余风险见 [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md) 与
 [`SECURITY.md`](SECURITY.md)。安全测试覆盖恶意 Host/Origin、缺少 CSRF、
 跨源 WebSocket、Bridge Token 越权、超大请求体与模型输出注入。
+
+## Windows 原生伴生程序（未发布）
+
+`win-companion/` 是 v0.1.0 之后在 `main` 上的恢复性 spike，不属于 v0.1.0 Release。
+它以 Windows 用户会话托盘程序运行，用 `SetWinEventHook` 观察真实前台应用，并只从
+自己的 Start Menu 选择器启动已解析的 `.exe`。Web dock 仍不启动应用；它不读取或
+静默系统通知。见 [`win-companion/README.md`](win-companion/README.md)。
 
 ## 可选 macOS 浮动 Dock
 

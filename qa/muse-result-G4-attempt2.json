@@ -5,7 +5,7 @@
   "result": {
     "evidence": {
       "claim_http": 200,
-      "detail": "仓库路径 E:/ClaudeCodeFiles/MyProducts/agentic-focus-dock 为工作站本地盘符，本 VM 不可达；inputs 仅含 gate/commit_sha/repo/procedure_file，未附源码或 qa/MUSE_PROCEDURE.md 内容；无授权的 SSH/文件读取通道，未擅自尝试。",
+      "detail": "仓库路径 <repo-root> 为工作站本地盘符，本 VM 不可达；inputs 仅含 gate/commit_sha/repo/procedure_file，未附源码或 qa/MUSE_PROCEDURE.md 内容；无授权的 SSH/文件读取通道，未擅自尝试。",
       "identity": "muse-3",
       "kind": "focusdock_gate_g4",
       "provenance_verified": "issuer=claude/key_id=claude-producer-v1/authentication=local-ip-and-producer-token/version=1，经自有认证连接核对顶层四项一致",

@@ -1,0 +1,6 @@
+PASS JSON quotes and control characters
+PASS accept existing .exe
+PASS reject .txt target
+PASS reject missing .exe
+PASS reject missing bridge token
+SELF-TEST PASS

@@ -21,7 +21,7 @@ test("the capability panel states the notification limit honestly", async ({ pag
   await page.getByRole("button", { name: "Permissions" }).click();
   await expect(page.getByText("Unsupported by public APIs")).toBeVisible();
   await expect(page.getByText(/never reads Notification Center databases/)).toBeVisible();
-  await expect(page.getByText("macOS only").first()).toBeVisible();
+  await expect(page.getByText("Native companion").first()).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.addStyleTag({ content: ".dock-wrap { display: none !important; }" });
   await page.locator(".panel-note code").evaluateAll((nodes) => {

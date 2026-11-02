@@ -24,6 +24,11 @@ panel. Do not describe anything below as more capable than this table.
 > **macOS bridge status:** the "With macOS bridge" column is source-level and
 > **NOT runtime-verified**. The bridge observes frontmost apps and renders
 > `/dock`; v0.1.0 has no app-launch or notification-reading endpoint.
+>
+> **Windows companion spike (unreleased):** `win-companion/` observes real
+> foreground apps and can launch only Start Menu-resolved `.exe` targets from
+> its own tray picker. The web dock still does not launch apps, and the
+> companion does not read or suppress notifications.
 
 ## Labels used in the UI
 

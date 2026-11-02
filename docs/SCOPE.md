@@ -29,8 +29,9 @@ interception, loopback hardening, GPL isolation, Jev removed from the critical p
 
 **v0.1.0 delivery note (2026-11-02):** the bridge observes the frontmost app and
 renders `/dock`; it does **not** implement app launch. Pinned tiles are
-labels/bookmarks. App launch is a future native-companion requirement, not a
-shipped capability.
+labels/bookmarks. A separate unreleased Windows companion spike on `main`
+implements a Start Menu picker and allowlisted `.exe` launch; that is not part of
+the v0.1.0 Release or the web dock.
 
 ## P1 — implemented in this release where cheap, otherwise documented
 

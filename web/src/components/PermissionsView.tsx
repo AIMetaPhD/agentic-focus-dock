@@ -14,6 +14,7 @@ export function PermissionsView({
   const { t } = useT();
   const caps = state.capabilities;
   const bridgeConnected = state.bridge.connected;
+  const isMac = caps.platform === "darwin";
 
   const rotate = async () => {
     try {
@@ -47,15 +48,16 @@ export function PermissionsView({
     {
       key: "ax",
       title: t("perm.ax"),
-      status:
-        caps.accessibility.status === "granted"
+      status: !isMac
+        ? t("perm.notApplicable")
+        : caps.accessibility.status === "granted"
           ? "granted"
           : caps.accessibility.status === "denied"
             ? t("perm.axDenied")
             : caps.bridge.available
               ? t("perm.bridgeOff")
               : t("perm.bridgeUnavailable"),
-      tone: caps.accessibility.status === "granted" ? "ok" : "muted",
+      tone: !isMac ? "muted" : caps.accessibility.status === "granted" ? "ok" : "muted",
       note: caps.accessibility.note,
     },
     {

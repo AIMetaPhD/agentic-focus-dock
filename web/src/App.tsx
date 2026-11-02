@@ -98,6 +98,15 @@ function Shell({
     }
   };
 
+  const setLanguage = async (language: "en" | "zh") => {
+    try {
+      await api("/api/settings", { method: "PUT", body: { language } });
+      await refresh();
+    } catch (cause) {
+      notify(cause instanceof Error ? cause.message : t("common.error"), "error");
+    }
+  };
+
   const demo = async (kind: DemoKind) => {
     setBusy(true);
     try {
@@ -164,6 +173,14 @@ function Shell({
 
   const pending = state.pending_notifications;
   const first = pending[0];
+  const nativePlatform = state.bridge.capabilities?.platform;
+  const nativeLabel = state.bridge.connected
+    ? nativePlatform === "windows"
+      ? t("native.windowsConnected")
+      : nativePlatform === "macos"
+        ? t("native.macosConnected")
+        : t("native.connected")
+    : t("native.webOnly");
 
   const body = useMemo(() => {
     switch (view) {
@@ -251,6 +268,17 @@ function Shell({
         <div className="top-status">
           <span className={`live-dot ${live ? "is-live" : ""}`} aria-hidden="true" />
           <span>{live ? t("misc.connected") : t("misc.offline")}</span>
+          <span className={`native-status ${state.bridge.connected ? "is-connected" : ""}`}>
+            {nativeLabel}
+          </span>
+          <button
+            className="lang-switch"
+            type="button"
+            onClick={() => void setLanguage(state.settings.language === "zh" ? "en" : "zh")}
+            title={state.settings.language === "zh" ? "Switch to English" : "切换到中文"}
+          >
+            {state.settings.language === "zh" ? "EN" : "中文"}
+          </button>
           <span className="version">v{state.version}</span>
         </div>
       </header>
