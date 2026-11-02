@@ -1,0 +1,210 @@
+{
+  "protocol": 1,
+  "version": "0.1.0",
+  "active_mode": "writing",
+  "manual_lock": true,
+  "modes": [
+    {
+      "id": "writing",
+      "name": "Writing",
+      "updated_at": "2026-11-02T14:56:49.416Z",
+      "pinned_items": [
+        {
+          "id": "notes",
+          "label": "Notes",
+          "kind": "app",
+          "bundle_id": "com.apple.Notes",
+          "url": null
+        },
+        {
+          "id": "docs",
+          "label": "Docs",
+          "kind": "bookmark",
+          "bundle_id": null,
+          "url": "https://docs.google.com"
+        },
+        {
+          "id": "browser",
+          "label": "Browser",
+          "kind": "app",
+          "bundle_id": "com.google.Chrome",
+          "url": null
+        },
+        {
+          "id": "native-character-map-f7769c05",
+          "label": "Character Map",
+          "kind": "app",
+          "bundle_id": "character-map-f7769c05",
+          "url": null
+        },
+        {
+          "id": "native-obsidian-e514e0e4",
+          "label": "Obsidian",
+          "kind": "app",
+          "bundle_id": "obsidian-e514e0e4",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "building",
+      "name": "Building",
+      "updated_at": "2026-11-02T07:01:53.364Z",
+      "pinned_items": [
+        {
+          "id": "vscode",
+          "label": "VS Code",
+          "kind": "app",
+          "bundle_id": "com.microsoft.VSCode",
+          "url": null
+        },
+        {
+          "id": "terminal",
+          "label": "Terminal",
+          "kind": "app",
+          "bundle_id": "com.apple.Terminal",
+          "url": null
+        },
+        {
+          "id": "browser",
+          "label": "Browser",
+          "kind": "app",
+          "bundle_id": "com.google.Chrome",
+          "url": null
+        },
+        {
+          "id": "github",
+          "label": "GitHub",
+          "kind": "bookmark",
+          "bundle_id": null,
+          "url": "https://github.com"
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "updated_at": "2026-11-02T07:01:53.366Z",
+      "pinned_items": [
+        {
+          "id": "zotero",
+          "label": "Zotero",
+          "kind": "app",
+          "bundle_id": "com.zotero.Zotero",
+          "url": null
+        },
+        {
+          "id": "papers",
+          "label": "Papers",
+          "kind": "bookmark",
+          "bundle_id": null,
+          "url": "https://scholar.google.com"
+        },
+        {
+          "id": "browser",
+          "label": "Browser",
+          "kind": "app",
+          "bundle_id": "com.google.Chrome",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "meeting",
+      "name": "Meeting",
+      "updated_at": "2026-11-02T07:01:53.368Z",
+      "pinned_items": [
+        {
+          "id": "zoom",
+          "label": "Zoom",
+          "kind": "app",
+          "bundle_id": "us.zoom.xos",
+          "url": null
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "kind": "app",
+          "bundle_id": "com.apple.Notes",
+          "url": null
+        },
+        {
+          "id": "calendar",
+          "label": "Calendar",
+          "kind": "app",
+          "bundle_id": "com.apple.iCal",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "break",
+      "name": "Break",
+      "updated_at": "2026-11-02T07:01:53.370Z",
+      "pinned_items": [
+        {
+          "id": "music",
+          "label": "Music",
+          "kind": "app",
+          "bundle_id": "com.apple.Music",
+          "url": null
+        },
+        {
+          "id": "photos",
+          "label": "Photos",
+          "kind": "app",
+          "bundle_id": "com.apple.Photos",
+          "url": null
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "name": "Social",
+      "updated_at": "2026-11-02T07:01:53.372Z",
+      "pinned_items": [
+        {
+          "id": "slack",
+          "label": "Slack",
+          "kind": "app",
+          "bundle_id": "com.tinyspeck.slackmacgap",
+          "url": null
+        },
+        {
+          "id": "x",
+          "label": "X",
+          "kind": "app",
+          "bundle_id": "com.twitter.twitter-mac",
+          "url": null
+        },
+        {
+          "id": "wechat",
+          "label": "WeChat",
+          "kind": "app",
+          "bundle_id": "com.tencent.xinWeChat",
+          "url": null
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "language": "zh",
+    "ai_provider": "rules",
+    "cloud_opt_in": false,
+    "has_api_key": false,
+    "store_window_titles": false,
+    "retention_days": 7,
+    "excluded_apps": []
+  },
+  "bridge": {
+    "connected": true,
+    "bridge_version": "0.2.0-win",
+    "capabilities": {
+      "platform": "windows",
+      "activity": "win32-foreground",
+      "launch": "allowlist",
+      "notifications": "unsupported",
+      "overlay": "tray"
+    }
+  }
+}

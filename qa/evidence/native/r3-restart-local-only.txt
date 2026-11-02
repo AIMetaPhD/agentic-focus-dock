@@ -1,0 +1,23 @@
+R3 local-only / offline-dependency check
+Date: 2026-11-02
+
+Listeners
+- 127.0.0.1:4317  FocusDock server
+- 127.0.0.1:4318  Windows companion control server
+
+Established connections sampled from both PIDs
+- all remote addresses were 127.0.0.1 (server, browser pages, companion)
+- no non-loopback TCP listener or established connection was present
+
+AI and privacy settings at the time of the check
+- provider: rules
+- cloud_opt_in: false
+- has_api_key: false
+- store_window_titles: false
+- retention_days: 7
+
+Interpretation
+- The checked workflow (foreground events, mode state, pinned apps, icon
+  loading, allowlisted launch) does not call a cloud model.
+- A full run with the network adapter disabled was not performed; that
+  remains an unverified boundary rather than a PASS claim.

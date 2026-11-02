@@ -79,6 +79,17 @@ class Hub {
       if (client.readyState === client.OPEN) client.send(message);
     }
   }
+
+  closeAll(): void {
+    for (const client of this.clients) {
+      try {
+        client.terminate();
+      } catch {
+        /* a socket that is already gone needs no cleanup */
+      }
+    }
+    this.clients.clear();
+  }
 }
 
 const nowIso = () => new Date().toISOString();
@@ -1131,6 +1142,10 @@ export async function startServer(opts: StartOptions): Promise<{
         if (String(raw) === "ping" && ws.readyState === ws.OPEN) ws.send("pong");
       });
     });
+  });
+
+  app.addHook("preClose", async () => {
+    ctx.hub.closeAll();
   });
 
   app.addHook("onClose", async () => {

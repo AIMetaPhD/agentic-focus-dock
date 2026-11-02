@@ -1,0 +1,35 @@
+R3 app restart / stop test
+Date: 2026-11-02
+Host: Windows 11 Pro 10.0.26200 (local interactive session)
+
+Before stop
+- server pid 69420, TCP listener 127.0.0.1:4317
+- companion pid 31700 (prior start), TCP listener 127.0.0.1:4318
+- one WebSocket client attached to /api/ws (WS_OPEN, hello received)
+
+Companion stop
+- Stop-Process on pid 31700
+- no FocusDockCompanion process remained
+- TCP 4318 closed
+
+Server stop (Ctrl+C) with the WebSocket client still attached
+- server pid 69420 gone within 1 s
+- TCP 4317 closed
+- WebSocket client observed WS_CLOSED
+
+Defect found and fixed before this pass
+- The first stop attempt left node pid 7644 alive with an established
+  loopback WebSocket connection after the HTTP listener closed.
+- Fix: terminate hub clients in the preClose hook and force-exit after a
+  3 s cleanup deadline. The stop sequence above was rerun after the fix,
+  and a regression test now covers WebSocket shutdown.
+
+Restart
+- server restarted from the same data directory, final pid 62628
+- companion restarted, final pid 55824, bridge connected
+- stable state JSON before and after restart is identical (`diff` exit 0):
+  active mode, manual lock, all six modes, all pinned items (including
+  Character Map and Obsidian), language, AI provider, privacy settings
+- icons still return the same SHA-256 values after restart
+
+Raw OS process listings and user-specific app names were not copied here.

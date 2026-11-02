@@ -77,12 +77,16 @@ async function main(): Promise<void> {
     }
   };
 
-  process.once("SIGINT", () => {
-    void cleanup().then(() => process.exit(0));
-  });
-  process.once("SIGTERM", () => {
-    void cleanup().then(() => process.exit(0));
-  });
+  const shutdown = () => {
+    const forceExit = setTimeout(() => process.exit(0), 3000);
+    void cleanup().finally(() => {
+      clearTimeout(forceExit);
+      process.exit(0);
+    });
+  };
+
+  process.once("SIGINT", shutdown);
+  process.once("SIGTERM", shutdown);
 
   console.log("");
   console.log("  FocusDock AI — local-first focus dock");
