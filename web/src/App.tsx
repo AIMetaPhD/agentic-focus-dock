@@ -9,11 +9,27 @@ import { ModesView } from "./components/ModesView";
 import { AIStudio } from "./components/AIStudio";
 import { SettingsView } from "./components/SettingsView";
 import { PermissionsView } from "./components/PermissionsView";
-import type { AppState } from "./types";
+import { NativeAppPicker, type NativeApp } from "./components/NativeAppPicker";
+import type { AppState, Mode, PinnedItem } from "./types";
 
 type View = "focus" | "timeline" | "modes" | "ai" | "settings" | "permissions";
 type DemoKind = "slack" | "urgent" | "activity" | "burst";
 type Toast = { message: string; kind: "ok" | "error" };
+type SocialGate = { item: PinnedItem; deadline: number };
+
+function modeBody(mode: Mode, pinned: PinnedItem[]) {
+  return {
+    name: mode.name,
+    color: mode.color,
+    icon: mode.icon,
+    pinned_items: pinned,
+    activity_app_allowlist: mode.activity_app_allowlist,
+    keywords: mode.keywords,
+    transition: mode.transition,
+    notifications: mode.notifications,
+    sort_order: mode.sort_order,
+  };
+}
 
 const NAV: { id: View; key: TranslationKey }[] = [
   { id: "focus", key: "nav.focus" },
@@ -54,6 +70,8 @@ function Shell({
   const [toast, setToast] = useState<Toast | null>(null);
   const [busy, setBusy] = useState(false);
   const [dismissedSuggestion, setDismissedSuggestion] = useState<string | null>(null);
+  const [socialGate, setSocialGate] = useState<SocialGate | null>(null);
+  const [appPickerOpen, setAppPickerOpen] = useState(false);
   const toastTimer = useRef<number | null>(null);
   const dockOnly = window.location.pathname === "/dock";
 
@@ -163,17 +181,75 @@ function Shell({
     }
   };
 
-  const pinned = (label: string, url?: string) => {
-    if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
+  const launchNative = async (item: PinnedItem, confirmSocial = false) => {
+    if (!item.bundle_id) {
+      notify(t("misc.nativeUnavailable"), "error");
       return;
     }
-    notify(`${label}: ${t("misc.nativeOnly")}`, "error");
+    try {
+      await api("/api/native/launch", {
+        method: "POST",
+        body: {
+          id: item.bundle_id,
+          label: item.label,
+          confirm_social: confirmSocial,
+        },
+      });
+      notify(t("misc.nativeLaunched", { label: item.label }));
+    } catch (cause) {
+      if (cause instanceof ApiError && cause.code === "social_pause_required") {
+        const data = (cause.body ?? {}) as { wait_seconds?: number };
+        const wait = Math.max(1, Number(data.wait_seconds ?? 30));
+        setSocialGate({ item, deadline: Date.now() + wait * 1000 });
+        return;
+      }
+      if (cause instanceof ApiError) notify(cause.message, "error");
+      else notify(cause instanceof Error ? cause.message : t("common.error"), "error");
+    }
+  };
+
+  const pinned = (item: PinnedItem) => {
+    if (item.kind === "bookmark" && item.url) {
+      window.open(item.url, "_blank", "noopener,noreferrer");
+      return;
+    }
+    if (item.kind === "app" && item.bundle_id) {
+      void launchNative(item);
+      return;
+    }
+    notify(`${item.label}: ${t("misc.nativeUnavailable")}`, "error");
+  };
+
+  const pinNativeApp = async (app: NativeApp) => {
+    const mode = state.modes.find((item) => item.id === state.active_mode);
+    if (!mode) return;
+    if (mode.pinned_items.some((item) => item.bundle_id === app.id)) {
+      notify(t("native.alreadyPinned", { label: app.name }), "error");
+      return;
+    }
+    const id = `native-${app.id}`.slice(0, 64);
+    try {
+      await api(`/api/modes/${mode.id}`, {
+        method: "PUT",
+        body: modeBody(mode, [
+          ...mode.pinned_items,
+          { id, label: app.name, icon: "▣", kind: "app", bundle_id: app.id },
+        ]),
+      });
+      await refresh();
+      notify(t("native.pinned", { label: app.name }));
+      setAppPickerOpen(false);
+    } catch (cause) {
+      notify(cause instanceof Error ? cause.message : t("common.error"), "error");
+    }
   };
 
   const pending = state.pending_notifications;
   const first = pending[0];
   const nativePlatform = state.bridge.capabilities?.platform;
+  const socialSeconds = socialGate
+    ? Math.max(0, Math.ceil((socialGate.deadline - now) / 1000))
+    : 0;
   const nativeLabel = state.bridge.connected
     ? nativePlatform === "windows"
       ? t("native.windowsConnected")
@@ -237,6 +313,9 @@ function Shell({
             window.location.href = "/";
           }}
           onPinned={pinned}
+          onAddApp={() => {
+            window.location.href = "/";
+          }}
           compact
         />
         {toast ? <div className={`toast toast-${toast.kind}`}>{toast.message}</div> : null}
@@ -306,7 +385,54 @@ function Shell({
         onToggleLock={toggleLock}
         onOpenSettings={() => setView("settings")}
         onPinned={pinned}
+        onAddApp={() => setAppPickerOpen(true)}
       />
+
+      <NativeAppPicker
+        open={appPickerOpen}
+        onClose={() => setAppPickerOpen(false)}
+        onPin={(app) => void pinNativeApp(app)}
+        onLaunch={(app) => {
+          setAppPickerOpen(false);
+          void launchNative({
+            id: `native-${app.id}`.slice(0, 64),
+            label: app.name,
+            icon: "▣",
+            kind: "app",
+            bundle_id: app.id,
+          });
+        }}
+      />
+
+      {socialGate ? (
+        <div className="social-gate" role="dialog" aria-modal="true" aria-label={t("social.title")}>
+          <div className="social-gate-card">
+            <span className="badge badge-urgent">{t("social.badge")}</span>
+            <h2>{socialSeconds > 0 ? t("social.title") : t("social.ready")}</h2>
+            <p>{t("social.body", { label: socialGate.item.label, seconds: socialSeconds })}</p>
+            <p className="panel-note">{t("social.outside")}</p>
+            <div className="panel-actions">
+              <button className="btn btn-ghost" type="button" onClick={() => setSocialGate(null)}>
+                {t("common.cancel")}
+              </button>
+              <button
+                className="btn btn-primary"
+                type="button"
+                disabled={socialSeconds > 0}
+                onClick={() => {
+                  const item = socialGate.item;
+                  setSocialGate(null);
+                  void launchNative(item, true);
+                }}
+              >
+                {socialSeconds > 0
+                  ? t("social.wait", { seconds: socialSeconds })
+                  : t("social.openNow")}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {toast ? (
         <div className={`toast toast-${toast.kind}`} role="status">

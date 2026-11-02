@@ -69,7 +69,7 @@ namespace FocusDock.Companion
             Controls.Add(errorLabel);
 
             Button launch = new Button();
-            launch.Text = "Launch app… / 启动应用…";
+            launch.Text = "Diagnostic launch… / 诊断启动…";
             launch.SetBounds(18, 250, 170, 34);
             launch.Click += delegate { EventHandler handler = LaunchRequested; if (handler != null) handler(this, EventArgs.Empty); };
             Controls.Add(launch);
@@ -87,7 +87,7 @@ namespace FocusDock.Companion
             Controls.Add(hide);
 
             Label note = new Label();
-            note.Text = "Tray menu: status · launch · dashboard · exit. Window titles are off by default.";
+            note.Text = "Normal flow: use the web dock + Add app. This raw launcher is diagnostic only.";
             note.ForeColor = Color.DimGray;
             note.SetBounds(18, 294, 600, 22);
             Controls.Add(note);

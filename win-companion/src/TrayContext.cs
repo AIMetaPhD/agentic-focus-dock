@@ -10,6 +10,7 @@ namespace FocusDock.Companion
     {
         private readonly NotifyIcon icon;
         private readonly ForegroundMonitor monitor;
+        private readonly ControlServer control;
         private readonly BridgeClient client;
         private readonly Options options;
         private readonly System.Threading.Timer heartbeat;
@@ -18,15 +19,16 @@ namespace FocusDock.Companion
         private StatusForm status;
         private bool exiting;
 
-        public TrayContext(BridgeClient client, ForegroundMonitor monitor, Options options)
+        public TrayContext(BridgeClient client, ForegroundMonitor monitor, ControlServer control, Options options)
         {
             this.client = client;
             this.monitor = monitor;
+            this.control = control;
             this.options = options;
 
             ContextMenuStrip menu = new ContextMenuStrip();
             menu.Items.Add("Show status / 显示状态", null, delegate { ShowStatus(); });
-            menu.Items.Add("Launch app… / 启动应用…", null, delegate { LaunchApp(); });
+            menu.Items.Add("Diagnostic launch… / 诊断启动…", null, delegate { LaunchApp(); });
             menu.Items.Add("Open dashboard / 打开面板", null, delegate { OpenDashboard(); });
             menu.Items.Add(new ToolStripSeparator());
             menu.Items.Add("Exit / 退出", null, delegate { Exit(); });
@@ -128,6 +130,7 @@ namespace FocusDock.Companion
             if (exitTimer != null) exitTimer.Stop();
             heartbeat.Dispose();
             monitor.Dispose();
+            control.Dispose();
             client.Disconnect();
             icon.Visible = false;
             icon.Dispose();

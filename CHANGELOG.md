@@ -5,6 +5,10 @@
 - Windows tray companion in `win-companion/`: real foreground detection with
   `SetWinEventHook`, authenticated loopback activity events, Start Menu app
   picker, allowlisted `.exe` launch with SHA-256 audit, and graceful disconnect.
+- Web pinned-tile launch through an authenticated local proxy, plus a cancelable
+  social focus-pause prompt.
+- Native picker no longer preselects the first Start Menu entry; Launch stays
+  disabled until the user explicitly selects an app.
 - Bilingual topbar language switch and explicit `Windows — connected` /
   `macOS — connected` / `Web-only — no native access` status.
 - Windows process identifiers added to default mode allowlists.

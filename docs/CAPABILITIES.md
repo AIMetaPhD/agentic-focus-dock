@@ -26,9 +26,10 @@ panel. Do not describe anything below as more capable than this table.
 > `/dock`; v0.1.0 has no app-launch or notification-reading endpoint.
 >
 > **Windows companion spike (unreleased):** `win-companion/` observes real
-> foreground apps and can launch only Start Menu-resolved `.exe` targets from
-> its own tray picker. The web dock still does not launch apps, and the
-> companion does not read or suppress notifications.
+> foreground apps and launches only Start Menu-resolved `.exe` targets, from its
+> own tray picker or from a web pinned tile through an authenticated local
+> proxy. Social apps get a cancelable focus-pause prompt when the active mode
+> enables it. The companion does not read or suppress notifications.
 
 ## Labels used in the UI
 

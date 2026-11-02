@@ -1,4 +1,4 @@
-import type { AppState, PendingNotification } from "../types";
+import type { AppState, PendingNotification, PinnedItem } from "../types";
 import { useT } from "../i18n";
 
 type Decision = "stay" | "later" | "dismiss" | "go_social";
@@ -146,13 +146,15 @@ export function Dock({
   onToggleLock,
   onOpenSettings,
   onPinned,
+  onAddApp,
   compact = false,
 }: {
   state: AppState;
   onActivate: (id: string) => void;
   onToggleLock: () => void;
   onOpenSettings: () => void;
-  onPinned: (label: string, url?: string) => void;
+  onPinned: (item: PinnedItem) => void;
+  onAddApp: () => void;
   compact?: boolean;
 }) {
   const { t } = useT();
@@ -191,13 +193,22 @@ export function Dock({
               key={item.id}
               type="button"
               className={`app-tile ${state.bridge.connected && index < 2 ? "is-running" : ""}`}
-              onClick={() => onPinned(item.label, item.url)}
-              title={item.kind === "bookmark" ? item.url : `${item.label} — native launch needs the macOS bridge`}
+              onClick={() => onPinned(item)}
+              title={item.kind === "bookmark" ? item.url : `${item.label} — native launch`}
             >
               <span aria-hidden="true">{item.icon}</span>
               <span className="app-label">{item.label}</span>
             </button>
           ))}
+          <button
+            className="app-tile app-add"
+            type="button"
+            onClick={onAddApp}
+            title={t("native.addTitle")}
+          >
+            <span aria-hidden="true">＋</span>
+            <span className="app-label">{t("native.addShort")}</span>
+          </button>
         </div>
 
         <div className="dock-actions">

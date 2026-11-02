@@ -1,0 +1,9 @@
+{
+  "launchToast": "Launched Character Map",
+  "gateText": "FOCUS PAUSE\nSocial app is paused\n\nOpening X unlocks in 5s. Cancel to stay focused.\n\nFocusDock cannot block this app outside itself; you can still open it directly.\n\nCancel\nOpen in 5s",
+  "socialToast": "Launched X",
+  "setup": {
+    "status": 200,
+    "charId": "character-map-f7769c05"
+  }
+}

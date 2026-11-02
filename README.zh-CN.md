@@ -26,7 +26,7 @@ API Key 也能完整使用。
 | AI 提案 → Diff → 确认 → 应用 → 回滚 | **通过**（规则引擎） | API 与 E2E 测试 |
 | 可选 Ollama / OpenAI 兼容适配器 | **已实现，未实测** | 需要本地模型或真实端点 |
 | macOS 浮动 Dock | **未验证** | 仅有 Swift 源码与 macOS CI 编译；开发机没有 Mac |
-| 本机应用控制 / 启动 | **Web 未实现；Windows spike：允许列表启动** | 未发布的 Windows 伴生程序；Web dock 仍不启动应用 |
+| 本机应用控制 / 启动 | **Windows spike：Web pinned + 原生 picker 启动** | 未发布的 Windows 伴生程序；macOS 与纯浏览器路径仍不能启动应用 |
 | 全局系统通知拦截 | **设计上不支持** | 公开 API 限制，界面中已说明 |
 | 公开发布 | **已公开 v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **已合并** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -132,8 +132,9 @@ API Key 保存在数据目录的 `secrets.json`（尽力设为 `0600`），**不
 
 `win-companion/` 是 v0.1.0 之后在 `main` 上的恢复性 spike，不属于 v0.1.0 Release。
 它以 Windows 用户会话托盘程序运行，用 `SetWinEventHook` 观察真实前台应用，并只从
-自己的 Start Menu 选择器启动已解析的 `.exe`。Web dock 仍不启动应用；它不读取或
-静默系统通知。见 [`win-companion/README.md`](win-companion/README.md)。
+自己的 Start Menu 选择器或经本地认证代理的 Web pinned tile 启动已解析的 `.exe`。
+社交应用在模式开启时会显示可取消的专注暂停提示。它不读取或静默系统通知。见
+[`win-companion/README.md`](win-companion/README.md)。
 
 ## 可选 macOS 浮动 Dock
 

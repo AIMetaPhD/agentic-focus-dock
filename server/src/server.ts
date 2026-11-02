@@ -108,6 +108,58 @@ function bridgeIsFresh(ctx: Ctx): boolean {
   return Date.now() - Date.parse(ctx.bridge.last_seen) < 25_000;
 }
 
+const SOCIAL_NATIVE_HINTS = [
+  "slack",
+  "discord",
+  "twitter",
+  "wechat",
+  "微信",
+  "instagram",
+  "messages",
+  "teams",
+];
+
+function isSocialNativeLabel(label: string | undefined): boolean {
+  const value = (label ?? "").toLowerCase().trim();
+  if (!value) return false;
+  if (value === "x" || value.startsWith("x ") || value.endsWith(" x")) return true;
+  return SOCIAL_NATIVE_HINTS.some((hint) => value.includes(hint));
+}
+
+async function nativeControlRequest(
+  ctx: Ctx,
+  path: string,
+  method = "GET",
+  body?: unknown,
+): Promise<{ status: number; body: unknown }> {
+  const base = process.env.FOCUSDOCK_NATIVE_COMPANION_URL || "http://127.0.0.1:4318";
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(`${base}${path}`, {
+      method,
+      headers: {
+        authorization: `Bearer ${ctx.bridgeToken}`,
+        ...(body ? { "content-type": "application/json" } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+    });
+    const text = await response.text();
+    let parsed: unknown = null;
+    if (text) {
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        parsed = { message: text };
+      }
+    }
+    return { status: response.status, body: parsed };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function publicSettings(settings: Settings, dataDir: string): unknown {
   return {
     ...settings,
@@ -769,6 +821,66 @@ export async function startServer(opts: StartOptions): Promise<{
     const updated = ctx.store.markProposal(id, "rejected");
     ctx.store.audit("user", "proposal.reject", id, {});
     return updated;
+  });
+
+  // ---------- native companion launch (Windows recovery spike) ----------
+
+  app.get("/api/native/apps", async (_request, reply) => {
+    if (process.platform !== "win32") {
+      return fail(reply, 503, "native_unavailable", "Native launch is only available on Windows in this spike.");
+    }
+    try {
+      const result = await nativeControlRequest(ctx, "/apps");
+      if (result.status !== 200) {
+        return fail(reply, 503, "native_unavailable", "The Windows companion is not listening.");
+      }
+      return result.body;
+    } catch {
+      return fail(reply, 503, "native_unavailable", "The Windows companion is not running.");
+    }
+  });
+
+  app.post("/api/native/launch", async (request, reply) => {
+    const body = z
+      .object({
+        id: z.string().min(1).max(128),
+        label: z.string().max(80).optional(),
+        confirm_social: z.boolean().optional(),
+      })
+      .parse(request.body);
+    if (process.platform !== "win32") {
+      return fail(reply, 503, "native_unavailable", "Native launch is only available on Windows in this spike.");
+    }
+
+    const active = activeMode(ctx.store);
+    const wait = active.notifications.switch_wait_seconds;
+    if (
+      isSocialNativeLabel(body.label) &&
+      active.id !== "social" &&
+      active.notifications.social_switch_enabled &&
+      wait > 0 &&
+      body.confirm_social !== true
+    ) {
+      return reply.code(409).send({
+        error: "social_pause_required",
+        message: "Social app launch is paused for focus.",
+        wait_seconds: wait,
+      });
+    }
+
+    try {
+      const result = await nativeControlRequest(ctx, "/launch", "POST", { id: body.id });
+      if (result.status !== 200) {
+        return fail(reply, 502, "native_launch_failed", "The Windows companion rejected the launch.");
+      }
+      ctx.store.audit("user", "native.launch", "apps", {
+        id: body.id,
+        label: body.label ?? null,
+      });
+      return result.body;
+    } catch {
+      return fail(reply, 503, "native_unavailable", "The Windows companion is not running.");
+    }
   });
 
   // ---------- settings, privacy, data ----------

@@ -70,7 +70,15 @@ export function ModesView({
   const [versions, setVersions] = useState<ModeVersion[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [nativeApps, setNativeApps] = useState<{ id: string; name: string }[]>([]);
+  const [nativeId, setNativeId] = useState("");
   const fileInput = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    void api<{ apps: { id: string; name: string }[] }>("/api/native/apps")
+      .then((data) => setNativeApps(Array.isArray(data.apps) ? data.apps : []))
+      .catch(() => setNativeApps([]));
+  }, []);
 
   const selected = useMemo(
     () => state.modes.find((m) => m.id === selectedId) ?? null,
@@ -124,6 +132,24 @@ export function ModesView({
       const pinned = current.pinned_items.map((item, i) => (i === index ? { ...item, ...patch } : item));
       return { ...current, pinned_items: pinned };
     });
+  };
+
+  const addNative = () => {
+    if (!draft) return;
+    const app = nativeApps.find((entry) => entry.id === nativeId);
+    if (!app) return;
+    if (draft.pinned_items.some((item) => item.bundle_id === app.id)) {
+      notify(`${app.name} is already pinned.`, "error");
+      return;
+    }
+    const id = `native-${app.id}`.slice(0, 64);
+    update({
+      pinned_items: [
+        ...draft.pinned_items,
+        { id, label: app.name, icon: "▣", kind: "app", bundle_id: app.id },
+      ],
+    });
+    setNativeId("");
   };
 
   const addPinned = () => {
@@ -446,6 +472,36 @@ export function ModesView({
                     </button>
                   </div>
                 ))}
+
+                <div className="native-picker">
+                  <h3>{t("modes.nativeApps")}</h3>
+                  {nativeApps.length === 0 ? (
+                    <p className="empty">{t("modes.nativeUnavailable")}</p>
+                  ) : (
+                    <div className="native-picker-row">
+                      <select
+                        value={nativeId}
+                        aria-label={t("modes.nativeSelect")}
+                        onChange={(event) => setNativeId(event.target.value)}
+                      >
+                        <option value="">{t("modes.nativeSelect")}</option>
+                        {nativeApps.map((app) => (
+                          <option key={app.id} value={app.id}>
+                            {app.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        className="btn btn-ghost"
+                        type="button"
+                        disabled={!nativeId}
+                        onClick={addNative}
+                      >
+                        {t("modes.addNative")}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="form-grid">

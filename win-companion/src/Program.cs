@@ -56,6 +56,22 @@ namespace FocusDock.Companion
             }
 
             BridgeClient client = new BridgeClient(options.Backend, token);
+            ControlServer control = new ControlServer(token, options.ControlPort, options.AuditFile, Log);
+            try
+            {
+                control.Start();
+            }
+            catch (Exception ex)
+            {
+                Log("control server error: " + ex.Message);
+                MessageBox.Show(
+                    "FocusDock companion could not listen on 127.0.0.1:" + options.ControlPort +
+                    ".\n\nThe native tray and foreground events still work, but web-triggered launches are unavailable.\n\n" + ex.Message,
+                    "FocusDock Native Companion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
             ForegroundMonitor monitor = new ForegroundMonitor(client, options.IncludeTitles, Log);
             try
             {
@@ -69,7 +85,7 @@ namespace FocusDock.Companion
                 return;
             }
 
-            TrayContext tray = new TrayContext(client, monitor, options);
+            TrayContext tray = new TrayContext(client, monitor, control, options);
             Log("companion started; backend=" + options.Backend);
             Application.Run(tray);
         }

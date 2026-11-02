@@ -6,6 +6,7 @@
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
 - Repository: <https://github.com/AIMetaPhD/agentic-focus-dock>
 - Recovery commit: `c7a766e013da6f6e14d52c633818febdf43c83f9`
+- R3 follow-up commit: the commit containing the web pinned launch, social pause, and dock-first Add app UI (see git log)
 - Base commit before recovery: `56b30f3517ace01f2c31319b90fc5843112f73e8`
 - Public release: **v0.1.0 remains the public Release; no v0.2 Release was created.**
 
@@ -19,7 +20,7 @@ remains **NOT VERIFIED**.
 | R0 Truthful inventory / Mac reachability | **PASS for reachability matrix** | Repo, host, tools and tests inventoried; one online macOS Tailscale peer exists; SSH host key is presented but **not trusted**; GUI session not proven |
 | R1 Existing macOS bridge smoke test | **BLOCKED** | Host-key trust and Mac GUI/screen evidence are missing; no `NSPanel`/`NSWorkspace` runtime claim |
 | R2 Windows native companion | **PASS (minimal)** | Real foreground events, Building suggestion after 15 s, three distinct apps, allowlisted Character Map launch, unknown launch rejected, bilingual native status, graceful disconnect |
-| R3 Usefulness / full workflow | **PARTIAL / BLOCKED** | Real foreground → suggestion and native launch exist, but the **web pinned tile does not launch apps**, the social pause flow is not native, reboot persistence was not tested, and the user-value assessment has not happened |
+| R3 Usefulness / full workflow | **PARTIAL — functional web flow passes** | Dock-first Add app, web pinned launch and a cancelable social pause pass; reboot persistence and the user-value assessment are still pending |
 
 **Recommendation: CONDITIONAL GO** to continue the specific Windows native P0
 blockers. **Not GO** for a daily-use claim or another public Release.
@@ -135,8 +136,11 @@ server reported `connected: false`, `last_seen: null`
 
 ### R2 limitations
 
-- **The web dock's pinned tiles still do not launch apps.** Launch is exposed
-  through the native tray picker and the `--launch` test path only.
+- Web pinned launch is **Windows-only** and requires the running companion; the
+  browser-only and macOS paths still have no launch endpoint.
+- The native picker initially preselected the first Start Menu entry (`Access`),
+  which caused an accidental Microsoft Access launch. It now starts with no
+  selection and keeps Launch disabled until the user explicitly chooses an app.
 - The foreground-to-record latency was observed at the log's 1-second
   resolution; **sub-second latency was not instrumented**. The `<1 s` target is
   not proven.
@@ -148,25 +152,40 @@ server reported `connected: false`, `last_seen: null`
 
 ## 5. R3 — usefulness test
 
-**PARTIAL / BLOCKED.**
+**PARTIAL — 2 of 4 subitems pass.**
 
 Proven:
 
-- Real foreground app → native event → validated Building suggestion after 15 s.
-- Real allowlisted app launch from the native picker catalog.
-- Bilingual native status and language switch.
-- Graceful disconnect with no residual process.
+- **Dock-first Add app UI:** the dock has a `+ Add` tile; it opens a searchable
+  app modal with an onboarding sentence, a `Test launch` action and a `Pin`
+  action. Pinning `Character Map` produced `Pinned Character Map` and a new dock
+  tile (`r3-add-app-modal.png`, `r3-dock-pinned.png`, `r3-add-app-test.json`).
+- **Web pinned launch:** the newly pinned dock tile `Character Map` launched a
+  real app through `/api/native/launch`; UI toast: `Launched Character Map`
+  (`qa/evidence/native/r3-web-launch.png`).
+- **Cancelable social pause:** a pinned test item labeled `X` (pointing to the
+  Character Map target, a test fixture) received `409 social_pause_required`,
+  showed a `FOCUS PAUSE` dialog, allowed Cancel, then allowed `Open now` after
+  the configured 4 s test wait; UI toast: `Launched X`
+  (`r3-social-pause.png`, `r3-social-open.png`, `r3-web-test.json`).
+- The native picker is now labeled **Diagnostic launch** and has a search box.
+  It no longer preselects the first Start Menu entry; Launch is disabled until
+  an explicit selection. This fixes the accidental `Access` launch reported by
+  the user. The normal flow is the web dock `+ Add` modal.
 
 Not proven:
 
-- Clicking a **web pinned tile** to launch a real app (R3 explicitly asks for
-  this).
-- The opt-in social pause workflow on a real social app.
+- The full 30 s default wait was not sat through; the test used a 4 s
+  mode-configured wait.
+- No real Slack/WeChat/Teams app was launched; the social item was a test
+  fixture.
 - Reboot/restart persistence and no-residual-window behavior after a real
-  reboot.
-- User assessment that the tool actually reduces context-switching friction.
+  reboot are still pending.
+- User assessment that the tool actually reduces context-switching friction is
+  still pending.
 
-The user-value test has not been performed; automated tests are not a substitute.
+The social pause is a UX gate, not an OS-level block; the user can still open
+the app directly. Automated tests are not a substitute for the user-value test.
 
 ## 6. Technical decisions and security
 
@@ -179,6 +198,9 @@ The user-value test has not been performed; automated tests are not a substitute
 - The native app catalog resolves Start Menu shortcuts to existing `.exe`
   targets; it does not accept arbitrary command lines, PowerShell, `cmd /c` or
   URIs from the model/web UI.
+- The web `/api/native/launch` route proxies an opaque catalog id to the
+  companion; it does not accept a path or command line. The social pause is a
+  UX gate, explicitly not a security boundary.
 - Launch target is hashed with SHA-256 and audited; unknown/out-of-catalog
   requests are rejected.
 - Status window hides app names by default; raw event logs with user app names
@@ -196,11 +218,12 @@ The user-value test has not been performed; automated tests are not a substitute
 | `npm run lint` | pass |
 | `npm test` | **56 passed** (52 server + 4 web) |
 | `npm run build` | pass |
-| `npm run test:e2e` | **13 passed** |
+| `npm run test:e2e` | **13 passed** (before the R3 web-launch UI change; CI re-runs it) |
+| R3 UI scripts | `win-companion/r3-add-app-test.mjs` and `r3-web-test.mjs` pass |
 | `npm run secret-scan` | clean, 132 tracked files |
 | C# `--self-test` | **5 checks pass** |
 | C# build | pass |
-| CI | run `41409028974` on `c7a766e` — **success**, all three jobs |
+| CI | R2 run `41409028974` on `c7a766e` — **success**; R3 follow-up CI: see Actions for this commit |
 | Muse QA | **NOT VERIFIED**; no Muse PASS was fabricated |
 
 ## 8. Evidence index
@@ -219,6 +242,14 @@ The user-value test has not been performed; automated tests are not a substitute
 | Disconnect test | `qa/evidence/native/disconnect-test.txt` |
 | Disconnect state | `qa/evidence/native/disconnect-status.json` |
 | Language toggle result | `qa/evidence/native/web-status.json` |
+| Web pinned launch | `qa/evidence/native/r3-web-launch.png` |
+| Social pause dialog | `qa/evidence/native/r3-social-pause.png` |
+| Social open after pause | `qa/evidence/native/r3-social-open.png` |
+| R3 UI test result | `qa/evidence/native/r3-web-test.json` |
+| Dock-first Add app modal | `qa/evidence/native/r3-add-app-modal.png` |
+| Dock after pinning | `qa/evidence/native/r3-dock-pinned.png` |
+| Add-app test result | `qa/evidence/native/r3-add-app-test.json` |
+| R3 launch audit (includes the accidental Access launch) | `qa/evidence/native/r3-launch-audit.log` |
 | Companion source | `win-companion/src/` |
 | Companion README | `win-companion/README.md` |
 
@@ -243,18 +274,28 @@ Raw logs with non-controlled app names were kept out of the repository.
 - Evidence: `qa/evidence/native/*` and regenerated `qa/evidence/0*.png`.
 - `.gitignore`.
 
+The R3 follow-up adds: `server/src/server.ts`, `web/src/App.tsx`,
+`web/src/components/Dock.tsx`, `web/src/components/ModesView.tsx`,
+`web/src/components/NativeAppPicker.tsx`, `web/src/i18n.tsx`,
+`web/src/styles.css`, `win-companion/src/ControlServer.cs`,
+`win-companion/src/AppCatalog.cs`, `win-companion/src/AppPickerForm.cs`,
+`win-companion/src/StatusForm.cs`, `win-companion/src/TrayContext.cs`,
+`win-companion/src/Options.cs`, `win-companion/src/Program.cs`,
+`win-companion/r3-*.mjs`, and `qa/evidence/native/r3-*`.
+
 ## 10. GO / STOP recommendation
 
-**CONDITIONAL GO** for the next Windows native step, limited to the specific
+**CONDITIONAL GO** for the next Windows native step, limited to the remaining
 R3 blockers:
 
-1. Wire a web pinned app tile to the native allowlist launch through an
-   authenticated server proxy; or explicitly decide that native tray launch is
-   the product surface.
-2. Add a real social-app pause workflow and prove it on Windows.
-3. Run a reboot/restart persistence and residual-window test.
-4. Instrument foreground-to-record latency to sub-second resolution.
-5. Conduct the user-value test with the owner.
+1. Run a reboot/restart persistence and residual-window test.
+2. Optionally repeat the social pause with the default 30 s and a real social
+   app the owner chooses (no private content).
+3. Instrument foreground-to-record latency to sub-second resolution.
+4. Conduct the user-value test with the owner; the current result is still
+   "technically works", not "useful in daily work".
+5. Remove or demote the raw native Start Menu picker further if the owner still
+   finds it confusing; the web `+ Add` flow is the intended product surface.
 
 **Do not** publish a v0.2 Release, promote the app as a daily-use focus agent,
 or open further profile marketing until R2 + R3 real-world evidence and user

@@ -10,6 +10,7 @@ namespace FocusDock.Companion
 {
     internal sealed class AppEntry
     {
+        public string Id;
         public string Name;
         public string TargetPath;
         public string Sha256;
@@ -56,6 +57,7 @@ namespace FocusDock.Companion
                     AppEntry entry = new AppEntry();
                     entry.Name = name;
                     entry.TargetPath = Path.GetFullPath(target);
+                    entry.Id = StableId(entry.Name, entry.TargetPath);
                     apps.Add(entry);
                 }
             }
@@ -95,6 +97,38 @@ namespace FocusDock.Companion
             {
                 return false;
             }
+        }
+
+        public static string StableId(string name, string path)
+        {
+            string slug = (name ?? "app").ToLowerInvariant();
+            StringBuilder clean = new StringBuilder(slug.Length);
+            foreach (char c in slug)
+            {
+                if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) clean.Append(c);
+                else if (clean.Length > 0 && clean[clean.Length - 1] != '-') clean.Append('-');
+            }
+            slug = clean.ToString().Trim('-');
+            if (slug.Length == 0) slug = "app";
+            if (slug.Length > 24) slug = slug.Substring(0, 24);
+
+            using (SHA256 sha = SHA256.Create())
+            {
+                byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(Path.GetFullPath(path).ToLowerInvariant()));
+                StringBuilder hex = new StringBuilder(hash.Length * 2);
+                foreach (byte b in hash) hex.Append(b.ToString("x2"));
+                return slug + "-" + hex.ToString().Substring(0, 8);
+            }
+        }
+
+        public static AppEntry FindById(List<AppEntry> apps, string id)
+        {
+            if (apps == null || string.IsNullOrEmpty(id)) return null;
+            foreach (AppEntry entry in apps)
+            {
+                if (string.Equals(entry.Id, id, StringComparison.OrdinalIgnoreCase)) return entry;
+            }
+            return null;
         }
 
         public static bool IsSafeTarget(string path)

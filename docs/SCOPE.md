@@ -30,8 +30,9 @@ interception, loopback hardening, GPL isolation, Jev removed from the critical p
 **v0.1.0 delivery note (2026-11-02):** the bridge observes the frontmost app and
 renders `/dock`; it does **not** implement app launch. Pinned tiles are
 labels/bookmarks. A separate unreleased Windows companion spike on `main`
-implements a Start Menu picker and allowlisted `.exe` launch; that is not part of
-the v0.1.0 Release or the web dock.
+implements a Start Menu picker, allowlisted `.exe` launch, and a web pinned-tile
+launch path through an authenticated local proxy; that is not part of the
+v0.1.0 Release. The social pause is a UX prompt, not an OS-level block.
 
 ## P1 — implemented in this release where cheap, otherwise documented
 

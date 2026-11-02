@@ -27,7 +27,7 @@ no cloud key required.
 | AI proposal → diff → confirm → apply → rollback | **PASS** (rules provider) | API and E2E tests |
 | Optional Ollama / OpenAI-compatible adapters | **IMPLEMENTED, NOT EXERCISED** | needs a local model / endpoint to verify |
 | macOS floating Dock | **NOT VERIFIED** | Swift source + macOS CI compile only; no Mac was available |
-| Native app control / launch | **WEB: NOT IMPLEMENTED; WINDOWS SPIKE: ALLOWLISTED LAUNCH** | unreleased Windows companion; the web dock still does not launch apps |
+| Native app control / launch | **WINDOWS SPIKE: WEB PINNED + NATIVE PICKER LAUNCH** | unreleased Windows companion; macOS and the browser-only path still cannot launch apps |
 | Global system notification interception | **UNSUPPORTED BY DESIGN** | public-API limitation, documented in the app |
 | Public release | **PUBLIC v0.1.0** | [GitHub Release](https://github.com/AIMetaPhD/agentic-focus-dock/releases/tag/v0.1.0) |
 | Profile README PR | **MERGED** | [AIMetaPhD/AIMetaPhD#1](https://github.com/AIMetaPhD/AIMetaPhD/pull/1) |
@@ -164,8 +164,9 @@ output injection.
 `win-companion/` is a post-v0.1.0 recovery spike on `main`, not part of the
 v0.1.0 Release. It runs as a Windows user-session tray app, observes real
 foreground apps with `SetWinEventHook`, and launches only Start Menu-resolved
-`.exe` targets from its own picker. The web dock still does not launch apps. It
-does not read or suppress notifications. See
+`.exe` targets from its own picker or from a web pinned tile through an
+authenticated local proxy. Social apps get a cancelable focus-pause prompt when
+the active mode enables it. It does not read or suppress notifications. See
 [`win-companion/README.md`](win-companion/README.md) and
 [`NATIVE_RECOVERY_REPORT.md`](NATIVE_RECOVERY_REPORT.md).
 

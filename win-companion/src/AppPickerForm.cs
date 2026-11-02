@@ -9,15 +9,17 @@ namespace FocusDock.Companion
     internal sealed class AppPickerForm : Form
     {
         private readonly ListBox list;
+        private readonly TextBox search;
         private readonly Label detail;
+        private readonly Button launchButton;
         private readonly string auditFile;
         private List<AppEntry> apps;
 
         public AppPickerForm(string auditFile)
         {
             this.auditFile = auditFile;
-            Text = "Installed apps — FocusDock / 已安装应用";
-            ClientSize = new Size(560, 420);
+            Text = "Choose an app — FocusDock / 选择应用";
+            ClientSize = new Size(560, 450);
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -25,31 +27,36 @@ namespace FocusDock.Companion
             ShowInTaskbar = false;
 
             Label hint = new Label();
-            hint.Text = "Start Menu shortcuts resolved to existing .exe targets. No free-form command line.";
-            hint.SetBounds(16, 12, 520, 36);
+            hint.Text = "This is a Windows diagnostic picker. Search and select the app you want; nothing launches until you press Launch. Access is just one installed Microsoft app, not a FocusDock requirement.";
+            hint.SetBounds(16, 12, 520, 48);
             Controls.Add(hint);
 
+            search = new TextBox();
+            search.SetBounds(16, 66, 528, 28);
+            search.TextChanged += delegate { FilterApps(); };
+            Controls.Add(search);
+
             list = new ListBox();
-            list.SetBounds(16, 52, 528, 270);
-            list.DisplayMember = "Name";
+            list.SetBounds(16, 104, 528, 230);
             list.DoubleClick += delegate { LaunchSelected(); };
             list.SelectedIndexChanged += delegate { ShowDetail(); };
             Controls.Add(list);
 
             detail = new Label();
-            detail.SetBounds(16, 330, 528, 40);
+            detail.SetBounds(16, 344, 528, 40);
             detail.ForeColor = Color.DimGray;
             Controls.Add(detail);
 
-            Button launch = new Button();
-            launch.Text = "Launch / 启动";
-            launch.SetBounds(300, 376, 110, 32);
-            launch.Click += delegate { LaunchSelected(); };
-            Controls.Add(launch);
+            launchButton = new Button();
+            launchButton.Text = "Launch / 启动";
+            launchButton.SetBounds(300, 400, 110, 32);
+            launchButton.Enabled = false;
+            launchButton.Click += delegate { LaunchSelected(); };
+            Controls.Add(launchButton);
 
             Button cancel = new Button();
             cancel.Text = "Cancel / 取消";
-            cancel.SetBounds(420, 376, 110, 32);
+            cancel.SetBounds(420, 400, 110, 32);
             cancel.DialogResult = DialogResult.Cancel;
             Controls.Add(cancel);
 
@@ -62,9 +69,7 @@ namespace FocusDock.Companion
             try
             {
                 apps = AppCatalog.Load();
-                list.DataSource = apps;
-                detail.Text = apps.Count + " apps found. Only resolved .exe targets can be launched.";
-                if (apps.Count > 0) list.SelectedIndex = 0;
+                FilterApps();
             }
             catch (Exception ex)
             {
@@ -76,9 +81,31 @@ namespace FocusDock.Companion
             }
         }
 
+        private void FilterApps()
+        {
+            if (apps == null) return;
+            string query = search.Text.Trim();
+            list.BeginUpdate();
+            list.Items.Clear();
+            foreach (AppEntry entry in apps)
+            {
+                if (query.Length == 0 || entry.Name.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    list.Items.Add(entry);
+                }
+            }
+            list.EndUpdate();
+            list.SelectedIndex = -1;
+            launchButton.Enabled = false;
+            detail.Text = list.Items.Count == 0
+                ? "No matches. Clear the search or try another name."
+                : list.Items.Count + " matches. Select one explicitly; nothing is launched automatically.";
+        }
+
         private void ShowDetail()
         {
             AppEntry entry = list.SelectedItem as AppEntry;
+            launchButton.Enabled = entry != null;
             if (entry == null)
             {
                 detail.Text = "";
