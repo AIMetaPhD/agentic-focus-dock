@@ -1,0 +1,26 @@
+2026-11-02 15:15:43 foreground monitor started
+2026-11-02 15:15:43 companion started; backend=http://127.0.0.1:4317
+2026-11-02 15:16:00 foreground: Windows 命令处理程序 pid=51260 hwnd=333160
+2026-11-02 15:16:00 sent activity: Windows 命令处理程序 stable=0s
+2026-11-02 15:16:00 foreground: Windows Terminal Host pid=69504 hwnd=33756412
+2026-11-02 15:16:00 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:15 sent activity: Windows Terminal Host stable=15s
+2026-11-02 15:16:17 foreground: Windows PowerShell pid=57524 hwnd=1054308
+2026-11-02 15:16:17 foreground: Windows Terminal Host pid=69504 hwnd=1054070
+2026-11-02 15:16:17 sent activity: Windows PowerShell stable=0s
+2026-11-02 15:16:17 foreground: Windows PowerShell pid=57524 hwnd=1054308
+2026-11-02 15:16:17 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:17 foreground: Windows Terminal Host pid=69504 hwnd=1054070
+2026-11-02 15:16:17 sent activity: Windows PowerShell stable=0s
+2026-11-02 15:16:17 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:32 sent activity: Windows Terminal Host stable=15s
+2026-11-02 15:16:45 foreground: Windows Terminal Host pid=69504 hwnd=33756412
+2026-11-02 15:16:45 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:45 foreground: Windows Terminal Host pid=69504 hwnd=1054070
+2026-11-02 15:16:45 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:45 foreground: Windows Terminal Host pid=69504 hwnd=33756412
+2026-11-02 15:16:45 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:16:45 foreground: Windows Terminal Host pid=69504 hwnd=1054070
+2026-11-02 15:16:45 sent activity: Windows Terminal Host stable=0s
+2026-11-02 15:22:17 foreground monitor started
+2026-11-02 15:22:18 companion started; backend=http://127.0.0.1:4317

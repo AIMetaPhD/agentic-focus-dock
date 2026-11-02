@@ -166,7 +166,8 @@ v0.1.0 Release. It runs as a Windows user-session tray app, observes real
 foreground apps with `SetWinEventHook`, and launches only Start Menu-resolved
 `.exe` targets from its own picker. The web dock still does not launch apps. It
 does not read or suppress notifications. See
-[`win-companion/README.md`](win-companion/README.md).
+[`win-companion/README.md`](win-companion/README.md) and
+[`NATIVE_RECOVERY_REPORT.md`](NATIVE_RECOVERY_REPORT.md).
 
 ## Optional macOS floating Dock
 

@@ -22,3 +22,4 @@ win-companion/obj/
 .DS_Store
 Thumbs.db
 *.log
+!qa/evidence/native/*.log
