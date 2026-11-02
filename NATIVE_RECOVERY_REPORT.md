@@ -6,7 +6,7 @@
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
 - Repository: <https://github.com/AIMetaPhD/agentic-focus-dock>
 - Recovery commit: `c7a766e013da6f6e14d52c633818febdf43c83f9`
-- R3 follow-up commits: `1ad22db` (dock-first Add app UI, web pinned launch, social pause, real app icons), `87ba975` (clean shutdown, R3 restart persistence)
+- R3 follow-up commits: `1ad22db` (dock-first Add app UI, web pinned launch, social pause, real app icons), `87ba975` (clean shutdown, R3 restart persistence), `236115b` (real editor, 30 s social and bilingual R3 evidence)
 - Base commit before recovery: `56b30f3517ace01f2c31319b90fc5843112f73e8`
 - Public release: **v0.1.0 remains the public Release; no v0.2 Release was created.**
 
@@ -270,7 +270,7 @@ the app directly. Automated tests are not a substitute for the user-value test.
 | `npm run secret-scan` | clean, 132 tracked files |
 | C# `--self-test` | **6 checks pass**, including executable icon extraction |
 | C# build | pass |
-| CI | R2 run `41409028974` on `c7a766e` — **success**; icon commit `1ad22db` run `41470500051` — **success**; shutdown/restart commit `87ba975` run `41475843568` — **success** (macOS bridge, secret scan, web typecheck/lint/unit/e2e) |
+| CI | R2 run `41409028974` on `c7a766e` — **success**; icon commit `1ad22db` run `41470500051` — **success**; shutdown/restart commit `87ba975` run `41475843568` — **success**; R3 workflow commit `236115b` run `41480919475` — **success** (macOS bridge, secret scan, web typecheck/lint/unit/e2e) |
 | Muse QA | **NOT VERIFIED**; no Muse PASS was fabricated |
 
 ## 8. Evidence index
