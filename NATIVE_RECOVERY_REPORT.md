@@ -6,7 +6,7 @@
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
 - Repository: <https://github.com/AIMetaPhD/agentic-focus-dock>
 - Recovery commit: `c7a766e013da6f6e14d52c633818febdf43c83f9`
-- R3 follow-up commit: the commit containing the web pinned launch, social pause, and dock-first Add app UI (see git log)
+- R3 follow-up commit: `1ad22db` (dock-first Add app UI, web pinned launch, social pause, real app icons)
 - Base commit before recovery: `56b30f3517ace01f2c31319b90fc5843112f73e8`
 - Public release: **v0.1.0 remains the public Release; no v0.2 Release was created.**
 
@@ -160,6 +160,11 @@ Proven:
   app modal with an onboarding sentence, a `Test launch` action and a `Pin`
   action. Pinning `Character Map` produced `Pinned Character Map` and a new dock
   tile (`r3-add-app-modal.png`, `r3-dock-pinned.png`, `r3-add-app-test.json`).
+- **Real app icons:** the Add app modal and the dock now render each pinned
+  app's own executable icon instead of a shared `▣` glyph. `Character Map` and
+  `Obsidian` returned different PNGs (2096 vs 1778 bytes, different SHA-256) and
+  rendered in both surfaces (`r3-add-app-character-map.png`,
+  `r3-add-app-obsidian.png`, `r3-dock-icons.png`, `r3-icon-*.png`).
 - **Web pinned launch:** the newly pinned dock tile `Character Map` launched a
   real app through `/api/native/launch`; UI toast: `Launched Character Map`
   (`qa/evidence/native/r3-web-launch.png`).
@@ -221,9 +226,9 @@ the app directly. Automated tests are not a substitute for the user-value test.
 | `npm run test:e2e` | **13 passed** (before the R3 web-launch UI change; CI re-runs it) |
 | R3 UI scripts | `win-companion/r3-add-app-test.mjs` and `r3-web-test.mjs` pass |
 | `npm run secret-scan` | clean, 132 tracked files |
-| C# `--self-test` | **5 checks pass** |
+| C# `--self-test` | **6 checks pass**, including executable icon extraction |
 | C# build | pass |
-| CI | R2 run `41409028974` on `c7a766e` — **success**; R3 follow-up CI: see Actions for this commit |
+| CI | R2 run `41409028974` on `c7a766e` — **success**; icon commit `1ad22db` run `41470500051` — **success** (macOS bridge, secret scan, web typecheck/lint/unit/e2e) |
 | Muse QA | **NOT VERIFIED**; no Muse PASS was fabricated |
 
 ## 8. Evidence index
@@ -249,6 +254,10 @@ the app directly. Automated tests are not a substitute for the user-value test.
 | Dock-first Add app modal | `qa/evidence/native/r3-add-app-modal.png` |
 | Dock after pinning | `qa/evidence/native/r3-dock-pinned.png` |
 | Add-app test result | `qa/evidence/native/r3-add-app-test.json` |
+| Add-app icon — Character Map | `qa/evidence/native/r3-add-app-character-map.png` |
+| Add-app icon — Obsidian | `qa/evidence/native/r3-add-app-obsidian.png` |
+| Dock with real pinned icons | `qa/evidence/native/r3-dock-icons.png` |
+| Extracted icon PNGs | `qa/evidence/native/r3-icon-character-map.png`, `r3-icon-obsidian.png` |
 | R3 launch audit (includes the accidental Access launch) | `qa/evidence/native/r3-launch-audit.log` |
 | Companion source | `win-companion/src/` |
 | Companion README | `win-companion/README.md` |
