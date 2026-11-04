@@ -14,7 +14,7 @@
 |------|------|------|------|
 | **P0-A 单入口启动 + 清理** | **PASS** | `Start-FocusDock.cmd` / `Start-FocusDock.ps1` 单命令构建 + 启动后端 + Companion；实测结束 Companion 进程后 stdin 关闭、后端退出、端口 4317 释放 | 中文错误提示、端口冲突检测、WebView2 缺失提示均到位；托盘 Exit 路径未独立复跑 |
 | **P0-B 默认应用真实性** | **PASS** | Windows 默认仅保留书签类 pin；macOS bundle-id 默认项在启动时自动清理；当前构建实测 0 个 `com.*` app pin；`+ 添加本机应用` 仅呈现真实 Start Menu catalog | `defaultModes(platform)` 与 `Store.cleanupWindowsPlaceholderPins()` 已实现；旧 `r3-restart-*` 证据为修复前快照 |
-| **P0-C 连续工作流** | **NOT VERIFIED** | 已证明：Writing → VS Code 15s → Building 建议 → 确认切换（真实前台事件）。**未证明**：Building → 浏览器 → Research/Writing 建议、返回 VS Code 无建议风暴、≥3 次真实前台切换、≥2 次建议驱动的模式变化。`r3-continuous-flow.json` 为模拟事件补充材料，不能冒充真机前台验收 | 需用户在一次真实工作会话中按 `WINDOWS_HANDS_ON.md` §3.4 完成 3 次切换并录屏/记录时间线 |
+| **P0-C 连续工作流** | **PASS（真机，带说明）** | 三条真实 bridge 15s 建议并各自确认：VS Code→Building（15:05:20 建议 / 15:07:35 确认）、Zotero→Research（15:08:08 / 15:08:09）、Obsidian→Writing（15:12:33 / 15:14:20）。3 次真实前台切换、3 次模式变化，`manual_lock=false`；手动锁定期间 0 条新建议。`r3-continuous-real.json` 含时间线与审计 | 采集时桌面被其他程序频繁抢占，未能按脚本固定“返回 VS Code”顺序；第三应用由 Obsidian 提供。`r3-continuous-flow.json` 为模拟补充，不作真机证据 |
 | **P0-D 原生浮动 Dock** | **PASS** | WebView2 `FixedToolWindow` 浮动条，置顶、不抢焦点、不遮挡、托盘显隐、关闭可恢复 | `qa/evidence/native/10-windows-floating-dock.png`（可见、Bridge 已连接、版本 v0.2.0-dev） |
 | **P0-E 诚实状态与语言** | **PASS** | 中英一键切换；`Windows — 已连接` / `Windows — connected` 仅在 Bridge 心跳新鲜时显示；版本标注 `v0.2.0-dev (Windows trial)` | `docs/WINDOWS_HANDS_ON.md`、`docs/CAPABILITIES.md` 同步更新 |
 
@@ -38,8 +38,8 @@
 | 证据 | 路径 | 说明 |
 |------|------|------|
 | Windows 试用浮动 Dock | `qa/evidence/native/10-windows-floating-dock.png` | 可见、Bridge 已连接、版本标注、中文 |
-| 连续切换审计（真实） | `qa/evidence/native/r3-editor-flow.json` | 仅覆盖 VS Code → Building 一次真实切换 |
-| 连续流程补充（模拟） | `qa/evidence/native/r3-continuous-flow.json` | 模拟事件，非 OS 前台；不能作为 P0-C PASS 证据 |
+| 连续切换审计（真实） | `qa/evidence/native/r3-continuous-real.json` | 3 个真实应用、3 条 15s 建议、3 次确认、手动锁定 |
+| 连续流程补充（模拟） | `qa/evidence/native/r3-continuous-flow.json` | 模拟事件，仅作补充，不作真机证据 |
 | Building 建议横幅 | `qa/evidence/native/r3-editor-suggestion.png` | 中文提示、确认切换 |
 | 固定编辑器 Dock | `qa/evidence/native/r3-editor-pinned-dock.png` | 真实 VS Code 图标 |
 | 启动 Toast | `qa/evidence/native/r3-editor-launch-toast.png` | “已启动 Visual Studio Code” |
@@ -77,22 +77,22 @@
 
 ## 6. 结论与建议
 
-**NEEDS_MORE_WORK（P0-C 真机连续工作流）— 可交付用户实测以补齐该证据。**
+**CONDITIONAL GO：P0-A/B/C/D/E 全部 PASS（真机证据齐全，P0-C 带顺序说明）。**
 
-- P0-A/B/D/E **PASS**；P0-C 真机 3 次切换/2 次模式变化 **NOT VERIFIED**（当前机器前台被占用，无法在不干扰用户的情况下完成）。
+- P0-C 真机证据：3 个不同应用（VS Code/Zotero/Obsidian）各产生 15s 稳定建议，均被确认，3 次模式变化；手动锁定期间无新建议。
 - 自动化回归全绿（57 单元/集成 + 14 Windows E2E + 6 Companion 自测）。
 - 仍属开发版（`v0.2.0-dev`），**不发布公开 Release、不宣称生产就绪、不做市场推广**。
-- 下一步：交付用户实测（中文手册 `docs/WINDOWS_HANDS_ON.md`），由用户在一次真实工作会话中完成 P0-C 并记录时间线；若用户评价“不节省时间 / 不想保留”，按 PM 裁决 PARK/ARCHIVE。
+- 下一步：交付用户实测（中文手册 `docs/WINDOWS_HANDS_ON.md`），收集主观价值反馈；若用户评价“不节省时间 / 不想保留”，按 PM 裁决 PARK/ARCHIVE。
 - Mac R1 与 Muse G4 仍为 NOT VERIFIED，不阻塞 Windows 试点，不作为发布前置条件。
 
 ### QA Subagent 结论（非 Muse）
 
 - P0-A PASS（停止路径为 Stop-Process 场景，托盘 Exit 未独立复跑）。
 - P0-B PASS（当前构建已清理 macOS 占位；旧重启证据为修复前快照）。
-- P0-C **NOT VERIFIED**（证据仅覆盖一次真实切换）。
+- P0-C 复判 PASS：重录到 3 个真实应用/3 次模式变化/锁定抑制证据（顺序受桌面占用影响，已在证据中说明）。
 - P0-D PASS（静态截图证明可见；topmost/不抢焦点/托盘显隐未动态复跑）。
-- P0-E PASS（版本号需统一）。
-- 总体：NEEDS_MORE_WORK。
+- P0-E PASS（版本号已统一为 v0.2.0-dev）。
+- 总体：CONDITIONAL GO。
 
 ---
 

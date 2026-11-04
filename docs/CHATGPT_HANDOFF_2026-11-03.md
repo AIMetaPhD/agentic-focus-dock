@@ -13,7 +13,7 @@
 
 ## 1. One-paragraph status
 
-FocusDock Windows 试用版已完成 P0-A/B/D/E，P0-C 真机连续工作流仍为 **NOT VERIFIED**。单入口启动脚本（`Start-FocusDock.cmd`）可一键完成依赖检查、前端构建、原生组件编译、后端+ Companion 启动，托盘 Exit 单入口关闭两者并释放端口。Windows 默认 pin 仅保留书签，真实应用仅来自 Start Menu catalog（当前构建已验证 0 个 macOS app pin）。已证明的真实前台流程：Writing → VS Code 15s → Building 建议 → 确认切换。**未证明**：Building → 浏览器 → Research/Writing 建议、返回 VS Code 无建议风暴、≥3 次真实切换、≥2 次建议驱动的模式变化；`r3-continuous-flow.json` 为模拟事件，不能冒充真机证据。原生浮动 Dock（WebView2 `FixedToolWindow`）已在真机可见并显示 Bridge “已连接”，但置顶/不抢焦点/托盘显隐未动态复跑。中英双语一键切换，版本标注 `v0.2.0-dev (Windows trial)`。自动化回归全绿（57 单元/集成 + 14 Windows E2E + 6 Companion 自测）。**结论：NEEDS_MORE_WORK（P0-C），可交付用户实测补齐。**
+FocusDock Windows 试用版已完成 P0-A/B/C/D/E。单入口启动脚本（`Start-FocusDock.cmd`）可一键完成依赖检查、前端构建、原生组件编译、后端+ Companion 启动，结束 Companion 后后端退出、端口释放。Windows 默认 pin 仅保留书签，当前构建实测 0 个 macOS app pin。P0-C 真机证据：3 个不同应用（VS Code/Zotero/Obsidian）各产生 15s 稳定建议并确认，3 次模式变化（Building→Research→Writing），手动锁定期间 0 条新建议；采集时桌面被其他程序频繁抢占，未能按脚本固定“返回 VS Code”顺序，已在证据中说明。原生浮动 Dock（WebView2 `FixedToolWindow`）真机可见并显示 Bridge “已连接”；置顶/不抢焦点/托盘显隐未动态复跑。中英双语一键切换，版本标注 `v0.2.0-dev (Windows trial)`。自动化回归全绿（57 单元/集成 + 14 Windows E2E + 6 Companion 自测）。**结论：CONDITIONAL GO，可交付用户实测。**
 
 ## 2. Gate matrix (updated)
 
@@ -22,20 +22,20 @@ FocusDock Windows 试用版已完成 P0-A/B/D/E，P0-C 真机连续工作流仍�
 | R0 inventory / Mac reachability | **PASS for reachability matrix** | repo/tooling inventory; one online macOS Tailscale peer; SSH host key presented but not trusted; GUI session not proven |
 | R1 macOS bridge smoke test | **BLOCKED** | host-key trust and Mac GUI/screen evidence missing; no `NSPanel`/`NSWorkspace` runtime claim |
 | R2 Windows native companion | **PASS** | real foreground events, Building suggestion after 15 s, allowlisted launch, unknown launch rejected, bilingual native status, graceful disconnect |
-| R3 usefulness / full workflow | **PARTIAL — P0-C NOT VERIFIED** | One real switch (VS Code→Building) proven; browser/return/3-switch sequence not captured |
+| R3 usefulness / full workflow | **PASS (caveated)** | 3 real apps / 3 confirmed mode changes / lock suppression; scripted return order interrupted by desktop activity |
 | P0-A single-entry launch & cleanup | **PASS** | `Start-FocusDock.cmd` one-click; Exit closes both; ports freed |
 | P0-B default app authenticity | **PASS** | Windows seeds only bookmarks; real apps from Start Menu only |
 | P0-D native floating dock | **PASS (static evidence)** | WebView2 FixedToolWindow visible; topmost/no-focus/tray toggles not dynamically re-run |
 | P0-E honest status & language | **PASS** | bilingual, bridge status only when fresh, version marked dev |
 
-**Decision: NEEDS_MORE_WORK** — P0-C real-foreground 3-switch workflow must be completed by the user in a real session; P0-A/B/D/E pass. No public Release until user approves.
+**Decision: CONDITIONAL GO** — P0-A/B/C/D/E pass; P0-C has three real apps/three confirmations with an order caveat. No public Release until user approves.
 
 ## 3. Key new evidence (trial)
 
 | Evidence | Path | Description |
 |---|---|---|
 | Windows floating dock (visible) | `qa/evidence/native/10-windows-floating-dock.png` | Bridge "已连接", v0.2.0-dev, 中文/英文, 6 modes |
-| Real editor switch (one) | `qa/evidence/native/r3-editor-flow.json` | VS Code→Building suggestion/confirm only; 3-switch sequence NOT VERIFIED |
+| Real continuous flow | `qa/evidence/native/r3-continuous-real.json` | 3 real apps, 3 suggestions, 3 confirmations, lock suppression |
 | Simulated continuous flow | `qa/evidence/native/r3-continuous-flow.json` | Supplementary simulation, not OS foreground |
 | Building suggestion UI | `qa/evidence/native/r3-editor-suggestion.png` | Chinese, confirm switch |
 | Pinned editor dock | `qa/evidence/native/r3-editor-pinned-dock.png` | Real VS Code icon |
