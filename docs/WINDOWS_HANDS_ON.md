@@ -25,7 +25,7 @@
 ```
 
 脚本会自动：
-1. 检查 Node.js 版本和端口占用（4317/4318）。
+1. 检查 Node.js 版本和端口占用（4317）。
 2. `npm run build` 构建前端。
 3. 编译 Windows Companion（含 WebView2 浮动 Dock）。
 4. 启动本地后端（`http://127.0.0.1:4317`）并生成 Bridge Token。
@@ -36,7 +36,7 @@
 
 | 报错 | 原因 | 解决 |
 |------|------|------|
-| `端口 4317/4318 已占用` | 已有 FocusDock 或其他程序占用 | 右击托盘 → Exit；或关闭冲突程序 |
+| `端口 4317 已占用` | 已有 FocusDock 或其他程序占用 | 右击托盘 → Exit；或关闭冲突程序 |
 | `前端构建失败` | 依赖缺失或源码错误 | `npm install` 后重试 |
 | `原生组件构建失败` | 旧版残留或缺少 WebView2 SDK | 退出旧实例重试；首次需联网 |
 | `浮动 Dock 无法加载 WebView2` | 未安装 WebView2 Runtime | 安装 [Microsoft Edge WebView2 Evergreen](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) |

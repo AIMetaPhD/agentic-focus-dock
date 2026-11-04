@@ -12,11 +12,11 @@
 
 | P0 项 | 状态 | 证据 | 说明 |
 |------|------|------|------|
-| **P0-A 单入口启动 + 清理** | **PASS** | `Start-FocusDock.cmd` / `Start-FocusDock.ps1` 单命令构建 + 启动后端 + Companion；右击托盘 Exit 关闭两者；端口 4317/4318 释放 | 中文错误提示、端口冲突检测、WebView2 缺失提示均到位 |
-| **P0-B 默认应用真实性** | **PASS** | Windows 默认仅保留书签类 pin；macOS bundle-id 默认项在启动时自动清理；`+ 添加本机应用` 仅呈现真实 Start Menu catalog | `defaultModes(platform)` 与 `Store.cleanupWindowsPlaceholderPins()` 已实现 |
-| **P0-C 连续工作流** | **PASS** | 1) Writing → VS Code 15s 建议 Building → 确认切换<br>2) Building → 浏览器 → Research 建议<br>3) 返回 VS Code 无建议风暴<br>4) 手动锁定/解锁清晰可见<br>5) ≥3 次真实切换、≥2 次模式变化，审计日志完整 | 详见 `qa/evidence/native/r3-editor-flow.json`、`r3-editor-suggestion.png` |
-| **P0-D 原生浮动 Dock** | **PASS** | WebView2 `FixedToolWindow` 浮动条，置顶、不抢焦点、不遮挡、托盘显隐、关闭可恢复 | `qa/evidence/native/10-windows-floating-dock.png`（可见、Bridge 已连接、版本 v2.0-dev） |
-| **P0-E 诚实状态与语言** | **PASS** | 中英一键切换；`Windows — 已连接` / `Windows — connected` 仅在 Bridge 心跳新鲜时显示；版本标注 `v2.0-dev (Windows trial)` | `docs/WINDOWS_HANDS_ON.md`、`docs/CAPABILITIES.md` 同步更新 |
+| **P0-A 单入口启动 + 清理** | **PASS** | `Start-FocusDock.cmd` / `Start-FocusDock.ps1` 单命令构建 + 启动后端 + Companion；实测结束 Companion 进程后 stdin 关闭、后端退出、端口 4317 释放 | 中文错误提示、端口冲突检测、WebView2 缺失提示均到位；托盘 Exit 路径未独立复跑 |
+| **P0-B 默认应用真实性** | **PASS** | Windows 默认仅保留书签类 pin；macOS bundle-id 默认项在启动时自动清理；当前构建实测 0 个 `com.*` app pin；`+ 添加本机应用` 仅呈现真实 Start Menu catalog | `defaultModes(platform)` 与 `Store.cleanupWindowsPlaceholderPins()` 已实现；旧 `r3-restart-*` 证据为修复前快照 |
+| **P0-C 连续工作流** | **NOT VERIFIED** | 已证明：Writing → VS Code 15s → Building 建议 → 确认切换（真实前台事件）。**未证明**：Building → 浏览器 → Research/Writing 建议、返回 VS Code 无建议风暴、≥3 次真实前台切换、≥2 次建议驱动的模式变化。`r3-continuous-flow.json` 为模拟事件补充材料，不能冒充真机前台验收 | 需用户在一次真实工作会话中按 `WINDOWS_HANDS_ON.md` §3.4 完成 3 次切换并录屏/记录时间线 |
+| **P0-D 原生浮动 Dock** | **PASS** | WebView2 `FixedToolWindow` 浮动条，置顶、不抢焦点、不遮挡、托盘显隐、关闭可恢复 | `qa/evidence/native/10-windows-floating-dock.png`（可见、Bridge 已连接、版本 v0.2.0-dev） |
+| **P0-E 诚实状态与语言** | **PASS** | 中英一键切换；`Windows — 已连接` / `Windows — connected` 仅在 Bridge 心跳新鲜时显示；版本标注 `v0.2.0-dev (Windows trial)` | `docs/WINDOWS_HANDS_ON.md`、`docs/CAPABILITIES.md` 同步更新 |
 
 ---
 
@@ -26,8 +26,8 @@
 |------|------|------|
 | TypeScript 类型检查 | **PASS** | `npm run typecheck` |
 | ESLint | **PASS** | `npm run lint` |
-| 单元/集成测试 | **57 passed** | Server 53 + Web 4 + Trial 3 |
-| Playwright E2E | **14 passed** | 核心、AI/模式、设置/安全，语言锁定中文 |
+| 单元/集成测试 | **57 passed** | Server 53 + Web 4（含 trial 3 项） |
+| Playwright E2E | **14 passed (Windows) / 13 passed (Linux CI)** | 核心、AI/模式、设置/安全；Windows 额外跑默认 pin 测试 |
 | Companion 自测 | **6/6 PASS** | `FocusDockCompanionCli.exe --self-test` |
 | Secret Scan | **Clean** | 169 文件 |
 
@@ -38,7 +38,8 @@
 | 证据 | 路径 | 说明 |
 |------|------|------|
 | Windows 试用浮动 Dock | `qa/evidence/native/10-windows-floating-dock.png` | 可见、Bridge 已连接、版本标注、中文 |
-| 连续切换审计 | `qa/evidence/native/r3-editor-flow.json` | 3 次真实切换、2 次模式变化 |
+| 连续切换审计（真实） | `qa/evidence/native/r3-editor-flow.json` | 仅覆盖 VS Code → Building 一次真实切换 |
+| 连续流程补充（模拟） | `qa/evidence/native/r3-continuous-flow.json` | 模拟事件，非 OS 前台；不能作为 P0-C PASS 证据 |
 | Building 建议横幅 | `qa/evidence/native/r3-editor-suggestion.png` | 中文提示、确认切换 |
 | 固定编辑器 Dock | `qa/evidence/native/r3-editor-pinned-dock.png` | 真实 VS Code 图标 |
 | 启动 Toast | `qa/evidence/native/r3-editor-launch-toast.png` | “已启动 Visual Studio Code” |
@@ -76,12 +77,22 @@
 
 ## 6. 结论与建议
 
-**CONDITIONAL GO：Windows 试点就绪，可交付用户实测。**
+**NEEDS_MORE_WORK（P0-C 真机连续工作流）— 可交付用户实测以补齐该证据。**
 
-- P0-A/B/C/D/E 全部 PASS，自动化回归全绿，真机证据齐全。
-- 仍属开发版（`v0.2-dev`），**不发布公开 Release、不宣称生产就绪、不做市场推广**。
-- 下一步：交付用户实测（中文手册 `docs/WINDOWS_HANDS_ON.md`），收集主观价值反馈；若用户评价“不节省时间 / 不想保留”，按 PM 裁决 PARK/ARCHIVE。
+- P0-A/B/D/E **PASS**；P0-C 真机 3 次切换/2 次模式变化 **NOT VERIFIED**（当前机器前台被占用，无法在不干扰用户的情况下完成）。
+- 自动化回归全绿（57 单元/集成 + 14 Windows E2E + 6 Companion 自测）。
+- 仍属开发版（`v0.2.0-dev`），**不发布公开 Release、不宣称生产就绪、不做市场推广**。
+- 下一步：交付用户实测（中文手册 `docs/WINDOWS_HANDS_ON.md`），由用户在一次真实工作会话中完成 P0-C 并记录时间线；若用户评价“不节省时间 / 不想保留”，按 PM 裁决 PARK/ARCHIVE。
 - Mac R1 与 Muse G4 仍为 NOT VERIFIED，不阻塞 Windows 试点，不作为发布前置条件。
+
+### QA Subagent 结论（非 Muse）
+
+- P0-A PASS（停止路径为 Stop-Process 场景，托盘 Exit 未独立复跑）。
+- P0-B PASS（当前构建已清理 macOS 占位；旧重启证据为修复前快照）。
+- P0-C **NOT VERIFIED**（证据仅覆盖一次真实切换）。
+- P0-D PASS（静态截图证明可见；topmost/不抢焦点/托盘显隐未动态复跑）。
+- P0-E PASS（版本号需统一）。
+- 总体：NEEDS_MORE_WORK。
 
 ---
 

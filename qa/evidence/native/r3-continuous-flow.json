@@ -1,0 +1,602 @@
+{
+  "mode": "simulated activity via /api/demo/activity (not OS foreground capture)",
+  "note": "Exercises the same rules-engine path with simulated app events. Real foreground 3-switch test remains NOT VERIFIED.",
+  "started_at": "2026-11-04T06:01:39.999Z",
+  "steps": [
+    {
+      "at": "2026-11-04T06:01:40.026Z",
+      "name": "reset",
+      "detail": {
+        "active": "writing"
+      }
+    },
+    {
+      "at": "2026-11-04T06:01:40.033Z",
+      "name": "vscode-stable-15",
+      "detail": {
+        "bridgeStatus": 201,
+        "suggested": "building",
+        "active": "writing"
+      }
+    },
+    {
+      "at": "2026-11-04T06:01:40.038Z",
+      "name": "confirm-building",
+      "detail": {
+        "status": 200,
+        "active": "building",
+        "lock": false
+      }
+    },
+    {
+      "at": "2026-11-04T06:02:41.059Z",
+      "name": "chrome-stable-15",
+      "detail": {
+        "bridgeStatus": 201,
+        "suggested": null,
+        "active": "building"
+      }
+    },
+    {
+      "at": "2026-11-04T06:02:41.070Z",
+      "name": "confirm-writing",
+      "detail": {
+        "status": 200,
+        "active": "writing",
+        "lock": false
+      }
+    },
+    {
+      "at": "2026-11-04T06:02:41.082Z",
+      "name": "return-vscode",
+      "detail": {
+        "bridgeStatus": 201,
+        "active": "writing",
+        "suggested": "building"
+      }
+    },
+    {
+      "at": "2026-11-04T06:02:41.093Z",
+      "name": "manual-lock",
+      "detail": {
+        "bridgeStatus": 201,
+        "lock": true,
+        "suggested": null
+      }
+    },
+    {
+      "at": "2026-11-04T06:02:41.099Z",
+      "name": "manual-unlock",
+      "detail": {
+        "lock": false
+      }
+    }
+  ],
+  "finished_at": "2026-11-04T06:02:41.099Z",
+  "final": {
+    "protocol": 1,
+    "version": "0.2.0-dev (Windows trial)",
+    "modes": [
+      {
+        "id": "writing",
+        "name": "Writing",
+        "version": 1,
+        "color": "amber",
+        "icon": "✍",
+        "pinned_items": [
+          {
+            "id": "docs",
+            "label": "Docs",
+            "icon": "📄",
+            "kind": "bookmark",
+            "url": "https://docs.google.com"
+          }
+        ],
+        "activity_app_allowlist": [
+          "com.apple.Notes",
+          "com.google.Chrome",
+          "com.apple.Safari",
+          "md.obsidian",
+          "notepad.exe",
+          "winword.exe",
+          "obsidian.exe"
+        ],
+        "keywords": [
+          "write",
+          "draft",
+          "essay",
+          "paper",
+          "写作",
+          "论文",
+          "稿"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "defer",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 30,
+          "social_switch_enabled": true
+        },
+        "sort_order": 0,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.007Z",
+        "updated_at": "2026-11-04T06:01:40.007Z"
+      },
+      {
+        "id": "building",
+        "name": "Building",
+        "version": 1,
+        "color": "blue",
+        "icon": "⚒",
+        "pinned_items": [
+          {
+            "id": "github",
+            "label": "GitHub",
+            "icon": "⑂",
+            "kind": "bookmark",
+            "url": "https://github.com"
+          }
+        ],
+        "activity_app_allowlist": [
+          "com.microsoft.VSCode",
+          "com.apple.Terminal",
+          "com.google.Chrome",
+          "com.apple.Safari",
+          "com.googlecode.iterm2",
+          "code.exe",
+          "devenv.exe",
+          "windowsterminal.exe",
+          "cmd.exe",
+          "powershell.exe"
+        ],
+        "keywords": [
+          "code",
+          "build",
+          "debug",
+          "terminal",
+          "repo",
+          "代码",
+          "编程",
+          "调试"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "defer",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 30,
+          "social_switch_enabled": true
+        },
+        "sort_order": 1,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.009Z",
+        "updated_at": "2026-11-04T06:01:40.009Z"
+      },
+      {
+        "id": "research",
+        "name": "Research",
+        "version": 1,
+        "color": "violet",
+        "icon": "🔬",
+        "pinned_items": [
+          {
+            "id": "papers",
+            "label": "Papers",
+            "icon": "📄",
+            "kind": "bookmark",
+            "url": "https://scholar.google.com"
+          }
+        ],
+        "activity_app_allowlist": [
+          "com.zotero.Zotero",
+          "com.google.Chrome",
+          "com.apple.Safari",
+          "com.apple.Preview",
+          "zotero.exe"
+        ],
+        "keywords": [
+          "research",
+          "literature",
+          "read",
+          "study",
+          "文献",
+          "阅读",
+          "研究"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "defer",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 30,
+          "social_switch_enabled": true
+        },
+        "sort_order": 2,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.011Z",
+        "updated_at": "2026-11-04T06:01:40.011Z"
+      },
+      {
+        "id": "meeting",
+        "name": "Meeting",
+        "version": 1,
+        "color": "teal",
+        "icon": "🎙",
+        "pinned_items": [],
+        "activity_app_allowlist": [
+          "us.zoom.xos",
+          "com.apple.Notes",
+          "com.apple.iCal",
+          "com.microsoft.teams2",
+          "zoom.exe",
+          "teams.exe",
+          "ms-teams.exe"
+        ],
+        "keywords": [
+          "meeting",
+          "call",
+          "zoom",
+          "会议",
+          "开会",
+          "讨论"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "defer",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 30,
+          "social_switch_enabled": true
+        },
+        "sort_order": 3,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.013Z",
+        "updated_at": "2026-11-04T06:01:40.013Z"
+      },
+      {
+        "id": "break",
+        "name": "Break",
+        "version": 1,
+        "color": "rose",
+        "icon": "🌿",
+        "pinned_items": [],
+        "activity_app_allowlist": [
+          "com.apple.Music",
+          "com.apple.Photos",
+          "com.apple.TV",
+          "spotify.exe",
+          "music.ui.exe"
+        ],
+        "keywords": [
+          "break",
+          "rest",
+          "walk",
+          "休息",
+          "放松"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "show",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 0,
+          "social_switch_enabled": false
+        },
+        "sort_order": 4,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.016Z",
+        "updated_at": "2026-11-04T06:01:40.016Z"
+      },
+      {
+        "id": "social",
+        "name": "Social",
+        "version": 1,
+        "color": "pink",
+        "icon": "💬",
+        "pinned_items": [],
+        "activity_app_allowlist": [
+          "com.tinyspeck.slackmacgap",
+          "com.twitter.twitter-mac",
+          "com.tencent.xinWeChat",
+          "com.hnc.Discord",
+          "com.apple.MobileSMS",
+          "slack.exe",
+          "discord.exe",
+          "wechat.exe"
+        ],
+        "keywords": [
+          "social",
+          "slack",
+          "twitter",
+          "wechat",
+          "discord",
+          "社交",
+          "微信"
+        ],
+        "transition": {
+          "manual_immediate": true,
+          "auto_suggest_only": true,
+          "dwell_seconds": 15,
+          "cooldown_seconds": 60
+        },
+        "notifications": {
+          "default": "show",
+          "time_sensitive": "show",
+          "switch_wait_seconds": 0,
+          "social_switch_enabled": false
+        },
+        "sort_order": 5,
+        "is_builtin": true,
+        "created_at": "2026-11-04T06:01:40.018Z",
+        "updated_at": "2026-11-04T06:01:40.018Z"
+      }
+    ],
+    "runtime": {
+      "active_mode": "writing",
+      "manual_lock": false,
+      "last_suggestion_at": "2026-11-04T06:02:41.073Z",
+      "last_suggested_mode": null
+    },
+    "active_mode": "writing",
+    "pending_notifications": [],
+    "settings": {
+      "language": "zh",
+      "ai": {
+        "provider": "rules",
+        "ollama_url": "http://127.0.0.1:11434",
+        "ollama_model": "qwen2.5:7b",
+        "base_url": "https://api.openai.com/v1",
+        "model": "gpt-4o-mini",
+        "cloud_opt_in": false,
+        "include_recent_activity": false,
+        "has_api_key": false
+      },
+      "privacy": {
+        "retention_days": 7,
+        "store_window_titles": false,
+        "excluded_apps": []
+      },
+      "data_dir": "C:\\Users\\春春与慧慧\\AppData\\Local\\FocusDock"
+    },
+    "bridge": {
+      "connected": true,
+      "last_seen": "2026-11-04T06:02:32.909Z",
+      "bridge_version": "0.2.0-win",
+      "capabilities": {
+        "platform": "windows",
+        "activity": "win32-foreground",
+        "launch": "allowlist",
+        "notifications": "unsupported",
+        "overlay": "tray"
+      },
+      "token_path": "C:\\Users\\春春与慧慧\\AppData\\Local\\FocusDock\\runtime\\bridge-token"
+    },
+    "capabilities": {
+      "protocol": 1,
+      "version": "0.2.0-dev (Windows trial)",
+      "platform": "win32",
+      "web": {
+        "modes": true,
+        "rules_engine": true,
+        "ai_proposals": true,
+        "realtime": true,
+        "activity_detection": "browser-local only"
+      },
+      "bridge": {
+        "available": true,
+        "status": "connected",
+        "last_seen": "2026-11-04T06:02:32.909Z",
+        "capabilities": {
+          "platform": "windows",
+          "activity": "win32-foreground",
+          "launch": "allowlist",
+          "notifications": "unsupported",
+          "overlay": "tray"
+        },
+        "note": "Optional Windows companion: foreground events and allowlisted launch; no notification interception."
+      },
+      "system_notifications": {
+        "supported": false,
+        "reason": "Public APIs expose only the app's own notifications; Windows notification reading is not implemented. FocusDock never reads private databases or injects into other apps."
+      },
+      "accessibility": {
+        "status": "not_connected",
+        "note": "macOS-only capability; not used on Windows."
+      },
+      "cloud_ai": {
+        "provider": "rules",
+        "opt_in": false
+      },
+      "labels": [
+        "simulated",
+        "product-owned",
+        "connected-official"
+      ]
+    },
+    "counts": {
+      "events": 4,
+      "modes": 6
+    }
+  },
+  "audit": [
+    {
+      "id": 25,
+      "ts": "2026-11-04T06:02:41.095Z",
+      "actor": "user",
+      "action": "runtime.lock",
+      "target": "runtime",
+      "detail": {
+        "locked": false
+      }
+    },
+    {
+      "id": 24,
+      "ts": "2026-11-04T06:02:41.085Z",
+      "actor": "user",
+      "action": "runtime.lock",
+      "target": "runtime",
+      "detail": {
+        "locked": true
+      }
+    },
+    {
+      "id": 23,
+      "ts": "2026-11-04T06:02:41.062Z",
+      "actor": "user",
+      "action": "mode.activate",
+      "target": "writing",
+      "detail": {
+        "manual_lock": false
+      }
+    },
+    {
+      "id": 22,
+      "ts": "2026-11-04T06:01:40.036Z",
+      "actor": "user",
+      "action": "mode.activate",
+      "target": "building",
+      "detail": {
+        "manual_lock": false
+      }
+    },
+    {
+      "id": 21,
+      "ts": "2026-11-04T06:01:40.020Z",
+      "actor": "user",
+      "action": "data.reset",
+      "target": "all",
+      "detail": {}
+    },
+    {
+      "id": 20,
+      "ts": "2026-11-04T06:01:40.020Z",
+      "actor": "system",
+      "action": "seed",
+      "target": "modes",
+      "detail": {
+        "count": 6
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_d23249a6-fc61-4a62-8ef9-e6181348e7f1",
+      "kind": "activity",
+      "source": "simulated",
+      "source_app": "Google Chrome",
+      "timestamp": "2026-11-04T06:02:41.090Z",
+      "payload_level": "metadata_only",
+      "payload": {
+        "app_name": "Google Chrome",
+        "app_id": "chrome.exe",
+        "stable_seconds": 15,
+        "simulated": true
+      },
+      "classification": {
+        "mode": "writing",
+        "decision": "stay",
+        "confidence": 0.35,
+        "reason": "No mode claims Google Chrome; staying in Writing.",
+        "engine": "rules",
+        "matched_rule": "no-match"
+      },
+      "actual_action": "none",
+      "created_at": "2026-11-04T06:02:41.090Z"
+    },
+    {
+      "id": "evt_55166a42-1506-4910-80aa-f5813c836e0c",
+      "kind": "activity",
+      "source": "simulated",
+      "source_app": "Visual Studio Code",
+      "timestamp": "2026-11-04T06:02:41.072Z",
+      "payload_level": "metadata_only",
+      "payload": {
+        "app_name": "Visual Studio Code",
+        "app_id": "code.exe",
+        "stable_seconds": 15,
+        "simulated": true
+      },
+      "classification": {
+        "mode": "writing",
+        "decision": "suggest_switch",
+        "suggested_mode": "building",
+        "confidence": 0.9,
+        "reason": "Visual Studio Code fits Building (allowlist match for code.exe).",
+        "engine": "rules",
+        "matched_rule": "allowlist"
+      },
+      "actual_action": "suggested",
+      "created_at": "2026-11-04T06:02:41.072Z"
+    },
+    {
+      "id": "evt_f56f7108-7314-41be-9261-0475c2b96a57",
+      "kind": "activity",
+      "source": "simulated",
+      "source_app": "Google Chrome",
+      "timestamp": "2026-11-04T06:02:41.043Z",
+      "payload_level": "metadata_only",
+      "payload": {
+        "app_name": "Google Chrome",
+        "app_id": "chrome.exe",
+        "stable_seconds": 15,
+        "simulated": true
+      },
+      "classification": {
+        "mode": "building",
+        "decision": "stay",
+        "confidence": 0.35,
+        "reason": "No mode claims Google Chrome; staying in Building.",
+        "engine": "rules",
+        "matched_rule": "no-match"
+      },
+      "actual_action": "none",
+      "created_at": "2026-11-04T06:02:41.043Z"
+    },
+    {
+      "id": "evt_88281feb-5fec-4d77-aadc-fd5f98c924fc",
+      "kind": "activity",
+      "source": "simulated",
+      "source_app": "Visual Studio Code",
+      "timestamp": "2026-11-04T06:01:40.028Z",
+      "payload_level": "metadata_only",
+      "payload": {
+        "app_name": "Visual Studio Code",
+        "app_id": "code.exe",
+        "stable_seconds": 15,
+        "simulated": true
+      },
+      "classification": {
+        "mode": "writing",
+        "decision": "suggest_switch",
+        "suggested_mode": "building",
+        "confidence": 0.9,
+        "reason": "Visual Studio Code fits Building (allowlist match for code.exe).",
+        "engine": "rules",
+        "matched_rule": "allowlist"
+      },
+      "actual_action": "suggested",
+      "created_at": "2026-11-04T06:01:40.028Z"
+    }
+  ]
+}
