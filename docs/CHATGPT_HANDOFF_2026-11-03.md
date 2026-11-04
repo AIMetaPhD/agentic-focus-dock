@@ -100,12 +100,12 @@ All paths relative to repo root. Raw logs with private data excluded.
 
 ## 8. Verification & CI
 
-- Trial commit: `HEAD` (see git log)
+- Trial commit: `199ff92` (real three-app P0-C evidence)
 - Typecheck + Lint + Build: **PASS**
 - Unit/Integration: **57 passed** (53 server + 4 web)
 - E2E: **14 passed** (chromium, en-GB, dark)
 - Companion self-test: **6/6 PASS** (incl. icon extraction)
 - Secret scan: **Clean** (169 files)
-- CI: latest push — all jobs success
+- CI `41857595236`: Secret scan **success**, Web typecheck/lint/unit/e2e **success**; macOS bridge job **queued at delivery** (unrelated Swift compile)
 
 No secrets, private paths, or tokens in public artifacts.
