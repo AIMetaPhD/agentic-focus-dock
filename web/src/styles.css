@@ -2398,6 +2398,22 @@ button:disabled {
   background: transparent;
 }
 
+.dock-native-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px;
+  font-size: 11px;
+}
+
+.dock-native-info .btn { padding: 5px 10px; }
+.dock-pause { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 12px; }
+.dock-pause .btn { padding: 4px 8px; }
+.dock-apps .app-add { min-width: 48px; }
+.dock-apps .app-add .app-label { white-space: nowrap; }
+.dock-only .dock { max-width: calc(100vw - 20px); }
+
 .dock-only .dock-wrap {
   bottom: 14px;
 }

@@ -189,13 +189,13 @@ export function Dock({
         <div className="dock-divider" aria-hidden="true" />
 
         <div className="dock-apps" aria-label={t("modes.pinned")}>
-          {active?.pinned_items.slice(0, 5).map((item, index) => (
+          {active?.pinned_items.slice(0, 5).map((item) => (
             <button
               key={item.id}
               type="button"
-              className={`app-tile ${state.bridge.connected && index < 2 ? "is-running" : ""}`}
+              className="app-tile"
               onClick={() => onPinned(item)}
-              title={item.kind === "bookmark" ? item.url : `${item.label} — native launch`}
+              title={item.kind === "bookmark" ? `${t("native.bookmark")}: ${item.url}` : `${item.label} — ${t("native.launchBehavior")}`}
             >
               <NativeAppIcon
                 id={item.kind === "app" ? item.bundle_id : undefined}
@@ -212,7 +212,7 @@ export function Dock({
             title={t("native.addTitle")}
           >
             <span aria-hidden="true">＋</span>
-            <span className="app-label">{t("native.addShort")}</span>
+            <span className="app-label">{active?.pinned_items.length ? t("native.addShort") : t("native.addTitle")}</span>
           </button>
         </div>
 

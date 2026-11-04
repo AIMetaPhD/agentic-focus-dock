@@ -583,8 +583,8 @@ export async function startServer(opts: StartOptions): Promise<{
     if (!mode) return fail(reply, 404, "not_found", "Mode not found.");
     const runtime = ctx.store.setRuntime({
       active_mode: id,
-      manual_lock: body.lock ?? true,
-      last_suggestion_at: null,
+      manual_lock: body.lock ?? ctx.store.getRuntime().manual_lock,
+      last_suggestion_at: ctx.store.getRuntime().last_suggestion_at,
       last_suggested_mode: null,
     });
     ctx.store.audit("user", "mode.activate", id, { manual_lock: runtime.manual_lock });
@@ -594,7 +594,7 @@ export async function startServer(opts: StartOptions): Promise<{
 
   app.post("/api/runtime/lock", async (request) => {
     const body = z.object({ locked: z.boolean() }).parse(request.body);
-    const runtime = ctx.store.setRuntime({ manual_lock: body.locked });
+    const runtime = ctx.store.setRuntime({ manual_lock: body.locked, last_suggested_mode: null });
     ctx.store.audit("user", "runtime.lock", "runtime", { locked: body.locked });
     ctx.hub.broadcast("runtime.changed", runtime);
     return runtime;

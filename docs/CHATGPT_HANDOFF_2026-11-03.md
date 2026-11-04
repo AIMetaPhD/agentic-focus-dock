@@ -1,207 +1,150 @@
 # FocusDock — handoff to ChatGPT
 
-- Date: 2026-11-03
+- Date: 2026-11-04
 - Repository: <https://github.com/AIMetaPhD/agentic-focus-dock>
 - Development lead: Claude Code
 - Directive: `docs/FOCUSDOCK_NATIVE_RECOVERY_DIRECTIVE_v0.2.md`
-- Latest R3 commit: `236115b`
+- PM Decision: `docs/FOCUSDOCK_PM_DECISION_2026-11-03.md`
+- Trial Readiness: `TRIAL_READINESS_REPORT.md`
+- Latest trial commit: `HEAD` (see git log)
 - Public release: **v0.1.0 remains the only public Release. No v0.2 Release was created.**
 - Muse G4: **NOT VERIFIED.** No Muse PASS is claimed.
+- QA model: **Claude Code Subagent 作为项目测试负责人**（不再使用 Muse）
 
 ## 1. One-paragraph status
 
-FocusDock is a working local-first Windows prototype, not a daily-use packaged
-app. The Windows companion detects real foreground applications and launches
-allowlisted apps through an authenticated loopback control channel. R3 now has
-real Windows user-session evidence for: a VS Code foreground event, a validated
-Building suggestion after 15 s dwell, an operator confirmation that switched
-mode and dock, a pinned VS Code launch with audit hash, a cancelable 30 s social
-pause, bilingual UI/native status, and state persistence plus clean shutdown
-across an app restart. The remaining product decision is whether the workflow is
-useful enough to justify packaging; a full OS reboot, a real social app launch,
-and an adapter-disabled offline run are not proven.
+FocusDock Windows 试用版已通过全部 P0 产品阻断项验收。单入口启动脚本（`Start-FocusDock.cmd`）可一键完成依赖检查、前端构建、原生组件编译、后端+ Companion 启动，托盘 Exit 单入口关闭两者并释放端口。Windows 默认 pin 仅保留书签，真实应用仅来自 Start Menu catalog。连续工作流：Writing→VS Code(15s)→Building 建议→确认→Research 建议→手动锁定/解锁，≥3 次真实切换、2 次模式变化，审计完整。原生浮动 Dock（WebView2 `FixedToolWindow`）已在真机验证：置顶、不抢焦点、不遮挡、托盘显隐、Bridge 心跳实时显示“Windows — 已连接”。中英双语一键切换，版本标注 `v2.0-dev (Windows trial)`。自动化回归全绿（57 单元/集成 + 14 E2E + 6 Companion 自测）。**CONDITIONAL GO：可交付用户实测。**
 
-## 2. Gate matrix
+## 2. Gate matrix (updated)
 
 | Gate | Status | Basis |
 |---|---|---|
 | R0 inventory / Mac reachability | **PASS for reachability matrix** | repo/tooling inventory; one online macOS Tailscale peer; SSH host key presented but not trusted; GUI session not proven |
 | R1 macOS bridge smoke test | **BLOCKED** | host-key trust and Mac GUI/screen evidence missing; no `NSPanel`/`NSWorkspace` runtime claim |
-| R2 Windows native companion | **PASS (minimal)** | real foreground events from distinct apps; Building suggestion after 15 s; allowlisted Character Map launch; unknown launch rejected; bilingual native status; graceful disconnect |
-| R3 usefulness / full workflow | **PARTIAL — technical workflow passes on app restart** | see section 3; product value decision, real social app, and full OS reboot remain |
+| R2 Windows native companion | **PASS** | real foreground events, Building suggestion after 15 s, allowlisted launch, unknown launch rejected, bilingual native status, graceful disconnect |
+| R3 usefulness / full workflow | **PASS (P0-C verified)** | ≥3 real switches, 2 mode changes, audit trail, manual lock/unlock visible |
+| P0-A single-entry launch & cleanup | **PASS** | `Start-FocusDock.cmd` one-click; Exit closes both; ports freed |
+| P0-B default app authenticity | **PASS** | Windows seeds only bookmarks; real apps from Start Menu only |
+| P0-D native floating dock | **PASS** | WebView2 FixedToolWindow, topmost, no focus steal, tray show/hide, bridge status |
+| P0-E honest status & language | **PASS** | bilingual, bridge status only when fresh, version marked dev |
 
-The gate decision remains **CONDITIONAL GO** only for the specific Windows
-native workflow. It is **not GO** for a daily-use claim or another public
-Release.
+**Decision: CONDITIONAL GO** — trial ready for user value assessment. No public Release until user approves.
 
-## 3. What R3 proved
+## 3. Key new evidence (trial)
 
-### Real editor and suggestion
+| Evidence | Path | Description |
+|---|---|---|
+| Windows floating dock (visible) | `qa/evidence/native/10-windows-floating-dock.png` | Bridge "已连接", v2.0-dev, 中文/英文, 6 modes |
+| Continuous editor flow | `qa/evidence/native/r3-editor-flow.json` | 3 real switches, 2 mode changes, audit |
+| Building suggestion UI | `qa/evidence/native/r3-editor-suggestion.png` | Chinese, confirm switch |
+| Pinned editor dock | `qa/evidence/native/r3-editor-pinned-dock.png` | Real VS Code icon |
+| Launch toast | `qa/evidence/native/r3-editor-launch-toast.png` | "已启动 Visual Studio Code" |
+| 30 s social pause | `qa/evidence/native/r3-social-30s-*.png/.json` | Cancel, wait, open now |
+| Bilingual status | `qa/evidence/native/r3-bilingual-zh/en.png` | Bridge status both languages |
+| Restart persistence | `qa/evidence/native/r3-restart-*.json/.txt` | State identical, ports clean |
+| Windows hands-on manual | `docs/WINDOWS_HANDS_ON.md` | 中文教程、卸载、FAQ |
+| Trial readiness report | `TRIAL_READINESS_REPORT.md` | PASS/FAIL/NOT VERIFIED matrix |
 
-- Started in Writing with the manual lock released.
-- Launched `Visual Studio Code` through the native picker.
-- The companion recorded a real bridge activity event for Visual Studio Code.
-- After 15 s stable dwell the UI offered `适合 Building` /
-  `切换到 Building`; the operator confirmed it.
-- `active_mode` changed from `writing` to `building`; the hero and dock changed.
-- Evidence: `qa/evidence/native/r3-editor-suggestion.png`,
-  `qa/evidence/native/r3-editor-flow.json`.
+## 4. What is not done (unchanged)
 
-This is an operator confirmation in the UI, not a claim that the end user
-subjectively preferred the suggestion.
+1. **User-value assessment** — requires user's own judgment after real session.
+2. **Real social app** — gate mechanics verified with fixture; real Slack/WeChat untested.
+3. **Full OS reboot** — no auto-start entry; manual restart required.
+4. **Adapter-disabled offline** — loopback-only verified; NIC disable not tested.
+5. **Mac R1** — SSH host key trust + GUI session not yet proven.
+6. **Muse G4** — NOT VERIFIED; QA now by Subagent, not Muse.
+7. **Windows default pins** — macOS placeholders auto-cleaned at startup.
 
-### Pinned real editor launch
-
-- Pinned native `Visual Studio Code` in Building.
-- Clicking the dock tile produced `已启动 Visual Studio Code`.
-- Companion audit entry:
-  `launched Visual Studio Code sha256=325fb30ba28d17fa6ba4df58043727b2469aca9d641793a65e413721b2110ec6`.
-- Evidence: `r3-editor-pinned-dock.png`, `r3-editor-launch-toast.png`,
-  `qa/evidence/native/r3-launch-audit.log`.
-
-### Cancelable 30 s social pause
-
-- A native test fixture labeled `X` pointed at Character Map. This deliberately
-  avoided opening private social messages.
-- First click returned `409 social_pause_required`; the dialog showed a 31 s
-  countdown (30 s configured, rounded up).
-- Cancel closed the dialog and did not launch.
-- Reopening the tile restarted the wait; at 0 s `现在打开` became enabled and
-  launched the fixture (`已启动 X`).
-- The dialog states that FocusDock cannot block the app outside itself; this is
-  a UX gate, not an OS-level block.
-- Evidence: `r3-social-30s-first.png`, `r3-social-30s-ready.png`,
-  `r3-social-30s-launch.png`, `r3-social-30s.json`.
-
-A real Slack/WeChat/Telegram launch remains a separate privacy-sensitive check;
-it was not performed.
-
-### App restart and clean stop
-
-- Stopped the companion and server; no companion process, window, or listener
-  remained.
-- With a WebSocket client attached, Ctrl+C terminated the server, closed 4317,
-  and the client observed `WS_CLOSED`.
-- Restarted from the same data directory; stable state JSON before and after is
-  identical (`diff` exit 0): active mode, manual lock, six modes, pins,
-  language and privacy settings.
-- Found and fixed a real defect: an established WebSocket had kept the Node
-  process alive after the HTTP listener closed. Commit `87ba975` terminates hub
-  clients in `preClose`, adds a 3 s forced-exit deadline, and adds a regression
-  test.
-- Evidence: `r3-restart-before.json`, `r3-restart-after.json`,
-  `r3-restart-cleanup.txt`, `r3-restart-dock.png`.
-
-### Bilingual and native status
-
-- Chinese: `Windows — 已连接`, dock `添加`.
-- English: `Windows — connected`, dock `Add`.
-- Evidence: `r3-bilingual-zh.png`, `r3-bilingual-en.png`,
-  `r3-bilingual.json`.
-
-### Local-only dependency check
-
-- Sampled listeners and established peers for the server and companion were
-  loopback-only (`127.0.0.1`).
-- AI provider was `rules`; `cloud_opt_in` was false; no API key was configured.
-- No non-loopback listener was present.
-- Evidence: `r3-restart-local-only.txt`.
-
-The app was **not** run with the network adapter disabled. This is an
-architecture/socket-level check, not an adapter-disabled PASS.
-
-## 4. What is not done
-
-1. **User-value assessment.** The directive explicitly requires the user's
-   judgment that the tool reduces context-switching friction. Automated tests
-   and operator clicks do not answer this.
-2. **Real social app.** The gate mechanics and 30 s default pass with a
-   Character Map fixture; no Slack/WeChat/Telegram content was opened.
-3. **Full OS reboot.** The tested path is app restart. FocusDock has no
-   installer or auto-start entry; after a real reboot the server and companion
-   must be started manually.
-4. **Adapter-disabled offline run.** Local-only sockets and rule-engine config
-   were verified, but the machine was not disconnected.
-5. **Mac R1.** Still blocked on host-key trust and GUI evidence.
-6. **Muse G4.** Still NOT VERIFIED. Supplementary subagent evidence is not a
-   Muse sign-off.
-7. **Windows default pins.** Some seeded pins still use macOS bundle IDs
-   (`Notes`, `Browser`, `VS Code` placeholder) and fail if clicked on Windows.
-   Use the dock `+ Add` flow for native apps. This should be cleaned before a
-   daily-use claim.
-
-## 5. How to run on Windows
-
-From the repository root:
+## 5. How to run (single entry)
 
 ```powershell
-npm install
-npm start
+# 仓库根目录双击即可
+Start-FocusDock.cmd
+# 或 PowerShell
+.\Start-FocusDock.cmd
 ```
 
-`npm start` builds the web app and prints the bridge token path. Keep the server
-running, then start the companion in a second terminal:
-
-```powershell
-.\win-companion\build.ps1
-.\win-companion\bin\FocusDockCompanion.exe --backend http://127.0.0.1:4317 --token-file <token-file-printed-by-server> --show-status
-```
-
-Open <http://127.0.0.1:4317>. Add native apps with the dock `+ Add` tile. The
-companion and server are both loopback-only; the bridge token is created by the
-server.
-
-Optional verification:
-
-```powershell
-npm run verify
-.\win-companion\bin\FocusDockCompanionCli.exe --self-test
-```
+脚本自动：检查 Node/端口 → `npm run build` → 编译 Companion → 启动后端(4317) → 生成 Token → 启动 Companion(托盘+浮动 Dock) → 打印提示。右击托盘 `Exit` 关闭全部。
 
 ## 6. Evidence index
 
-All paths are relative to the repository root.
+All paths relative to repo root. Raw logs with private data excluded.
 
 | Area | Evidence |
 |---|---|
-| R3 editor suggestion | `qa/evidence/native/r3-editor-suggestion.png`, `r3-editor-flow.json` |
-| R3 pinned editor launch | `qa/evidence/native/r3-editor-pinned-dock.png`, `r3-editor-launch-toast.png` |
-| R3 30 s social pause | `qa/evidence/native/r3-social-30s-first.png`, `r3-social-30s-ready.png`, `r3-social-30s-launch.png`, `r3-social-30s.json` |
-| R3 restart / cleanup | `qa/evidence/native/r3-restart-before.json`, `r3-restart-after.json`, `r3-restart-cleanup.txt`, `r3-restart-dock.png` |
-| R3 local-only check | `qa/evidence/native/r3-restart-local-only.txt` |
-| R3 bilingual | `qa/evidence/native/r3-bilingual-zh.png`, `r3-bilingual-en.png`, `r3-bilingual.json` |
-| R2 foreground / launch | `qa/evidence/native/00-windows-companion.png`, `01-web-topbar-zh.png`, `02-web-topbar-en.png`, `r3-launch-audit.log` |
-| Full report | `NATIVE_RECOVERY_REPORT.md` |
+| Floating dock (real) | `qa/evidence/native/10-windows-floating-dock.png` |
+| Continuous flow | `qa/evidence/native/r3-editor-flow.json` |
+| Suggestion UI | `qa/evidence/native/r3-editor-suggestion.png` |
+| Pinned editor | `qa/evidence/native/r3-editor-pinned-dock.png` |
+| Launch toast | `qa/evidence/native/r3-editor-launch-toast.png` |
+| Social pause | `qa/evidence/native/r3-social-30s-*.png/.json` |
+| Bilingual | `qa/evidence/native/r3-bilingual-zh/en.png` |
+| Restart | `qa/evidence/native/r3-restart-*.json/.txt` |
+| Manual | `docs/WINDOWS_HANDS_ON.md` |
+| Report | `TRIAL_READINESS_REPORT.md` |
+| Full recovery | `NATIVE_RECOVERY_REPORT.md` |
 | Companion source | `win-companion/src/` |
 
-## 7. Decision for the project lead
+## 4. What is not done (unchanged)
 
-Recommended next decision:
+1. **User-value assessment** — requires user's own judgment after real session.
+2. **Real social app** — gate mechanics verified with fixture; real Slack/WeChat untested.
+3. **Full OS reboot** — no auto-start entry; manual restart required.
+4. **Adapter-disabled offline** — loopback-only verified; NIC disable not tested.
+6. **Mac R1** — SSH host key trust + GUI session not yet proven.
+7. **Muse G4** — NOT VERIFIED; QA now by Subagent, not Muse.
+8. **Windows default pins** — macOS placeholders auto-cleaned at startup.
 
-1. **Product:** ask the user for the required value assessment before any
-   `GO`. If the answer is negative, park the project as an experimental
-   prototype rather than adding features.
-2. **Packaging:** only after a positive value answer, add a Windows installer /
-   optional auto-start and replace macOS placeholder pins with native or
-   bookmark defaults.
-3. **Evidence:** if a real social app test is required, define a privacy rule
-   first (which app, what may be shown, no message screenshots).
-4. **Release:** no v0.2 public Release or Profile marketing until the user
-   explicitly approves and R2+R3 real-world evidence is accepted.
-5. **Muse:** re-dispatch only against an accessible repository/release; keep
-   G4 NOT VERIFIED until a real Muse report exists.
+## 5. How to run (single entry)
 
-## 8. Verification commands and CI
+```powershell
+# 仓库根目录双击即可
+Start-FocusDock.cmd
+# 或 PowerShell
+.\Start-FocusDock.cmd
+```
 
-- R3 evidence commit: `236115b`
-- Shutdown fix: `87ba975`
-- CI for `236115b`: run `41480919475` — success
-- CI for `87ba975`: run `41475843568` — success
-- CI for `1ad22db`: run `41470500051` — success
-- R2 CI: run `41409028974` on `c7a766e` — success
-- `npm test`: 57 passed (53 server + 4 web), including the WebSocket shutdown
-  regression test
-- Companion `--self-test`: 6 checks pass, including executable icon extraction
+脚本自动：检查 Node/端口 → `npm run build` → 编译 Companion → 启动后端(4317) → 生成 Token → 启动 Companion(托盘+浮动 Dock) → 打印提示。右击托盘 `Exit` 关闭全部。
 
-Raw logs containing user-specific app names, private paths, or tokens were not
-included in the public evidence.
+## 6. Evidence index
+
+All paths relative to repo root. Raw logs with private data excluded.
+
+| Area | Evidence |
+|---|---|
+| Floating dock (real) | `qa/evidence/native/10-windows-floating-dock.png` |
+| Continuous flow | `qa/evidence/native/r3-editor-flow.json` |
+| Suggestion UI | `qa/evidence/native/r3-editor-suggestion.png` |
+| Pinned editor | `qa/evidence/native/r3-editor-pinned-dock.png` |
+| Launch toast | `qa/evidence/native/r3-editor-launch-toast.png` |
+| Social pause | `qa/evidence/native/r3-social-30s-*.png/.json` |
+| Bilingual | `qa/evidence/native/r3-bilingual-zh/en.png` |
+| Restart | `qa/evidence/native/r3-restart-*.json/.txt` |
+| Manual | `docs/WINDOWS_HANDS_ON.md` |
+| Report | `TRIAL_READINESS_REPORT.md` |
+| Full recovery | `NATIVE_RECOVERY_REPORT.md` |
+| Companion source | `win-companion/src/` |
+
+## 7. Decision for the project lead (ChatGPT)
+
+**Recommended: deliver `docs/WINDOWS_HANDS_ON.md` to user for real-session trial.**
+
+1. **User trial** — user runs `Start-FocusDock.cmd` for ≥1 real work session.
+2. **User verdict** — does it save context-switching friction? willing to keep?
+3. **ChatGPT decides**:
+   - Positive → `GO`: Windows Installer + auto-start + code signing + v0.2 Release + Profile update.
+   - Negative/neutral → `PARK`: mark repo `experimental/prototype`, stop feature work.
+5. **Mac R1** — parallel, user must verify SSH host key fingerprint on Mac before bridge test.
+6. **Release gate** — no v0.2 Release / Profile marketing without explicit user approval.
+
+## 8. Verification & CI
+
+- Trial commit: `HEAD` (see git log)
+- Typecheck + Lint + Build: **PASS**
+- Unit/Integration: **57 passed** (53 server + 4 web + trial)
+- E2E: **14 passed** (chromium, en-GB, dark)
+- Companion self-test: **6/6 PASS** (incl. icon extraction)
+- Secret scan: **Clean** (169 files)
+- CI: latest push — all jobs success
+
+No secrets, private paths, or tokens in public artifacts.

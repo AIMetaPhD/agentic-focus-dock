@@ -14,6 +14,8 @@ namespace FocusDock.Companion
             public string AppId;
             public string AppName;
             public string Title;
+            public string Observation;
+            public DateTime StartedAt;
         }
 
         private readonly BridgeClient client;
@@ -95,8 +97,9 @@ namespace FocusDock.Companion
             log("foreground: " + appName + " pid=" + pid + " hwnd=" + hwnd);
             Action<string> changed = ForegroundChanged;
             if (changed != null) changed(appName);
-            Send(appId, appName, title, 0, "win-" + pid + "-" + hwnd + "-0");
-            RestartDwell(pid, hwnd, appId, appName, title);
+            string observation = Guid.NewGuid().ToString("N");
+            Send(appId, appName, title, 0, observation + "-0");
+            RestartDwell(pid, hwnd, appId, appName, title, observation);
         }
 
         private bool TryDescribeProcess(uint pid, out string appId, out string appName)
@@ -139,7 +142,7 @@ namespace FocusDock.Companion
             return title.ToString();
         }
 
-        private void RestartDwell(uint pid, IntPtr hwnd, string appId, string appName, string title)
+        private void RestartDwell(uint pid, IntPtr hwnd, string appId, string appName, string title, string observation)
         {
             DwellState state = new DwellState();
             state.Pid = pid;
@@ -147,6 +150,8 @@ namespace FocusDock.Companion
             state.AppId = appId;
             state.AppName = appName;
             state.Title = title;
+            state.Observation = observation;
+            state.StartedAt = DateTime.UtcNow;
             lock (gate)
             {
                 if (dwellTimer != null)
@@ -154,7 +159,7 @@ namespace FocusDock.Companion
                     dwellTimer.Dispose();
                     dwellTimer = null;
                 }
-                dwellTimer = new Timer(DwellElapsed, state, 15000, Timeout.Infinite);
+                dwellTimer = new Timer(DwellElapsed, state, 15000, 15000);
             }
         }
 
@@ -166,7 +171,9 @@ namespace FocusDock.Companion
             {
                 if (disposed || dwell.Pid != lastPid || dwell.Hwnd != lastHwnd) return;
             }
-            Send(dwell.AppId, dwell.AppName, dwell.Title, 15, "win-" + dwell.Pid + "-" + dwell.Hwnd + "-15");
+            if (NativeMethods.GetForegroundWindow() != dwell.Hwnd) return;
+            double seconds = Math.Floor((DateTime.UtcNow - dwell.StartedAt).TotalSeconds);
+            Send(dwell.AppId, dwell.AppName, dwell.Title, seconds, dwell.Observation + "-" + seconds);
         }
 
         private void Send(string appId, string appName, string title, double stableSeconds, string dedupeKey)

@@ -9,6 +9,12 @@ async function resetData(page: Page): Promise<void> {
       headers: { "content-type": "application/json", "x-focusdock-csrf": csrf },
       body: JSON.stringify({ confirm: "RESET" }),
     });
+    // Pin English so the specs stay independent of the shipped default language.
+    await fetch("/api/settings", {
+      method: "PUT",
+      headers: { "content-type": "application/json", "x-focusdock-csrf": csrf },
+      body: JSON.stringify({ language: "en" }),
+    });
   });
   await page.reload();
 }

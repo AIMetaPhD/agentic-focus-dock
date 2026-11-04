@@ -147,6 +147,7 @@ namespace FocusDock.Companion
                             AppEntry entry = AppCatalog.FindById(GetApps(), match.Groups[1].Value);
                             if (entry == null)
                             {
+                                AppCatalog.AuditRejection(auditFile, "unknown catalog id");
                                 WriteJson(stream, 404, "Not Found", "{\"error\":\"unknown_app\"}");
                                 return;
                             }

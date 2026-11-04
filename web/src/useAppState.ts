@@ -20,6 +20,7 @@ export function useAppState() {
 
   useEffect(() => {
     void refresh();
+    const heartbeatRefresh = window.setInterval(() => void refresh(), 5000);
 
     let socket: WebSocket | null = null;
     let closed = false;
@@ -53,6 +54,7 @@ export function useAppState() {
     connect();
     return () => {
       closed = true;
+      window.clearInterval(heartbeatRefresh);
       if (retry) window.clearTimeout(retry);
       if (timer.current) window.clearTimeout(timer.current);
       socket?.close();

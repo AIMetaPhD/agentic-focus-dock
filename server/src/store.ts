@@ -17,7 +17,7 @@ import {
   type ProposalPatchOp,
   type Settings,
 } from "./domain/schemas";
-import { DEFAULT_MODES } from "./domain/defaults";
+import { defaultModes } from "./domain/defaults";
 
 const now = () => new Date().toISOString();
 
@@ -204,6 +204,25 @@ export class Store {
     this.db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 3000;");
     this.migrate();
     this.seedIfEmpty();
+    this.cleanupWindowsPlaceholderPins();
+  }
+
+  private cleanupWindowsPlaceholderPins(): void {
+    // A DB seeded before this release may still carry macOS bundle-id tiles;
+    // drop exactly those built-in pins on Windows so users never see dead tiles.
+    if (process.platform !== "win32") return;
+    for (const mode of this.listModes()) {
+      const seed = defaultModes("darwin").find((item) => item.id === mode.id);
+      if (!seed || !mode.is_builtin) continue;
+      const pinned_items = mode.pinned_items.filter(
+        (item) => !seed.pinned_items.some(
+          (original) => original.kind === "app" && JSON.stringify(original) === JSON.stringify(item),
+        ),
+      );
+      if (pinned_items.length !== mode.pinned_items.length) {
+        this.updateMode(mode.id, { pinned_items }, "windows-default-cleanup");
+      }
+    }
   }
 
   close(): void {
@@ -236,7 +255,7 @@ export class Store {
   private seedIfEmpty(): void {
     const row = this.db.prepare("SELECT COUNT(*) AS n FROM modes").get() as { n: number };
     if (Number(row.n) > 0) return;
-    for (const seed of DEFAULT_MODES) {
+    for (const seed of defaultModes()) {
       const config = modeInputSchema.parse(seed);
       const ts = now();
       this.db
@@ -264,7 +283,7 @@ export class Store {
         )
         .run(seed.id, JSON.stringify(config), ts);
     }
-    this.audit("system", "seed", "modes", { count: DEFAULT_MODES.length });
+    this.audit("system", "seed", "modes", { count: defaultModes().length });
   }
 
   // ---------- modes ----------
@@ -407,7 +426,7 @@ export class Store {
   }
 
   restoreDefaults(): Mode[] {
-    for (const seed of DEFAULT_MODES) {
+    for (const seed of defaultModes()) {
       const existing = this.getMode(seed.id);
       const config = modeInputSchema.parse(seed);
       if (!existing) {

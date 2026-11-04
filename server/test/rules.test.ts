@@ -67,8 +67,8 @@ describe("classifyActivity", () => {
       [unlockedWriting, unlockedBuilding, social],
       { ...idle, manual_lock: true },
     );
-    expect(locked.decision).toBe("suggest_switch");
-    expect(locked.reason).toContain("manual lock");
+    expect(locked.decision).toBe("hold");
+    expect(locked.matched_rule).toBe("manual-lock");
   });
 
   it("auto-switches only when both modes allow it", () => {
@@ -82,10 +82,20 @@ describe("classifyActivity", () => {
     const result = classifyActivity(activity("com.microsoft.VSCode"), writing, modes, {
       ...idle,
       last_suggestion_at: new Date(Date.now() - 10_000).toISOString(),
-      last_suggested_mode: "building",
+      last_suggested_mode: null,
     });
     expect(result.decision).toBe("hold");
     expect(result.matched_rule).toBe("cooldown");
+  });
+
+  it("does not repeat a pending suggestion after cooldown", () => {
+    const result = classifyActivity(activity("code.exe", 90), writing, modes, {
+      ...idle,
+      last_suggested_mode: "building",
+      last_suggestion_at: new Date(Date.now() - 90000).toISOString(),
+    });
+    expect(result.matched_rule).toBe("pending-suggestion");
+    expect(result.decision).toBe("hold");
   });
 
   it("is conservative for unknown apps", () => {

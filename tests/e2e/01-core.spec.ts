@@ -9,6 +9,12 @@ async function resetData(page: Page): Promise<void> {
       headers: { "content-type": "application/json", "x-focusdock-csrf": csrf },
       body: JSON.stringify({ confirm: "RESET" }),
     });
+    // Pin English so the specs stay independent of the shipped default language.
+    await fetch("/api/settings", {
+      method: "PUT",
+      headers: { "content-type": "application/json", "x-focusdock-csrf": csrf },
+      body: JSON.stringify({ language: "en" }),
+    });
   });
   await page.reload();
 }
@@ -24,6 +30,12 @@ test("the dock renders all six modes with Writing active", async ({ page }) => {
   await expect(page.getByText("SIMULATED").first()).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: "qa/evidence/00-focus-writing.png" });
+});
+
+test("Windows defaults expose no unusable macOS app tiles", async ({ page }, testInfo) => {
+  testInfo.skip(process.platform !== "win32", "Windows native defaults only");
+  const state = await page.evaluate(async () => (await fetch("/api/state")).json());
+  expect(state.modes.flatMap((mode) => mode.pinned_items).every((item) => item.kind === "bookmark")).toBe(true);
 });
 
 test("a simulated social message is deferred, labelled and can be kept for later", async ({ page }) => {
@@ -76,7 +88,7 @@ test("manual lock is visible and reversible", async ({ page }) => {
   const chip = page.locator(".status-chip");
   await expect(chip).toContainText("Auto suggestions on");
   await chip.click();
-  await expect(chip).toContainText("Manual lock on");
+  await expect(chip).toContainText("Locked");
   await expect(chip).toHaveAttribute("aria-pressed", "true");
   await chip.click();
   await expect(chip).toContainText("Auto suggestions on");

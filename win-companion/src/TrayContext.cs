@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -17,6 +18,7 @@ namespace FocusDock.Companion
         private readonly System.Windows.Forms.Timer showTimer;
         private readonly System.Windows.Forms.Timer exitTimer;
         private StatusForm status;
+        private FloatingDock dock;
         private bool exiting;
 
         public TrayContext(BridgeClient client, ForegroundMonitor monitor, ControlServer control, Options options)
@@ -27,6 +29,7 @@ namespace FocusDock.Companion
             this.options = options;
 
             ContextMenuStrip menu = new ContextMenuStrip();
+            menu.Items.Add("Show / hide Dock · 显示/隐藏浮动条", null, delegate { ToggleDock(); });
             menu.Items.Add("Show status / 显示状态", null, delegate { ShowStatus(); });
             menu.Items.Add("Diagnostic launch… / 诊断启动…", null, delegate { LaunchApp(); });
             menu.Items.Add("Open dashboard / 打开面板", null, delegate { OpenDashboard(); });
@@ -53,6 +56,11 @@ namespace FocusDock.Companion
                 if (status != null) status.SetCurrent(app);
             };
 
+            if (options.FloatingDock)
+            {
+                dock = new FloatingDock(options.Backend, options.DataDir ?? Path.GetDirectoryName(Path.GetDirectoryName(options.TokenFile)));
+                dock.Show();
+            }
             heartbeat = new System.Threading.Timer(Heartbeat, null, 0, 10000);
             if (options.ShowStatus)
             {
@@ -76,6 +84,12 @@ namespace FocusDock.Companion
                 };
                 exitTimer.Start();
             }
+        }
+
+        private void ToggleDock()
+        {
+            if (dock == null) return;
+            if (dock.Visible) dock.Hide(); else dock.Show();
         }
 
         public void ShowStatus()
@@ -134,6 +148,12 @@ namespace FocusDock.Companion
             client.Disconnect();
             icon.Visible = false;
             icon.Dispose();
+            if (dock != null)
+            {
+                dock.AllowClose = true;
+                dock.Close();
+                dock.Dispose();
+            }
             if (status != null)
             {
                 status.AllowClose = true;

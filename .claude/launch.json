@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "focusdock",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--no-open"],
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["E:/ClaudeCodeFiles/MyProducts/agentic-focus-dock/scripts/preview.mjs"],
       "port": 4317
     }
   ]

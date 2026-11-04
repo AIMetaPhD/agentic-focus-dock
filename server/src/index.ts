@@ -18,7 +18,7 @@ function canListen(port: number): Promise<boolean> {
 }
 
 async function findPort(start: number, strict: boolean): Promise<number> {
-  for (let i = 0; i < MAX_PORT_TRIES; i += 1) {
+  for (let i = 0; i < (strict ? 1 : MAX_PORT_TRIES); i += 1) {
     const port = start + i;
     if (await canListen(port)) return port;
   }
@@ -49,11 +49,11 @@ async function main(): Promise<void> {
   const store = openStore(config.dbPath);
   store.prune(store.getSettings().privacy.retention_days);
 
+  const port = await findPort(config.port, config.strictPort);
   const tokenPath = path.join(config.runtimeDir, "bridge-token");
   const token = crypto.randomBytes(32).toString("base64url");
   writeSecretFile(tokenPath, `${token}\n`);
 
-  const port = await findPort(config.port, config.strictPort);
   const { app, url } = await startServer({
     dataDir: config.dataDir,
     store,
@@ -77,13 +77,24 @@ async function main(): Promise<void> {
     }
   };
 
+  let shuttingDown = false;
   const shutdown = () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
     const forceExit = setTimeout(() => process.exit(0), 3000);
     void cleanup().finally(() => {
       clearTimeout(forceExit);
       process.exit(0);
     });
   };
+
+  if (process.env.FOCUSDOCK_MANAGED === "1") {
+    process.stdin.resume();
+    process.stdin.on("data", (data) => {
+      if (String(data).trim() === "stop") shutdown();
+    });
+    process.stdin.on("end", shutdown);
+  }
 
   process.once("SIGINT", shutdown);
   process.once("SIGTERM", shutdown);

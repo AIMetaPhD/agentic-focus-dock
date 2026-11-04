@@ -99,7 +99,30 @@ export function classifyActivity(
     };
   }
 
-  if (state.last_suggestion_at && state.last_suggested_mode) {
+  if (state.manual_lock) {
+    return {
+      mode: activeMode.id,
+      decision: "hold",
+      confidence: 0.9,
+      reason: "Manual lock is on; unlock to resume mode suggestions.",
+      engine: "rules",
+      matched_rule: "manual-lock",
+    };
+  }
+
+  if (state.last_suggested_mode === match.mode.id) {
+    return {
+      mode: activeMode.id,
+      decision: "hold",
+      suggested_mode: match.mode.id,
+      confidence: 0.9,
+      reason: "This mode suggestion is already pending confirmation.",
+      engine: "rules",
+      matched_rule: "pending-suggestion",
+    };
+  }
+
+  if (state.last_suggestion_at) {
     const elapsed = (Date.now() - Date.parse(state.last_suggestion_at)) / 1000;
     const cooldown = Math.max(activeMode.transition.cooldown_seconds, match.mode.transition.cooldown_seconds);
     if (elapsed < cooldown) {
@@ -125,9 +148,7 @@ export function classifyActivity(
     decision: canAuto ? "auto_switch" : "suggest_switch",
     suggested_mode: match.mode.id,
     confidence: 0.9,
-    reason: state.manual_lock
-      ? `${appName || appId} fits ${match.mode.name}, but manual lock is on; suggestion only.`
-      : `${appName || appId} fits ${match.mode.name} (${match.why}).`,
+    reason: `${appName || appId} fits ${match.mode.name} (${match.why}).`,
     engine: "rules",
     matched_rule: "allowlist",
   };

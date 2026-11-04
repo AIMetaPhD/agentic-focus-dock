@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -174,6 +175,9 @@ namespace FocusDock.Companion
             }
         }
 
+        [DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr window);
+        [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr window, int command);
+
         public static bool Launch(AppEntry entry, string auditFile, out string detail)
         {
             detail = "";
@@ -201,6 +205,25 @@ namespace FocusDock.Companion
                 }
                 entry.Sha256 = hash;
 
+                foreach (Process running in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(entry.TargetPath)))
+                {
+                    using (running)
+                    {
+                        try
+                        {
+                            if (running.MainWindowHandle == IntPtr.Zero ||
+                                !string.Equals(running.MainModule.FileName, entry.TargetPath, StringComparison.OrdinalIgnoreCase)) continue;
+                            ShowWindow(running.MainWindowHandle, 9);
+                            if (SetForegroundWindow(running.MainWindowHandle))
+                            {
+                                detail = "activated " + entry.Name + " sha256=" + hash;
+                                Audit(auditFile, "activate", entry, detail);
+                                return true;
+                            }
+                        }
+                        catch { /* Windows may deny inspection or foreground activation. */ }
+                    }
+                }
                 ProcessStartInfo info = new ProcessStartInfo(entry.TargetPath);
                 info.UseShellExecute = true;
                 info.WorkingDirectory = Path.GetDirectoryName(entry.TargetPath);
@@ -215,6 +238,11 @@ namespace FocusDock.Companion
                 Audit(auditFile, "error", entry, detail);
                 return false;
             }
+        }
+
+        public static void AuditRejection(string file, string detail)
+        {
+            Audit(file, "reject", null, detail);
         }
 
         private static void Audit(string file, string action, AppEntry entry, string detail)

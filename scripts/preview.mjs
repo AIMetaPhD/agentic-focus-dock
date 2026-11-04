@@ -14,7 +14,7 @@ if (build.status !== 0) process.exit(build.status ?? 1);
 const child = spawn(
   process.execPath,
   [path.join(root, "node_modules", "tsx", "dist", "cli.mjs"), "server/src/index.ts", "--no-open"],
-  { cwd: root, stdio: "inherit", env: { ...process.env, FOCUSDOCK_PORT: process.env.FOCUSDOCK_PORT ?? "4317" } },
+  { cwd: root, stdio: "inherit", env: { ...process.env, FOCUSDOCK_DATA_DIR: path.join(root, ".tmp-data", "trial-preview"), FOCUSDOCK_PORT_STRICT: "1", FOCUSDOCK_PORT: process.env.FOCUSDOCK_PORT ?? "4317" } },
 );
 
 child.on("exit", (code) => process.exit(code ?? 0));

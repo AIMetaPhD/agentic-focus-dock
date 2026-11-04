@@ -16,6 +16,10 @@ namespace FocusDock.Companion
         public int ExitAfterSeconds;
         public int ControlPort = 4318;
         public string LaunchName;
+        public string TrialRoot;
+        public string DataDir;
+        public bool FloatingDock;
+        public bool CaptureLogs;
 
         public static Options Parse(string[] args)
         {
@@ -28,7 +32,24 @@ namespace FocusDock.Companion
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i] ?? "";
-                if (arg == "--backend" && i + 1 < args.Length)
+                if (arg == "--trial-root" && i + 1 < args.Length)
+                {
+                    o.TrialRoot = args[++i];
+                    o.FloatingDock = true;
+                }
+                else if (arg == "--data-dir" && i + 1 < args.Length)
+                {
+                    o.DataDir = args[++i];
+                }
+                else if (arg == "--capture-logs")
+                {
+                    o.CaptureLogs = true;
+                }
+                else if (arg == "--floating-dock")
+                {
+                    o.FloatingDock = true;
+                }
+                else if (arg == "--backend" && i + 1 < args.Length)
                 {
                     o.Backend = args[++i];
                 }

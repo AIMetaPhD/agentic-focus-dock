@@ -195,7 +195,7 @@ export type Proposal = {
 };
 
 export const settingsSchema = z.object({
-  language: z.enum(["en", "zh"]).default("en"),
+  language: z.enum(["en", "zh"]).default("zh"),
   ai: z
     .object({
       provider: z.enum(["rules", "ollama", "openai-compatible"]).default("rules"),

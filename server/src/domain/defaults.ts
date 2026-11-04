@@ -149,6 +149,15 @@ export const DEFAULT_MODES: SeedMode[] = [
   },
 ];
 
+export function defaultModes(platform: string = process.platform): SeedMode[] {
+  return DEFAULT_MODES.map((mode) => ({
+    ...mode,
+    pinned_items: platform === "win32"
+      ? mode.pinned_items.filter((item) => item.kind === "bookmark")
+      : mode.pinned_items,
+  }));
+}
+
 export const SOCIAL_APP_HINTS = [
   "slack",
   "discord",

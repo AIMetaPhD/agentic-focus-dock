@@ -37,6 +37,26 @@ namespace FocusDock.Companion
                 Log("fatal exception: " + e.ExceptionObject);
             };
 
+            TrialSession session = null;
+            if (!string.IsNullOrEmpty(options.TrialRoot))
+            {
+                try
+                {
+                    string dataDir = options.DataDir ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "FocusDock");
+                    session = new TrialSession(options.TrialRoot, dataDir);
+                    options.Backend = session.Backend;
+                    options.TokenFile = session.TokenFile;
+                    options.LogFile = Path.Combine(dataDir, "runtime", "companion.log");
+                    options.AuditFile = Path.Combine(dataDir, "runtime", "launch-audit.log");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "FocusDock 启动失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+            Application.ApplicationExit += delegate { if (session != null) session.Dispose(); };
+
             string token;
             try
             {
@@ -44,6 +64,7 @@ namespace FocusDock.Companion
             }
             catch (Exception ex)
             {
+                if (session != null) session.Dispose();
                 Log("token error: " + ex.Message);
                 MessageBox.Show(
                     "FocusDock companion cannot read the bridge token:\n" + ex.Message +
@@ -63,6 +84,13 @@ namespace FocusDock.Companion
             }
             catch (Exception ex)
             {
+                if (session != null)
+                {
+                    control.Dispose();
+                    session.Dispose();
+                    MessageBox.Show("本机控制端口无法启动，请退出冲突的 FocusDock 实例后重试。", "FocusDock 启动失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Log("control server error: " + ex.Message);
                 MessageBox.Show(
                     "FocusDock companion could not listen on 127.0.0.1:" + options.ControlPort +
@@ -79,15 +107,26 @@ namespace FocusDock.Companion
             }
             catch (Exception ex)
             {
+                control.Dispose();
+                if (session != null) session.Dispose();
                 Log("monitor error: " + ex.Message);
                 MessageBox.Show("FocusDock companion could not start the foreground monitor:\n" + ex.Message, "FocusDock Native Companion", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Environment.Exit(3);
                 return;
             }
 
-            TrayContext tray = new TrayContext(client, monitor, control, options);
-            Log("companion started; backend=" + options.Backend);
-            Application.Run(tray);
+            try
+            {
+                TrayContext tray = new TrayContext(client, monitor, control, options);
+                Log("companion started; backend=" + options.Backend);
+                Application.Run(tray);
+            }
+            finally
+            {
+                monitor.Dispose();
+                control.Dispose();
+                if (session != null) session.Dispose();
+            }
         }
 
         private static int LaunchByName(string name)
@@ -126,6 +165,7 @@ namespace FocusDock.Companion
 
         private static void Log(string message)
         {
+            if (!options.CaptureLogs) return;
             string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + message;
             Console.WriteLine(line);
             try

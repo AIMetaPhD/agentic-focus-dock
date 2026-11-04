@@ -78,6 +78,8 @@ namespace FocusDock.Companion
             {
                 using (WebClient client = new WebClient())
                 {
+                    client.Proxy = null;
+                    client.Encoding = Encoding.UTF8;
                     client.Headers[HttpRequestHeader.Authorization] = "Bearer " + token;
                     client.Headers[HttpRequestHeader.ContentType] = "application/json";
                     client.UploadString(backend + path, "POST", json);

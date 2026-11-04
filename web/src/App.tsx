@@ -71,7 +71,7 @@ function Shell({
   const [busy, setBusy] = useState(false);
   const [dismissedSuggestion, setDismissedSuggestion] = useState<string | null>(null);
   const [socialGate, setSocialGate] = useState<SocialGate | null>(null);
-  const [appPickerOpen, setAppPickerOpen] = useState(false);
+  const [appPickerOpen, setAppPickerOpen] = useState(() => new URLSearchParams(window.location.search).has("add-app"));
   const toastTimer = useRef<number | null>(null);
   const dockOnly = window.location.pathname === "/dock";
 
@@ -96,7 +96,7 @@ function Shell({
   const activate = async (id: string) => {
     if (id === state.active_mode) return;
     try {
-      await api(`/api/modes/${id}/activate`, { method: "POST", body: { lock: true } });
+      await api(`/api/modes/${id}/activate`, { method: "POST", body: { lock: state.runtime.manual_lock } });
       setDismissedSuggestion(null);
       await refresh();
     } catch (cause) {
@@ -293,6 +293,14 @@ function Shell({
   if (dockOnly) {
     return (
       <div className="dock-only">
+        <div className="dock-native-info">
+          <span>{nativeLabel} · {state.version}</span>
+          <button className="lang-switch" onClick={() => void setLanguage(state.settings.language === "zh" ? "en" : "zh")}>{state.settings.language === "zh" ? "EN" : "中文"}</button>
+          {!state.runtime.manual_lock && state.runtime.last_suggested_mode && state.runtime.last_suggested_mode !== state.active_mode ? (
+            <button className="btn btn-primary" onClick={() => void activate(state.runtime.last_suggested_mode!)}>{t("focus.switchTo", { mode: state.modes.find((m) => m.id === state.runtime.last_suggested_mode)?.name ?? "" })}</button>
+          ) : null}
+          {state.runtime.manual_lock ? <span>{t("focus.locked")}</span> : null}
+        </div>
         {first ? (
           <div className="notification-layer is-dock-only">
             <NotificationCard
@@ -310,14 +318,25 @@ function Shell({
           onActivate={activate}
           onToggleLock={toggleLock}
           onOpenSettings={() => {
-            window.location.href = "/";
+            window.open("/", "_blank", "noopener,noreferrer");
           }}
           onPinned={pinned}
           onAddApp={() => {
-            window.location.href = "/";
+            window.open("/?add-app=1", "_blank", "noopener,noreferrer");
           }}
           compact
         />
+        {socialGate ? (
+          <div className="dock-pause" role="dialog" aria-label={t("social.title")}>
+            <span>{t("social.body", { label: socialGate.item.label, seconds: socialSeconds })}</span>
+            <button className="btn btn-ghost" onClick={() => setSocialGate(null)}>{t("common.cancel")}</button>
+            <button className="btn btn-primary" disabled={socialSeconds > 0} onClick={() => {
+              const item = socialGate.item;
+              setSocialGate(null);
+              void launchNative(item, true);
+            }}>{socialSeconds > 0 ? t("social.wait", { seconds: socialSeconds }) : t("social.openNow")}</button>
+          </div>
+        ) : null}
         {toast ? <div className={`toast toast-${toast.kind}`}>{toast.message}</div> : null}
       </div>
     );

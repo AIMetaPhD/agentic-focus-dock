@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 
 export const APP_NAME = "FocusDock";
-export const APP_VERSION = "0.1.0";
+export const APP_VERSION = "0.2.0-dev (Windows trial)";
 export const PROTOCOL_VERSION = 1;
 export const DEFAULT_PORT = 4317;
 export const MAX_PORT_TRIES = 11;
