@@ -16,7 +16,9 @@ try {
     Write-Host "正在准备 Windows 本地试用版……"
     & npm.cmd run build
     if ($LASTEXITCODE -ne 0) { throw "前端构建失败。请根据上方错误修复依赖后重试。" }
-    & powershell.exe -NoProfile -File (Join-Path $root "win-companion/build.ps1")
+    # Run the build in the current host instead of spawning another PowerShell.
+    # This avoids the PowerShell 7.6 startup crash in ShowUpdateNotification.
+    & (Join-Path $root "win-companion/build.ps1")
     if ($LASTEXITCODE -ne 0) { throw "原生组件构建失败。若旧版仍在运行，请先退出；首次构建需联网下载微软 WebView2 SDK。" }
     if (!$DataDir) { $DataDir = Join-Path $env:LOCALAPPDATA "FocusDock" }
     $arguments = '--trial-root "' + $root + '" --data-dir "' + $DataDir + '"'

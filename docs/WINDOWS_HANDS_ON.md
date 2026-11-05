@@ -24,6 +24,8 @@
 .\Start-FocusDock.cmd
 ```
 
+> 启动器会显式使用 Windows PowerShell 5.1，避免 PowerShell 7.6.x 在窄控制台/重定向输出时启动即崩溃（`totalWidth ('-17')` / `ShowUpdateNotification`）。请通过 `.cmd` 启动，不要直接用 `pwsh scripts\Start-FocusDock.ps1`。
+
 脚本会自动：
 1. 检查 Node.js 版本和端口占用（4317）。
 2. `npm run build` 构建前端。
@@ -116,6 +118,7 @@
 | Bridge 显示“仅 Web — 无本机访问” | 托盘右击 → Exit → 重新双击 `Start-FocusDock.cmd` |
 | 点击固定应用无反应 | 检查 `%LOCALAPPDATA%\FocusDock\runtime\floating-dock-error.log` |
 | 端口冲突 | `netstat -ano \| findstr :4317` 找到占用进程并结束 |
+| 启动即报 `totalWidth ('-17')` 或 `ShowUpdateNotification` | 这是 PowerShell 7.6.x 的启动缺陷；`Start-FocusDock.cmd` 已固定使用 Windows PowerShell 5.1，请通过 `.cmd` 启动，不要直接 `pwsh` 运行脚本 |
 
 ---
 
